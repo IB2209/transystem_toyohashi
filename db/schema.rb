@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_18_070450) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_18_071545) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "work_date"
     t.string "employee_name"
@@ -156,7 +156,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_18_070450) do
     t.datetime "schedule_date"
     t.string "responsible_person"
     t.text "note"
-    t.integer "plan_id", null: false
+    t.bigint "plan_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "comment"
