@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company_name: MyString
+  driver_name: MyString
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  has_abnormality: false
+  message: MyText
+  entry_date: 2025-01-20
+
+two:
+  company_name: MyString
+  driver_name: MyString
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  has_abnormality: false
+  message: MyText
+  entry_date: 2025-01-20

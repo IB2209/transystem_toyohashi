@@ -1,0 +1,95 @@
+
+<div class="tmp_home">
+<h1>TMP管理表</h1>
+<!-- 月別のタブ -->
+<ul class="tab-header">
+  <% @grouped_entries_by_month.keys.sort.reverse.each_with_index do |month, index| %>
+    <li class="tab-link <%= 'active' if index.zero? %>" data-tab="month-<%= month.strftime('%Y-%m') %>">
+      <%= month.strftime('%-m月') %>
+    </li>
+  <% end %>
+</ul>
+
+<!-- 月別のデータ -->
+<div class="tab-content">
+  <% @grouped_entries_by_month.each do |month, entries| %>
+    <div class="tab-pane <%= 'active' if @grouped_entries_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+      <h2>
+        <%= month.strftime('%Y年 %-m月') %>
+        <span style="font-size: 0.8em; color: gray;">
+          （入庫: <%= @monthly_counts[month]&.dig(:in_count) || 0 %> / 
+            出庫: <%= @monthly_counts[month]&.dig(:out_count) || 0 %>）
+        </span>
+      </h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="7" class="bk"></th>
+            <th colspan="2" style="background-color: pink;">入庫</th>
+            <th colspan="2" style="background-color: skyblue;">出庫</th>
+            <th class="bk" colspan="2"></th>
+          </tr>  
+          <tr>
+            <th>No.</th>
+            <th>入庫日</th>
+            <th>出庫日</th>
+            <th>型式</th>
+            <th>車体番号</th>
+            <th>引取先</th>
+            <th>納車先</th>
+            <th>会社名</th>
+            <th>運転者名</th>
+            <th>会社名</th>
+            <th>運転者名</th>
+            <th>車泊数</th>
+            <th>出庫</th>
+          </tr>
+        </thead>
+        <tbody>
+  <% previous_date = nil %> <!-- 前回の入庫日を保存する変数 -->
+  <% total_entries = entries.size %> <!-- 全体の件数を取得 -->
+  <% entries.each_with_index do |entry, index| %>
+    <% if previous_date && previous_date != entry[:in_entry].entry_date %>
+      <!-- 前回の入庫日と異なる場合にスペース行を挿入 -->
+      <tr>
+        <td colspan="13" style="height: 10px; border: none;"></td>
+      </tr>
+    <% end %>
+
+    <tr>
+      <!-- No.を降順に表示 -->
+      <td style="font-size: 14px; background-color: #f9f9f9;"><%= total_entries - index %></td>
+      <td style="font-size: 14px;"><%= entry[:in_entry].entry_date&.strftime("%-m/%-d") %></td>
+      <td style="font-size: 14px;"><%= entry[:out_entry]&.entry_date&.strftime("%-m/%-d") || "" %></td>
+      <td style="font-size: 15px; padding: 0 20px"><%= entry[:in_entry].model || entry[:out_entry]&.model %></td>
+      <td style="font-size: 15px; padding: 0 20px"><%= entry[:in_entry].chassis_number || entry[:out_entry]&.chassis_number %></td>
+      <td style="font-size: 14px;"><%= entry[:in_entry].pickup_location %></td>
+      <td style="font-size: 14px;"><%= entry[:out_entry]&.delivery_location %></td>
+      <td style="font-size: 14px;"><%= entry[:in_entry].company_name %></td>
+      <td style="font-size: 14px;"><%= entry[:in_entry].driver_name %></td>
+      <td style="font-size: 14px;"><%= entry[:out_entry]&.company_name %></td>
+      <td style="font-size: 14px;"><%= entry[:out_entry]&.driver_name %></td>
+      <td style="font-size: 14px;"><%= (entry[:out_entry]&.entry_date && entry[:in_entry].entry_date) ? "#{(entry[:out_entry].entry_date - entry[:in_entry].entry_date).to_i}日" : "-" %></td>
+      <td style="font-size: 14px;" class="out_new <%= entry[:out_entry].nil? ? 'not-registered' : 'registered' %>">
+        <% if entry[:out_entry].nil? %>
+          <%= link_to "登録", new_out_entry_path(chassis_number: entry[:in_entry].chassis_number) %>
+        <% else %>
+          <div class="sumi">済</div>
+        <% end %>
+      </td>
+    </tr>
+
+    <% previous_date = entry[:in_entry].entry_date %> <!-- 現在の入庫日を保存 -->
+  <% end %>
+</tbody>
+
+        
+      </table>
+    </div>
+  <% end %>
+</div>
+</div>
+</div>
+
+

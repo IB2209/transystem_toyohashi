@@ -1,0 +1,29 @@
+const button = document.getElementById("status-button-<%= @movement_record.id %>");
+if (button) {
+  button.innerText = "<%= @movement_record.status ? '入力済' : '未入力' %>";
+}
+let button1 = document.getElementById("status-button-1-<%= @movement_record.id %>");
+if (button1) {
+  if (button1.innerText === "済") {
+    button1.innerText = "未";
+    button1.classList.remove("btn-success");
+    button1.classList.add("btn-danger");
+  } else {
+    button1.innerText = "済";
+    button1.classList.remove("btn-danger");
+    button1.classList.add("btn-success");
+  }
+}
+
+let button2 = document.getElementById("status-button-2-<%= @movement_record.id %>");
+if (button2) {
+  if (button2.innerText === "済") {
+    button2.innerText = "未";
+    button2.classList.remove("btn-success");
+    button2.classList.add("btn-danger");
+  } else {
+    button2.innerText = "済";
+    button2.classList.remove("btn-danger");
+    button2.classList.add("btn-success");
+  }
+}

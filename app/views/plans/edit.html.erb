@@ -1,0 +1,56 @@
+<div class="backcolor_plan">
+
+  <div class="forphone">
+    <div class="header">
+      <div class="headerbox">
+        <h1>- 伝票編集 -</h1>
+        <p>
+          伝票の情報を修正してください。
+        </p>
+        <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">
+        ※ 必須の質問です
+        </p>
+      </div>
+    </div>
+
+    <%= form_with model: @plan, local: true do |form| %>
+      <div class="q">
+        <b><%= form.label :model, "型式" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :model, value: @plan.model, required: true %>
+      </div>
+      <div class="form-group q">
+        <b><%= form.label :chassis_number, "車番" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :chassis_number, class: "form-control", required: true %>
+        <% if @plan.errors[:chassis_number].any? %>
+        <div class="error-message">
+        <%= @plan.errors[:chassis_number].join(", ") %>
+        </div>
+        <% end %>
+      </div>
+      <div class="q">
+        <b><%= form.label :pickup_location, "引取先" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :pickup_location, value: @plan.pickup_location, required: true %>
+      </div>
+      <div class="q">
+        <b><%= form.label :delivery_location, "納車先" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :delivery_location, value: @plan.delivery_location, required: true %>
+      </div>
+      <div class="q date">
+        <b><%= form.label :move_date, "移動期日" %><sup class="require">※</sup><br></b>
+        <%= form.datetime_field :move_date, value: @plan.move_date, required: true %>
+      </div>
+      <div class="q">
+        <b><%= form.label :comment, "コメント" %><br>
+        <%= form.text_area :comment, placeholder: "伝票に記入されている場合入力", value: @plan.comment %>
+      </div>
+      <div class="q">
+        <b><%= form.label :issue_detail, "不具合内容" %><br>
+        <%= form.text_area :issue_detail, placeholder: "伝票に記入されている場合入力", value: @plan.issue_detail %>
+      </div>
+      <div class="bottombtn">
+      <%= link_to "戻る", plans_path, class: "back_btn" %>
+      <%= form.submit "更新", class: "submit_btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>

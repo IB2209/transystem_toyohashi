@@ -1,0 +1,70 @@
+<div class="backcolor_out">
+
+<div class="forphone">
+<div class="header">
+  <div class="headerbox">
+    <h1>- 出庫登録 -</h1>
+    <p>
+      不明点等ございましたらご連絡ください。<br>
+      西村：080-9027-9702
+    </p>
+    <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">
+    ※ 必須の質問です
+    </p>
+  </div>
+</div>
+
+<%= form_with model: @out_entry, local: true do |form| %>
+  <div class="q date">
+    <b><%= form.label :entry_date, "出庫日" %><sup class="require">※</sup><br></b>
+    <%= form.date_field :entry_date, value: @out_entry.entry_date || Date.today %>
+  </div>
+  <div class="q model">
+    <b><%= form.label :radio_model, "型式" %><br></b>
+    <%= form.text_field :model, value: @out_entry.model, readonly: true %>
+  </div>
+  <div class="q chassis">
+    <b><%= form.label :chassis_number, "車体番号" %><br></b>
+    <%= form.text_field :chassis_number, value: @out_entry.chassis_number, readonly: true %>
+  </div>
+  <div class="q">
+  <b><%= form.label :radio_company_name, "会社名" %><sup class="require">※</sup><br></b>
+  <%= form.radio_button :radio_company_name, "北峯" %> 北峯 <br>
+  <%= form.radio_button :radio_company_name, "スギタニ" %> スギタニ<br>
+  <%= form.radio_button :radio_company_name, "海老名" %> 海老名<br>
+  <%= form.radio_button :radio_company_name, "グローバル" %> グローバル<br>
+  <%= form.radio_button :radio_company_name, "永山運輸" %> 永山運輸<br>
+  <%= form.radio_button :radio_company_name, "グットラック" %> グットラック<br>
+  <%= form.radio_button :radio_company_name, "コックスギア" %> コックスギア<br>
+  <%= form.text_field :company_name, placeholder: "その他" %>
+  </div>
+  <div class="q">
+    <b><%= form.label :driver_name, "運転者名" %><sup class="require">※</sup><br></b>
+    <%= form.text_field :driver_name, placeholder: "苗字のみ", value: @out_entry.driver_name %>
+  </div>
+  <div class="q">
+    <b><%= form.label :radio_delivery_location, "納車先" %><sup class="require">※</sup><br></b>
+    <%= form.radio_button :radio_delivery_location, "東燃" %> 東燃<br>
+    <%= form.radio_button :radio_delivery_location, "藤沢工場" %> 藤沢工場<br>
+    <%= form.radio_button :radio_delivery_location, "UD上野" %> UD上野<br>
+    <%= form.radio_button :radio_delivery_location, "東海" %> 東海<br>
+    <%= form.radio_button :radio_delivery_location, "久松" %> 久松<br>
+    <%= form.text_field :delivery_location, placeholder: "その他" %>
+  </div>
+  <div class="q">
+    <b><%= form.label :has_abnormality, "異常の有無" %><sup class="require">※</sup><br></b>
+    <%= form.radio_button :has_abnormality, false, checked: !@out_entry.has_abnormality %> 無 <br>
+    <%= form.radio_button :has_abnormality, true, checked: @out_entry.has_abnormality %> 有
+  </div>
+  <div class="q">
+    <b><%= form.label :message, "メッセージ" %><br></b>
+    <%= form.text_area :message, placeholder: "特記事項を入力してください", value: @out_entry.message %>
+  </div>
+  
+  <div class="bottombtn">
+      <%= form.submit "送信", class: "submit_btn" %>
+      </div>
+<% end %>
+
+</div>
+</div>

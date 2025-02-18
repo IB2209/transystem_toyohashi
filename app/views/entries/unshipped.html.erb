@@ -1,0 +1,34 @@
+<div class="backcolor_show">
+
+<div class="forphone">
+<div class="unshipped">
+<h1>構内車両一覧</h1>
+<h2>- COXGEAR豊橋プール -</h2>
+<hr>
+<!--
+<h3>型式: 車両の型式</h3>
+<table>
+  <th class="unshipped_no">No.</th>
+  <th class="unshipped_chassis_number">車体番号</th>
+  <td class="unshipped_new_left"></td>
+          <td class="unshipped_new">選択</td>
+</table>
+<hr>-->
+<% @grouped_entries.each do |model, entries| %>
+  <h3><%= model %></h3>
+  <table>
+    <tbody>
+      <% entries.each_with_index do |entry, index| %>
+        <tr>
+          <td class="unshipped_no"><%= index + 1 %></td>
+          <td class="unshipped_chassis_number"><%= entry.chassis_number %></td>
+          <td class="unshipped_new_left"></td>
+          <td class="unshipped_new"><%= link_to "選択", new_out_entry_path(chassis_number: entry.chassis_number) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+</div>
+</div>
+</div> <!-- backcolor_show -->

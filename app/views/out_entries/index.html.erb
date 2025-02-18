@@ -1,0 +1,77 @@
+
+  <div class="tmp_home">
+    <h1>出庫一覧</h1>
+
+    <!-- 月別のタブ -->
+    <ul class="tab-header">
+      <% @grouped_entries_by_month.keys.each_with_index do |month, index| %>
+        <li class="tab-link <%= 'active' if index.zero? %>" data-tab="month-<%= month.strftime('%Y-%m') %>">
+          <%= month.strftime('%-m月') %>
+        </li>
+      <% end %>
+    </ul>
+
+    <!-- 月別のデータ -->
+    <div class="tab-content">
+      <% @grouped_entries_by_month.each do |month, entries| %>
+        <div class="tab-pane <%= 'active' if @grouped_entries_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+          <h2><%= month.strftime('%Y年 %-m月') %>
+          <span style="font-size: 0.8em; color: gray;">
+            （出庫台数: <%= @monthly_out_count[month] %>）
+          </span>
+          </h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>出庫日</th>
+                <th>会社名</th>
+                <th>運転者名</th>
+                <th>型式</th>
+                <th>車体番号</th>
+                <th>納車先</th>
+                <th>異常</th>
+                <th>メッセージ</th>
+                <th class="tablespace"></th>
+                <th>編集</th>
+              </tr>
+            </thead>
+            <tbody>
+  <% previous_date = nil %> <!-- 前回の出庫日を保存する変数 -->
+  <% entries.each_with_index do |entry, index| %>
+    <% if previous_date && previous_date != entry.entry_date %>
+      <!-- 日付が変わるごとにスペースを挿入 -->
+      <tr>
+        <td colspan="10" style="height: 10px; border: none;"></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td style="font-size: 14px; background-color: #f9f9f9;"><%= entries.size - index %></td>
+      <td style="font-size: 14px;">
+        <%= entry.entry_date&.strftime("%-d日") %>
+        <div style="font-size: 12px; display: inline;">
+          <%# ここで出発時間を表示する %>
+          <%= entry.entry_hour.present? && entry.entry_minute.present? ? "#{entry.entry_hour}:#{entry.entry_minute.to_s.rjust(2, '0')}" : entry.created_at.strftime("%-H:%M") %>
+        </div>
+      </td>
+      <td style="font-size: 14px;"><%= entry.company_name %></td>
+      <td style="font-size: 14px;"><%= entry.driver_name %></td>
+      <td style="font-size: 14px; padding: 0 20px"><%= entry.model %></td>
+      <td style="font-size: 14px; padding: 0 20px"><%= entry.chassis_number %></td>
+      <td style="font-size: 14px;"><%= entry.delivery_location %></td>
+      <td style="font-size: 14px;"><%= entry.has_abnormality ? "有" : "無" %></td>
+      <td style="font-size: 14px;"><%= entry.message %></td>
+      <td class="tablespace"></td>
+      <td style="font-size: 14px;"><%= link_to "編集", edit_out_entry_path(entry) %></td>
+    </tr>
+    <% previous_date = entry.entry_date %> <!-- 現在の日付を保存 -->
+  <% end %>
+</tbody>
+
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

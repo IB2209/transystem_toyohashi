@@ -1,0 +1,41 @@
+ja:
+  date:
+    day_names: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"]
+    abbr_day_names: ["日", "月", "火", "水", "木", "金", "土"]
+    month_names: [nil, "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+    abbr_month_names: [nil, "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
+    formats:
+      default: "%Y年%-m月%-d日"
+      short: "%-m/%-d"
+      long: "%Y年%-m月%-d日 (%a)"
+      month_and_year: "%Y年%-m月" # 年月を表示するフォーマット
+      weekday: "%A" # 曜日のみを表示するフォーマット
+      full: "%Y年%-m月%-d日 %A %H:%M" # 年月日、曜日、時間を表示するフォーマット
+
+  activerecord:
+    errors:
+      models:
+        movement_record:
+          attributes:
+            departure_time:
+              blank: "出発時間を入力してください"
+            arrival_time:
+              blank: "到着時間を入力してください"
+        in_entry:
+          attributes:
+            entry_date:
+              blank: "日付を入力してください"
+            driver_name:
+              blank: "運転者名を入力してください"
+            company_name:
+              blank: "会社名を入力してください"
+            chassis_number:
+              blank: "車番を入力してください"
+            model:
+              blank: "型式を入力してください"
+            pickup_location:
+              blank: "引取先を入力してください"
+            message:
+              blank: "メッセージを入力してください"
+      messages:
+        record_invalid: "レコードの保存に失敗しました: %{errors}"

@@ -1,0 +1,66 @@
+
+<div class="tmp_home">
+<div class="plans">
+  <h1>登録済伝票(捌く前)</h1>
+
+  <% if @grouped_plans_by_date.present? %>
+    <% @grouped_plans_by_date.each do |date, plans| %>
+      <h2 style="margin-top: 20px; border-top: 1px solid #ccc; padding: 20px 0 5px; text-align: left;">
+        <%= l date, format: "%-m月%-d日(%a)" %>
+      </h2>
+      <table>
+        <thead>
+          <tr>
+            <th class="th_no">No.</th>
+            <th class="th_model">型式</th>
+            <th class="th_chassis">車番</th>
+            <th class="th_pickup">引取先</th>
+            <th class="th_delivery">納車先</th>
+            <th class="th_limit">期日</th>
+            <th class="">コメント</th>
+            <th class="">不具合内容</th>
+            <th class="tablespace"></th>
+            <th class="th_regi">振分</th>
+            <th class="tablespace"></th>
+            <th class="th_edit">編集</th>
+            <th class="th_delete">削除</th>
+            
+          </tr>
+          <tr>
+            <th class="plansspace" colspan="13"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% plans.each_with_index do |plan, index| %>
+            <tr class="trtop">
+              <td style="text-align: center; background-color: #f9f9f9;"><%= index + 1 %></td>
+              <td style="text-align: center;">
+                <%= plan.model == "その他" ? plan.model_other.presence || "未設定" : plan.model %>
+              </td>
+              <td style="text-align: center;"><%= plan.chassis_number %></td>
+              <td style="text-align: center;">
+                <%= plan.pickup_location == "その他" ? plan.pickup_other.presence || "未設定" : plan.pickup_location %>
+              </td>
+              <td style="text-align: center;">
+                <%= plan.delivery_location == "その他" ? plan.delivery_other.presence || "未設定" : plan.delivery_location %>
+              </td>
+              <td style="text-align: center;"><%= plan.move_date&.strftime("%-H時") %></td>
+              <td class="th_message"><%= plan.comment %></td>
+              <td class="th_message"><%= plan.issue_detail %></td>
+              <td class="tablespace"></td>
+              <td class="regibtn" style="text-align: center;"><%= link_to '振分', new_schedule_path(plan_id: plan.id), class: 'regibtn_in' %></td>
+              <td class="tablespace"></td>
+              <td style="text-align: center;" class="th_edit"><%= link_to '編集', edit_plan_path(plan), class: 'btn btn-primary' %></td>
+              <td style="text-align: center;" class="th_delete">
+                <%= link_to '削除', plan_path(plan), class: 'btn btn-primary' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  <% else %>
+    <p>登録済み伝票がありません。</p>
+  <% end %>
+</div>
+</div>

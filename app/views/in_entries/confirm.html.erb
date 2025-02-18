@@ -1,0 +1,35 @@
+<div class="backcolor_show">
+<div class="confirm">
+
+<h1>- 入庫情報確認 -</h1>
+<p>以下の内容で送信してよろしいですか？</p>
+
+<table class="confirmtable">
+  <tr><th>入庫日</th><td><%= @in_entry.entry_date&.strftime("%-m月%-d日") %></td></tr>
+  <tr><th>会社名</th><td><%= @in_entry.company_name %></td></tr>
+  <tr><th>運転者名</th><td><%= @in_entry.driver_name %></td></tr>
+  <tr><th>型式</th><td><%= @in_entry.model %></td></tr>
+  <tr><th>車体番号</th><td><%= @in_entry.chassis_number %></td></tr>
+  <tr><th>引取先</th><td><%= @in_entry.pickup_location %></td></tr>
+  <tr><th>異常の有無</th><td><%= @in_entry.has_abnormality ? "有" : "無" %></td></tr>
+  <tr><th class="message">メッセージ</th><td><%= @in_entry.message %></td></tr>
+</table>
+
+<%= form_with model: @in_entry, url: in_entries_path, local: true do |form| %>
+  <%= form.hidden_field :entry_date %>
+  <%= form.hidden_field :company_name %>
+  <%= form.hidden_field :driver_name %>
+  <%= form.hidden_field :model %>
+  <%= form.hidden_field :chassis_number %>
+  <%= form.hidden_field :pickup_location %>
+  <%= form.hidden_field :has_abnormality %>
+  <%= form.hidden_field :message %>
+
+<div class="bottombtn">
+  <%= form.submit "戻る", name: "back", class: "back_btn" %>
+  <%= form.submit "送信", class: "submit_btn" %>
+</div>
+<% end %>
+
+</div>
+</div>

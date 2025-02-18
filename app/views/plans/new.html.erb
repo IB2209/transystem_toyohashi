@@ -1,0 +1,105 @@
+<div class="backcolor_plan">
+
+  <div class="forphone">
+    <div class="header">
+      <div class="headerbox">
+        <h1>- 新規伝票登録 -</h1>
+        <p>
+          FAXなどの情報を元に入力してください。
+        </p>
+        <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">
+          ※ 必須の質問です
+        </p>
+      </div>
+    </div>
+
+    <%= form_with model: @plan, local: true do |form| %>
+  <!-- 型式 -->
+  <div class="q">
+    <b><%= form.label :model, "型式" %><sup class="require">※</sup><br></b>
+    <% ["CYJ77D", "CYL77D", "FRR90", "FTR90", "FSR90"].each do |model| %>
+      <%= form.radio_button :model, model, id: "model_#{model}" %>
+      <%= label_tag "model_#{model}", model %><br>
+    <% end %>
+    <%= form.radio_button :model, "その他", id: "model_other" %>
+    <%= label_tag "model_other", "その他" %><br>
+    <%= form.text_field :model_other, placeholder: "その他の場合入力", class: "optional-field" %>
+  </div>
+
+  <!-- 車番 -->
+  <div class="form-group q">
+    <b><%= form.label :chassis_number, "車番" %><sup class="require">※</sup><br></b>
+    <%= form.text_field :chassis_number, class: "form-control", required: true %>
+  </div>
+
+  <!-- 引取先 -->
+  <div class="q">
+    <b><%= form.label :pickup_location, "引取先" %><sup class="require">※</sup><br></b>
+    <% ["豊橋プール", "トレクス", "萩原", "清水"].each do |location| %>
+      <%= form.radio_button :pickup_location, location, id: "pickup_#{location}" %>
+      <%= label_tag "pickup_#{location}", location %><br>
+    <% end %>
+    <%= form.radio_button :pickup_location, "その他", id: "pickup_other" %>
+    <%= label_tag "pickup_other", "その他" %><br>
+    <%= form.text_field :pickup_other, placeholder: "その他の場合入力", class: "optional-field" %>
+  </div>
+
+  <!-- 納車先 -->
+  <div class="q">
+    <b><%= form.label :delivery_location, "納車先" %><sup class="require">※</sup><br></b>
+    <% ["豊橋プール", "トレクス", "萩原", "清水"].each do |location| %>
+      <%= form.radio_button :delivery_location, location, id: "delivery_#{location}" %>
+      <%= label_tag "delivery_#{location}", location %><br>
+    <% end %>
+    <%= form.radio_button :delivery_location, "その他", id: "delivery_other" %>
+    <%= label_tag "delivery_other", "その他" %><br>
+    <%= form.text_field :delivery_other, placeholder: "その他の場合入力", class: "optional-field" %>
+  </div>
+
+
+      <!-- 移動期日 -->
+      <div class="q date">
+        <b><%= form.label :move_date, "移動期日" %><sup class="require">※</sup><br></b>
+        <%= form.datetime_field :move_date, required: true, step: 3600, value: @plan.move_date.presence || DateTime.current.change(hour: 9, min: 0) %>
+      </div>
+
+      <!-- コメント -->
+      <div class="q">
+        <b><%= form.label :comment, "コメント" %><br>
+        <%= form.text_area :comment, placeholder: "伝票に記入されている場合入力" %>
+      </div>
+
+      <!-- 不具合内容 -->
+      <div class="q">
+        <b><%= form.label :issue_detail, "不具合内容" %><br>
+        <%= form.text_area :issue_detail, placeholder: "伝票に記入されている場合入力" %>
+      </div>
+
+      <div class="bottombtn">
+      <%= form.submit "登録", class: "submit_btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  // 「その他」を選択した場合に入力フィールドを表示するスクリプト
+  document.querySelectorAll("[data-toggle-field]").forEach(field => {
+    const fieldType = field.dataset.toggleField;
+    const toggleInput = document.querySelector(`input#${fieldType}_other`);
+
+    if (toggleInput) {
+      toggleInput.style.display = "none";
+
+      document.querySelectorAll(`input[name="plan[${fieldType}]"]`).forEach(input => {
+        input.addEventListener("change", () => {
+          if (input.value === "その他") {
+            toggleInput.style.display = "block";
+          } else {
+            toggleInput.style.display = "none";
+          }
+        });
+      });
+    }
+  });
+</script>

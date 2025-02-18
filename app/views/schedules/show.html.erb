@@ -1,0 +1,23 @@
+<div class="backcolor_show">
+
+<div class="show">
+
+  <h1>- スケジュール詳細 -</h1>
+
+  <table class="showtable">
+    <tr><th>型式</th><td><%= @schedule.model.presence || "未設定" %></td></tr>
+    <tr><th>車番</th><td><%= @schedule.chassis_number.presence || "未設定" %></td></tr>
+    <tr><th>引取先</th><td><%= @schedule.pickup_location.presence || "未設定" %></td></tr>
+    <tr><th>納車先</th><td><%= @schedule.delivery_location.presence || "未設定" %></td></tr>
+    <tr><th>移動時間</th><td><%= @schedule.schedule_date&.strftime("%Y年 %-m月 %-d日 %-H時") || "未設定" %></td></tr>
+    <tr><th>担当者</th><td><%= @schedule.responsible_person.presence || "未設定" %></td></tr>
+    <tr><th>コメント</th><td><%= @schedule.comment.presence || "なし" %></td></tr>
+  </table>
+
+  <div class="bottombtn">
+    <%= link_to "戻る", schedules_path, class: "back_btn" %>
+    <div class="deletecontainer"><%= button_to "削除", schedule_path(@schedule), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "delete_btn" %></div>
+  </div>
+
+</div>
+</div>

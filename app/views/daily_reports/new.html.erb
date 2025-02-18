@@ -1,0 +1,63 @@
+<h1>日報作成</h1>
+
+<%= form_with(model: @daily_report, url: daily_reports_path, local: true) do |form| %>
+  <div>
+    <label>担当者選択</label>
+    <%= select_tag :responsible_person, options_for_select(@responsible_people), id: "responsible_person_select" %>
+  </div>
+
+  <h2>移動記録</h2>
+  <table id="movement_records_table">
+    <thead>
+      <tr>
+        <th>型式</th>
+        <th>車体番号</th>
+        <th>引取先</th>
+        <th>納車先</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JavaScript でデータを挿入 -->
+    </tbody>
+  </table>
+
+  <%= form.submit "送信" %>
+<% end %>
+
+<script>
+  document.getElementById("responsible_person_select").addEventListener("change", function() {
+    let selectedPerson = this.value;
+    console.log("選択された担当者:", selectedPerson);
+
+    fetch(`/daily_reports/fetch_records?responsible_person=${encodeURIComponent(selectedPerson)}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("データ取得に失敗しました");
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("取得データ:", data);
+        let tableBody = document.querySelector("#movement_records_table tbody");
+        tableBody.innerHTML = "";
+
+        if (data.length === 0) {
+          tableBody.innerHTML = "<tr><td colspan='4'>該当する移動記録がありません</td></tr>";
+          return;
+        }
+
+        data.forEach(record => {
+          let row = `<tr>
+            <td>${record.model}</td>
+            <td>${record.chassis_number}</td>
+            <td>${record.pickup_location}</td>
+            <td>${record.delivery_location}</td>
+          </tr>`;
+          tableBody.innerHTML += row;
+        });
+      })
+      .catch(error => {
+        console.error("エラー:", error);
+      });
+  });
+</script>

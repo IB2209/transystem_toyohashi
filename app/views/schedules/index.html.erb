@@ -1,0 +1,121 @@
+
+<div class="tmp_home">
+  <h1>業務日程(本日の業務)</h1>
+
+  <% @grouped_schedules_by_date.each do |date, schedules| %>
+    <h2 style="margin-top: 20px; border-top: 1px solid #ccc; padding: 20px 0 5px; text-align: left">
+    <%= l date, format: "%-m月%-d日(%a)" %>
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th class="th_no">No.</th>
+          <th class="th_model">型式</th>
+          <th class="th_chassis">車番</th>
+          <th class="th_pickup">引取先</th>
+          <th class="th_delivery">納車先</th>
+          <th class="th_limit">開始</th>
+          <th class="th_responsible_person">担当</th>
+          <th class="th_comment">コメント</th>
+          <th class="tablespace"></th>
+          <th class="th_regi">移動記録</th>
+          <th class="tablespace"></th>
+          <th class="th_edit">編集</th>
+          <th class="th_delete">削除</th>
+        </tr>
+        <tr>
+            <th class="plansspace" colspan="11"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% schedules.each_with_index do |schedule, index| %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= schedule.plan&.model %></td>
+            <td><%= schedule.plan&.chassis_number %></td>
+            <td><%= schedule.plan&.pickup_location %></td>
+            <td><%= schedule.plan&.delivery_location %></td>
+            <td><%= schedule.schedule_date.strftime("%-H時") %></td>
+            <td><%= schedule.responsible_person%></td>
+            <td class="th_message"><%= schedule.comment %></td>
+            <td class="tablespace"></td>
+            <td class="regibtn" style="text-align: center;">
+              <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "btn btn-primary" %>
+            </td>
+            <td class="tablespace"></td>
+            <td class="th_edit"><%= link_to '編集', edit_schedule_path(schedule), class: 'btn btn-primary' %></td>
+            <td class="th_delete"><%= link_to '削除', schedule_path(schedule), class: 'btn btn-primary' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+</div>
+
+
+
+
+
+
+<div class="displayphone">
+  <h1>業務日程(本日の業務)</h1>
+<table>
+  <thead>
+        <tr>
+          <th class="th_no" >No.</th>
+          <th class="th_modelchassis">
+            型式：車番 <br>
+            　　引取先 ➡︎ 納車先
+          </th>
+          <th class="tantou">
+          担当 <br>
+          出発
+          </th>
+          <th rowspan="2" class="tablespace"></th>
+          <th class="th_movereco" rowspan="2">移動 <br> 記録</th>
+        </tr>
+        <tr>
+          <th class="th_no">編集</th>
+          <th colspan="2">コメント</th>
+        </tr>
+      </thead>
+  </table>
+  <hr>
+
+  <% @grouped_schedules_by_date.each do |date, schedules| %>
+    <h2 style="margin-top: 20px; padding: 20px 0 5px; text-align: left">
+    <%= l date, format: "%-m月%-d日(%a)" %>
+    </h2>
+    
+      
+    <table>
+      
+      <tbody>
+        <% schedules.each_with_index do |schedule, index| %>
+          <tr>
+            <td class="borderleft th_no"><%= index + 1 %></td>
+            <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
+            <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %></td>
+            <td class="borderbottom tantou">
+            <%= schedule.responsible_person%><br>
+            <%= schedule.schedule_date.strftime("%-H時") %>
+            </td>
+            <td rowspan="2" class="tablespace"></td>
+            <td rowspan="2" class="regibtn" style="text-align: center;"><%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "" %></td>
+          </tr>
+          <tr class="trbottom">
+          <td class="border borderleft th_no"><%= link_to '編集', edit_schedule_path(schedule), class: 'th_no' %></td>
+          
+          <td class="border td_left" colspan="2"><%= schedule.comment %></td>
+          
+          </tr>
+          <tr>
+            <td colspan="3" class="th_underspace"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+</div>

@@ -1,0 +1,983 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto";
+  
+}
+.sidebarcontainer{
+  display: flex;
+}
+.backcolor_schedule{
+  background-color: rgb(255, 246, 230);
+  width: 100%;
+  margin-left: -190px;
+}
+.backcolor_schedule .forphone .header, .backcolor_schedule .forphone .bottombtn .submit_btn, .backcolor_schedule .regibtn{
+  background-color: orange;
+}
+
+.backcolor_out{
+  background-color: rgb(240, 247, 255);
+  width: 100%;
+  margin-left: -190px;
+}
+.backcolor_out .forphone .header , .backcolor_out .forphone .bottombtn .submit_btn, .backcolor_out .regibtn{
+  background-color: rgb(0, 119, 255);
+}
+
+.backcolor_plan{
+  background-color: rgb(255, 255, 227);
+  width: 100%;
+  margin-left: -190px;
+}
+.backcolor_plan .forphone .header , .backcolor_plan .forphone .bottombtn .submit_btn, .backcolor_plan .regibtn{
+  background-color: rgb(208, 208, 1);
+}
+
+.backcolor_show{
+  width: 100%;
+  margin-left: -190px;
+}
+
+/*----------------------sidebar---------------------------*/
+
+/* サイドバーのスタイル */
+header{
+  width: 190px;
+}
+.sidebar img {
+  width: 30px;
+  margin-right: 15px;
+}
+/* サイドバー全体のスタイル */
+.sidebar {
+  width: 190px;
+  height: 100vh;
+  background-color: #333;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 20px;
+  overflow-y: auto;
+}
+
+/* メニューリストのスタイル */
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* メニューアイテム */
+.menu-item {
+  position: relative;
+}
+
+/* メニューのリンク */
+.menu-item > a {
+  display: block;
+  color: white;
+  padding: 15px;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+  cursor: pointer;
+}
+
+/* ホバー時の背景変更 */
+.menu-item > a:hover {
+  background-color: #555;
+}
+
+/* ドロップダウンメニュー */
+.dropdown {
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+  background-color: #444;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 開いたとき */
+.menu-item.open .dropdown {
+  visibility: visible;
+  opacity: 1;
+  max-height: 400px;
+  margin-bottom: 20px;
+}
+
+
+/* ドロップダウンメニューのアイテム */
+.dropdown li {
+  border-bottom: 1px solid #555;
+}
+
+/* ドロップダウン内のリンク */
+.dropdown li a {
+  padding: 10px 20px;
+  display: block;
+  color: white;
+  text-decoration: none;
+}
+
+/* ホバー時の色変更 */
+.dropdown li a:hover {
+  background-color: #555;
+}
+
+
+
+
+
+/*----------------------forphone---------------------------*/
+.forphone{
+  max-width: 480px;
+  margin: auto;
+}
+.forphone .bottombtn{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px;
+  margin-top: 20px;
+}
+.forphone .bottombtn .back_btn{
+  background-color: gray;
+  color: white;
+  width: 20%;
+  text-align: center;
+  font-size: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+.forphone .bottombtn .submit_btn{
+  background-color: orange;
+  color: white;
+  width: 40%;
+  text-align: center;
+  font-size: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+/*----------------------forpc---------------------------*/
+.forpc{
+  padding: 15px;
+  max-width: 1100px;
+  margin: auto;
+  background-color: rgb(255, 255, 254);
+  
+}
+
+/*----------------------tmp_home---------------------------*/
+.tmp_home{
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 10px 15px 50px;
+}
+.tmp_home h1, .tmp_home h2{
+  text-align: center;
+}
+.tmp_home table{
+  width: 100%;
+  font-size: 14px;
+  margin: auto;
+}
+.tmp_home thead, .tmp_home tbody{
+  font-weight: bold;
+}
+.tmp_home table .th_no{
+  width: 5px;
+}
+.tmp_home table .th_model{
+  width: 130px;
+}
+.tmp_home table .th_chassis{
+  width: 100px;
+}
+.tmp_home table .th_pickup{
+  width: 120px;
+}
+.tmp_home table .th_delivery{
+  width: 100px;
+}
+.tmp_home table .th_limit{
+  width: 35px;
+}
+.tmp_home table .th_responsible_person{
+  width: 50px;
+}
+.tmp_home table .th_message{
+  font-size: 12px;
+  text-align: left;
+  min-width: 100px;
+}
+.tmp_home table .th_regi{
+  width: 60px;
+  border: 2px solid orange;
+  border-radius: 15%;
+  background-color: white;
+}
+.tmp_home table .th_edit{
+  width: 30px;
+  font-size: 12px;
+}
+.tmp_home table .th_delete{
+  width: 30px;
+  font-size: 12px;
+}
+.tmp_home .plansspace{
+  border: none;
+  background-color: white;
+  height: -2px;
+}
+
+.regibtn{
+  background-color: ;
+  font-weight: bold;
+  border: 3px solid white;
+  border-radius: 10%;
+  background-color: orange;
+}
+.regibtn_in{
+  border: none;
+  
+}
+
+/*----------------------入---------------------------*/
+
+
+
+/* タブヘッダーのスタイル */
+.tab-header {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.tab-header .tab-link {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  margin-right: 5px;
+}
+
+.tab-header .tab-link.active {
+  background-color: rgb(72, 168, 247);
+  color: white;
+  font-weight: bold;
+}
+
+
+
+/* ボタンの基本スタイル */
+.btn-toggle {
+  width: 70px;
+  padding: 20px 8px ;
+  margin-top: 15px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 5px;
+}
+
+/* "済" のときのボタンスタイル（緑色） */
+.btn-success {
+  background-color: #c7c7c7;
+  color: white;
+}
+
+/* "未" のときのボタンスタイル（赤色） */
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* ボタンを押したときのエフェクト */
+.btn-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ボタンのホバー効果 */
+.btn-toggle:hover {
+  opacity: 0.85;
+}
+
+
+
+/* タブコンテンツのスタイル */
+.tab-content {
+  margin-top: 20px;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* テーブルスタイル */
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #a3a3a3;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.bk {
+  background-color: black;
+  color: white;
+}
+
+a{
+  color: black;
+  text-decoration: none;
+}
+
+.out_new {
+  
+  
+}
+.out_new input{
+  color: white;
+}
+/* 登録済みの背景色 */
+td.out_new.registered {
+  background-color: white; /* 緑系の色 */
+}
+
+/* 未登録の背景色 */
+td.out_new.not-registered {
+  background-color: #cae3fd; /* 赤系の色 */
+  font-weight: bold;
+}
+
+.tmp_home th, .tmp_home td{
+  padding: ;
+} 
+.sumi{
+  color: lightgray;
+}
+
+.forphone{
+  padding: 15px;
+}
+
+.borderboth{
+
+  padding: 5px 20px;
+}
+.tablespace{
+  background-color: white;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+
+}
+.tmp_home thead .message{
+  width: 200px;
+}
+
+
+
+.forphone .header{
+  max-width: 100%;
+  background-color: orange;
+  border: 1px solid lightgray;
+  border-radius: 10px 10px 15px 15px;
+  
+}
+.forphone .header .headerbox{
+  background-color: white;
+  padding: 0 0 20px;
+  margin-top: -10px;
+  border-radius: 0 0 10px 10px;
+  
+}
+.forphone .header h1{
+  margin-bottom: 0;
+  padding: 20px 0 0 40px;
+}
+.forphone .header p{
+  padding-left: 30px;
+}
+.forphone .q{
+  padding: 20px 0 20px 30px;
+  background-color: white;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  line-height: 2.0;
+  font-size: 18px;
+}
+.forphone .q sup.require{
+  color: rgb(224, 0, 0);
+  font-size: 12px;
+  margin-left: 2px;
+}
+.forphone .date input {
+  border: none;
+}
+.forphone .q input {
+  
+  border: none;
+  border-bottom: 1px solid lightgray;
+}
+.forphone .q input[type="text"]{
+  height: 30px;
+  padding: 5px 15px;
+}
+.forphone .q textarea{
+  width: 90%;
+  max-width: 90%;
+  min-height: 100px;
+  border: none;
+  border-bottom: 1px solid lightgray;
+  margin-top: 5px;
+}
+/*.forphone .submit{
+  margin: 30px auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+*/
+.forphone input[type="submit"]{
+  padding: 10px 25px;
+  color: rgb(255, 255, 255);
+  background-color: slateblue;
+  border: none;
+  border-radius: 10px;
+}
+
+/*----------------------入庫index---------------------------*/
+
+
+/*----------------------入庫confirm---------------------------*/
+
+.confirm{
+  max-width: 480px;
+  margin: auto;
+  padding: 10px;
+}
+.confirm h1{
+  text-align: center;
+  margin-bottom: 40px;
+}
+.confirm p{
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.confirmtable{
+  margin: auto;
+  width: 100%;
+}
+.confirmtable th, .confirmtable td{
+  border: none;
+  background-color: white;
+}
+.confirmtable th{
+  text-align: right;
+  padding: 10px 0;
+  width: 30%;
+}
+.confirmtable td{
+  text-align: left;
+  padding: 10px 0 10px 20px;
+  width: 70%;
+}
+.confirm .bottombtn{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  margin-top: 20px;
+  
+}
+.confirm .back_btn{
+  background-color: gray;
+  color: white;
+  width: 30%;
+  font-size: 15px;
+  border: none;
+}
+.confirm .submit_btn{
+  background-color: orange;
+  color: white;
+  width: 50%;
+  height: 50px;
+  font-size: 15px;
+  border: none;
+}
+.confirm .message{
+  vertical-align: top;
+}
+
+/*----------------------入庫詳細（show）---------------------------*/
+
+.show {
+  max-width: 480px;
+  width: 100%;
+  margin: auto;
+  padding: 10px;
+}
+
+.show h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 30px;
+}
+
+.showtable {
+  margin: auto;
+  width: 100%;
+}
+
+.showtable th, .showtable td {
+  border: none;
+  background-color: white;
+}
+
+.showtable th {
+  text-align: right;
+  padding: 10px 0;
+  width: 30%;
+}
+
+.showtable td {
+  text-align: left;
+  padding: 10px 0 10px 20px;
+  width: 70%;
+}
+
+.show .bottombtn {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.show .back_btn,
+.show .delete_btn {
+  text-align: center;
+  font-size: 15px;
+  padding: 15px 10px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.show .back_btn {
+  background-color: gray;
+  color: white;
+  width: 20%;
+}
+
+.show .delete_btn {
+  background-color: rgb(185, 0, 0);
+  color: white;
+  width: 100%;
+  padding: 15px 0;
+}
+.show .deletecontainer{
+  width: 40%;
+} 
+
+.show .message {
+  vertical-align: top;
+}
+
+/*----------------------出庫フォーム---------------------------*/
+.forphone .model input, .forphone .chassis input {
+  border: none;
+}
+
+/*----------------------未出庫一覧---------------------------*/
+.unshipped table{
+  border-collapse: separate;
+
+}
+.unshipped h2{
+  
+  text-align: center;
+}
+.unshipped h1{
+  text-align: center;
+  font-size: 25px;
+}
+.unshipped h3{
+  font-size: 23px;
+  
+}
+.unshipped hr{
+  margin-bottom: 50px;
+  color: #666;
+}
+.unshipped_no{
+  width: 20px;
+  border: 1px solid darkgray;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-bottom: 1px solid #333;
+}
+.unshipped_chassis_number{
+  width: 150px;
+  border: none;
+  border-bottom: 1px solid #333;
+  
+}
+.unshipped_new{
+  width: 100px;
+  margin-left: 30px;
+  border-radius: 10px;
+  border: 5px solid white;
+  background-color: rgb(188, 218, 252);
+  font-weight: bold;
+}
+.unshipped_new_left{
+  border: none
+}
+.unshipped_chassis_number{
+  font-weight: bold;
+}
+
+/*----------------------TMP管理表---------------------------*/
+
+/*----------------------業務日程---------------------------*/
+
+.tmp_home  .th_comment{
+  width: 200px;
+}
+.no_edit{
+  text-align: left;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/*----------------------移動記録---------------------------*/
+table.movement thead{
+  border: 3px solid black;
+  border-bottom: 10px double black;
+
+}
+
+table.movement tbody {
+
+  border: 3px solid black;
+  font-weight: bold;
+}
+.movement td{
+  border: 1px solid #c7c7c7;
+}
+table.movement .sky{
+  font-size: 1.0em;
+  font-weight: bold;
+}
+table.movement tbody .bottom{
+  border-bottom: 2px solid black;
+}
+.movement .money_name{
+  font-size: 11px;
+}
+.movement .detail{
+  text-align: left;
+  vertical-align: top;
+  padding: 5px;
+  font-size: 13px;
+}
+.border_dot{
+  border-bottom: 1px solid #f2f2f2;
+}
+.border_none{
+  border-bottom: none;
+}
+.movement .th1{
+  width: 30px;
+}
+.movement .fontsmall{
+  font-size: 0.8em;
+}
+.movement .pad{
+  padding: 0 ;
+}
+.movement .th2{
+  width: 200px;
+}
+.movement .th3{
+  width: 90px;
+}
+.movement .th4{
+  width: 90px;
+}
+.movement .th5{
+  width: 90px;
+}
+.movement .th6{
+  width: 90px;
+}
+.movement .th7{
+  width: 130px;
+}
+.movement .th8{
+  width: 50px;
+  border-right: 5px double black;
+  
+}
+.movement .td8{
+  border-right: 5px double black;
+}
+.movement .th1{
+  
+}
+.movement .th1{
+  
+}
+.movement .th1{
+  
+}
+.movement .th1{
+  
+}
+.movement .td8{
+  text-align: left;
+  vertical-align: top;
+}
+
+
+/*----------------------スマホ用---------------------------*/
+#smartphone{
+  max-width: 450px;
+  margin: auto;
+  
+}
+#smartphone h2{
+  text-align: center;
+  margin-top: 20px;
+}
+#smartphone h3{
+  margin-top: -20px;
+  text-align: center;
+}
+#smartphone hr{
+  margin: 20px 5px 30px;
+}
+#smartphone nav{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  text-align: center;
+  margin: auto;
+  
+}
+#smartphone .smartnav{
+  max-width: 300px;
+  width: 100%;
+  padding: 40px 20px;
+  box-shadow: 10px 10px 20px -7px #777777;
+  border-radius: 20px;
+  background-color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+#smartphone .nav1{
+  background-color: rgb(255, 224, 224);
+}
+#smartphone .nav2{
+  background-color: rgb(222, 222, 255);
+}
+#smartphone .nav3{
+  background-color: rgb(252, 239, 215);
+}
+#smartphone .nav4{
+  background-color: rgb(222, 254, 222);
+}
+
+
+/*----------------------Smartphone---------------------------*/
+
+.displayphone {
+  max-width: 480px;
+  padding: 5px;
+  margin: auto;
+  text-align: center;
+  
+}
+.displayphone .menubar{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 11px;
+  height: 70px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.displayphone .menu_content{
+  background-color: white;
+  padding: 10px;
+  width: 12%;
+}
+
+
+.displayphone h1{
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+.displayphone hr{
+  margin:30px auto 20px;
+  color: lightgray;
+}
+.displayphone th{
+  font-size: 12px;
+}
+.displayphone tr{
+  
+}
+.displayphone td{
+  font-size: 13px;
+  border: 1px solid lightgray;
+  font-weight: bold;
+}
+.displayphone table{
+  margin: auto;
+  min-width: 100%;
+}
+.displayphone .tablespace{
+  border: 1px solid white;
+}
+
+.displayphone .th_no{
+  width: 15px;
+  background-color: rgb(32, 32, 32);
+  color: white;
+}
+.displayphone .th_movereco{
+  min-width: 50px;
+  border: 2px solid orange;
+  background-color: white;
+  border-radius: 10%;
+}
+
+.displayphone .regibtn{
+  border: 2px solid white;
+  border-radius: 10%;
+}
+.displayphone .th_underspace{
+  border: 1px solid white;
+  background-color: white;
+  border-bottom: 1px solid lightgray;
+}
+
+.displayphone .borderleft_none{
+  border-left: 1px solid white;
+}
+
+
+/* タブレット用スタイル */
+@media screen and (max-width: 1300px) {
+  .tmp_home {
+    margin-left: 50px;
+  }
+}
+
+
+/* 480px以上のスタイル */
+@media screen and (min-width: 768px) {
+  .displayphone{
+    display: none;
+  }
+}
+
+/* スマホ用スタイル */
+@media screen and (max-width: 480px) {
+  .tmp_home {
+    display: none;
+  }
+  header{
+    display: none;
+  }
+  .sidebarcontainer{
+    display: block;
+  }
+  /*----------------------schedule---------------------------*/
+  .displayphone{
+    padding: 20px;
+  }
+
+  .displayphone .th_modelchassis{
+    max-width: 300px;
+    width: 100%;
+  }
+
+  .displayphone .tantou{
+    min-width: 50px;
+  }
+
+  .displayphone .td_left{
+    text-align: left;
+  }
+  .displayphone .regibtn{
+    min-width: 50px;
+    border-radius: 5%;
+  }
+  .backcolor_schedule, .backcolor_out, .backcolor_plan, .backcolor_show{
+    margin: auto;
+  }
+}
+
+
+
+
+
+/*----------------------TMP管理表---------------------------*/
+
+.success-message {
+  margin:auto;
+  text-align: center;
+}
+
+.success-message h3 {
+  margin-top: 50px;
+}
+
+.success_btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+
+}
+.success_center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

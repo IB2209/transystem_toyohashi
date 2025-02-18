@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>日報 - 移動記録</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 800px; margin: auto; border: 1px solid #000; padding: 20px; }
+    h1 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid black; padding: 10px; text-align: left; }
+    .print-btn { text-align: center; margin-top: 20px; }
+    @media print {
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>移動記録 日報</h1>
+
+    <table>
+      <tr>
+        <th>移動日</th>
+        <td><%= @movement_record.move_date %></td>
+      </tr>
+      <tr>
+        <th>担当者</th>
+        <td><%= @movement_record.responsible_person %></td>
+      </tr>
+      <tr>
+        <th>依頼</th>
+        <td><%= @movement_record.request_type %></td>
+      </tr>
+      <tr>
+        <th>新中古</th>
+        <td><%= @movement_record.vehicle_condition %></td>
+      </tr>
+      <tr>
+        <th>型式</th>
+        <td><%= @movement_record.model %></td>
+      </tr>
+      <tr>
+        <th>車番</th>
+        <td><%= @movement_record.chassis_number %></td>
+      </tr>
+      <tr>
+        <th>引取先</th>
+        <td><%= @movement_record.pickup_location %></td>
+      </tr>
+      <tr>
+        <th>納車先</th>
+        <td><%= @movement_record.delivery_location %></td>
+      </tr>
+      <tr>
+        <th>出発時間</th>
+        <td><%= @movement_record.departure_hour.to_s.rjust(2, '0') %>:<%= @movement_record.departure_minute.to_s.rjust(2, '0') %></td>
+      </tr>
+      <tr>
+        <th>到着時間</th>
+        <td><%= @movement_record.arrival_hour.to_s.rjust(2, '0') %>:<%= @movement_record.arrival_minute.to_s.rjust(2, '0') %></td>
+      </tr>
+      <tr>
+        <th>高速代</th>
+        <td><%= "#{@movement_record.toll_fee_type} (#{@movement_record.toll_fee}円)" %></td>
+      </tr>
+      <tr>
+        <th>燃料代</th>
+        <td><%= "#{@movement_record.fuel_fee_type} (#{@movement_record.fuel_fee}円)" %></td>
+      </tr>
+      <tr>
+        <th>燃料</th>
+        <td><%= "#{@movement_record.fuel_amount} ℓ" %></td>
+      </tr>
+      <tr>
+        <th>宿泊代</th>
+        <td><%= "#{@movement_record.lodging_fee_type} (#{@movement_record.lodging_fee}円)" %></td>
+      </tr>
+      <tr>
+        <th>交通代</th>
+        <td><%= "#{@movement_record.transportation_fee_type} (#{@movement_record.transportation_fee}円)" %></td>
+      </tr>
+      <tr>
+        <th>異常の有無</th>
+        <td><%= @movement_record.has_abnormality ? "有" : "無" %></td>
+      </tr>
+      <tr>
+        <th>メッセージ</th>
+        <td><%= @movement_record.message %></td>
+      </tr>
+    </table>
+
+    <div class="print-btn">
+      <button onclick="window.print()">印刷する</button>
+    </div>
+
+  </div>
+
+</body>
+</html>

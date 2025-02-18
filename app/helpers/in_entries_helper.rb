@@ -1,0 +1,2 @@
+module InEntriesHelper
+end

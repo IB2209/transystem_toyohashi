@@ -1,0 +1,190 @@
+<div class="tmp_home">
+  <h1>移動記録</h1>
+
+  <!-- ✅ 月ごとのタブを作成 -->
+  <ul class="tab-header">
+    <% @grouped_movement_records.keys.each_with_index do |month, index| %>
+      <li class="tab-link <%= 'active' if index.zero? %>" data-tab="month-<%= month.strftime('%Y-%m') %>">
+        <%= month.strftime('%-m月') %>
+      </li>
+    <% end %>
+  </ul>
+
+  <!-- ✅ 各月のデータをタブの中に配置 -->
+  <div class="tab-content">
+    <% @grouped_movement_records.each do |month, daily_records| %>
+      <div class="tab-pane <%= 'active' if @grouped_movement_records.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+        
+
+        <% daily_records.each do |date, records| %>
+          <!-- ✅ move_date ごとのグループ -->
+          <h2 style="margin-top: 20px; border-top: 1px solid #ccc; padding: 20px 0 5px; text-align: left">
+            <%= l date, format: "%-m月%-d日(%a)" %>
+          </h2>
+
+      <table class="movement">
+        <thead>
+          <tr class="tr">
+            <th class="th1" rowspan="2">No.</th>
+            <th class="th2">引取先　➡︎　納車先 <br> 経由地 </th>
+            <th class="th3">燃料代</th>
+            <th class="th4">高速代</th>
+            <th class="th5">交通代</th>
+            <th class="th6">宿泊代</th>
+            <th class="th7">担当者</th>
+            <th class="th8">異常</th>
+            <th class="th9">編集</th>
+            <th class="th10">削除</th>
+          </tr>
+          <tr>
+            <th>型式 <br> 車両番号</th>
+            <th rowspan="2">燃料代詳細</th>
+            <th rowspan="2">高速代詳細</th>
+            <th rowspan="2">交通代詳細</th>
+            <th rowspan="2">宿泊代詳細</th>
+            <th class="th8" rowspan="3" colspan="2">メッセージ</th>
+            <th rowspan="3" colspan="2">いすゞ入力 <br> 未 or 済</th>
+            
+          </tr>
+          <tr>
+            <th>依頼</th>
+            <th>出発時間　➡︎　到着時間</th>
+          </tr>
+          <tr>
+            <th>状態</th>
+            <th>出発距離　➡︎　到着距離 <br> ( 総距離 )</th>
+            <th colspan="4">合計金額</th>
+          </tr>
+        </thead>
+        <tbody>
+  <% records.each_with_index do |record, index| %>
+    <!-- 1行目 -->
+    <tr>
+      <td class="sky" style="text-align: center; background-color: #f9f9f9;" rowspan="2"><%= @record_numbers_by_date[date][record.id] %></td>
+      <td class="sky">
+      <%= "#{record.pickup_location || '未設定'}　➡︎　#{record.delivery_location || '未設定'}<br>#{record.waypoint.presence || ''}".html_safe %>
+      </td>
+      <!-- 燃料代 -->
+<td>
+  <% if record.fuel_fee_type == "カード" %>
+    <div class="money_name">燃料 - カード -</div>
+    <% if record.fuel_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.fuel_fee) %>円
+    <% end %>
+  <% elsif record.fuel_fee_type.present? %>
+    <div class="money_name">燃料 - <%= record.fuel_fee_type %> -</div>
+    <% if record.fuel_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.fuel_fee) %>円
+    <% end %>
+  <% end %>
+  <% if record.fuel_amount.present? && record.fuel_amount.to_i > 0 %>
+    (<%= record.fuel_amount.to_i %>ℓ)
+  <% end %>
+</td>
+      <!-- 高速代 -->
+<td>
+  <% if record.toll_fee_type == "カード" %>
+    <div class="money_name">高速 - カード -</div>
+    <% if record.toll_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.toll_fee) %>円
+    <% end %>
+  <% elsif record.toll_fee_type.present? %>
+    <div class="money_name">高速 - <%= record.toll_fee_type %> -</div>
+    <% if record.toll_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.toll_fee) %>円
+    <% end %>
+  <% end %>
+</td>
+<!-- 交通費 -->
+<td>
+  <% if record.transportation_fee_type == "カード" %>
+    <div class="money_name">交通 - カード -</div>
+    <% if record.transportation_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.transportation_fee) %>円
+    <% end %>
+  <% elsif record.transportation_fee_type.present? %>
+    <div class="money_name">交通 - <%= record.transportation_fee_type %> -</div>
+    <% if record.transportation_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.transportation_fee) %>円
+    <% end %>
+  <% end %>
+</td>
+
+<!-- 宿泊代 -->
+<td>
+  <% if record.lodging_fee_type == "カード" %>
+    <div class="money_name">宿泊 - カード -</div>
+    <% if record.lodging_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.lodging_fee) %>円
+    <% end %>
+  <% elsif record.lodging_fee_type.present? %>
+    <div class="money_name">宿泊 - <%= record.lodging_fee_type %> -</div>
+    <% if record.lodging_fee.to_i > 0 %>
+      <%= number_with_delimiter(record.lodging_fee) %>円
+    <% end %>
+  <% end %>
+</td>
+      <td><%= record.responsible_person || "" %></td>
+      <td class="th8"><%= record.has_abnormality ? "有" : "無" %></td>
+      <td><%= link_to '編集', edit_movement_record_path(record), class: 'btn btn-warning' %></td>
+      <td><%= link_to '削除', movement_record_path(record), class: 'btn btn-info' %></td>
+      
+
+    </tr>
+    <!-- 2行目 -->
+    <tr>
+      <td class="sky"><%= "#{record.model || '未設定'} <br>#{record.chassis_number || '未設定'}" .html_safe %></td>
+      <td rowspan="2" class="money_name detail"><%= record.fuel_fee_detail.presence || "" %></td>
+      <td rowspan="2" class="money_name detail"><%= record.toll_fee_detail.presence || "" %></td>
+      <td rowspan="2" class="money_name detail"><%= record.transportation_fee_detail.presence || "" %></td>
+      <td rowspan="2" class="money_name detail"><%= record.lodging_fee_detail.presence || "" %></td>
+      <td class="td8" rowspan="3" colspan="2"><%= record.message || "なし" %></td>
+      <td class="border_none" rowspan="3">ロケ管理<br>
+  <%= button_to record.status_1 ? "済" : "未",
+    toggle_status_1_movement_record_path(record),
+    method: :patch,
+    remote: true,
+    class: "btn btn-toggle #{record.status_1 ? 'btn-success' : 'btn-danger'}",
+    id: "status-button-1-#{record.id}",
+    data: { url: toggle_status_1_movement_record_path(record) } %>
+</td>
+
+<td class="border_none" rowspan="3">SKY<br>
+  <%= button_to record.status_2 ? "済" : "未",
+    toggle_status_2_movement_record_path(record),
+    method: :patch,
+    remote: true,
+    class: "btn btn-toggle #{record.status_2 ? 'btn-success' : 'btn-danger'}",
+    style: "margin-top:20px;",
+    id: "status-button-2-#{record.id}",
+    data: { url: toggle_status_2_movement_record_path(record) } %>
+</td>
+
+    </tr>
+
+    <!-- 3行目 -->
+    <tr>
+      <td class="fontsmall pad"><%= record.request_type || "" %></td>
+      <td class="sky">
+        <%= "#{record.departure_hour.to_s.rjust(1, '0')}:#{record.departure_minute.to_s.rjust(2, '0')}　➡︎　#{record.arrival_hour.to_s.rjust(1, '0')}:#{record.arrival_minute.to_s.rjust(2, '0')}" %>
+      </td>
+    </tr>
+    <tr class="bottom">
+                  <td class="fontsmall"><%= record.vehicle_condition || "" %></td>
+                  <td>
+                    <%= "#{record.departure_distance.present? ? "#{record.departure_distance} km" : "未設定"} ➡︎ 
+                        #{record.arrival_distance.present? ? "#{record.arrival_distance} km" : "未設定"} <br>
+                        （ #{record.departure_distance.present? && record.arrival_distance.present? ? 
+                        "#{record.arrival_distance - record.departure_distance} km" : "未設定"} ）".html_safe %>
+                  </td>
+                  <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
+                  <td colspan="4"><%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "" %></td>
+                </tr>
+              <% end %> <!-- `records.each_with_index` の `end` -->
+            </tbody>
+          </table>
+        <% end %> <!-- `daily_records.each` の `end` -->
+      </div>
+    <% end %> <!-- `@grouped_movement_records.each` の `end` -->
+  </div>
+</div>

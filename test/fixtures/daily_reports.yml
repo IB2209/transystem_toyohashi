@@ -1,0 +1,65 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  work_date: 2025-01-31
+  employee_name: MyString
+  start_time: 2025-01-31 23:06:51
+  end_time: 2025-01-31 23:06:51
+  day_off: MyString
+  work_content: MyString
+  work_content_other: MyString
+  vehicle_model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  delivery_location: MyString
+  travel_distance: 1
+  fuel_fee: 1
+  toll_fee: 1
+  transportation_fee: 1
+  lodging_fee: 1
+  fuel_fee_type: MyString
+  toll_fee_type: MyString
+  transportation_fee_type: MyString
+  lodging_fee_type: MyString
+  fuel_amount: 1
+  has_abnormality: false
+  remarks: MyText
+  status: false
+  status_1: false
+  status_2: false
+  fuel_fee_detail: MyText
+  toll_fee_detail: MyText
+  transportation_fee_detail: MyText
+  lodging_fee_detail: MyText
+
+two:
+  work_date: 2025-01-31
+  employee_name: MyString
+  start_time: 2025-01-31 23:06:51
+  end_time: 2025-01-31 23:06:51
+  day_off: MyString
+  work_content: MyString
+  work_content_other: MyString
+  vehicle_model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  delivery_location: MyString
+  travel_distance: 1
+  fuel_fee: 1
+  toll_fee: 1
+  transportation_fee: 1
+  lodging_fee: 1
+  fuel_fee_type: MyString
+  toll_fee_type: MyString
+  transportation_fee_type: MyString
+  lodging_fee_type: MyString
+  fuel_amount: 1
+  has_abnormality: false
+  remarks: MyText
+  status: false
+  status_1: false
+  status_2: false
+  fuel_fee_detail: MyText
+  toll_fee_detail: MyText
+  transportation_fee_detail: MyText
+  lodging_fee_detail: MyText

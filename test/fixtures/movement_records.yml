@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  schedule: one
+  responsible_person: MyString
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  waypoint: MyString
+  delivery_location: MyString
+  departure_time: 2025-01-28 11:06:34
+  arrival_time: 2025-01-28 11:06:34
+  departure_distance: 1
+  arrival_distance: 1
+  toll_fee_type: MyString
+  toll_fee: 1
+  fuel_fee_type: MyString
+  fuel_fee: 1
+  has_abnormality: false
+  message: MyText
+
+two:
+  schedule: two
+  responsible_person: MyString
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  waypoint: MyString
+  delivery_location: MyString
+  departure_time: 2025-01-28 11:06:34
+  arrival_time: 2025-01-28 11:06:34
+  departure_distance: 1
+  arrival_distance: 1
+  toll_fee_type: MyString
+  toll_fee: 1
+  fuel_fee_type: MyString
+  fuel_fee: 1
+  has_abnormality: false
+  message: MyText

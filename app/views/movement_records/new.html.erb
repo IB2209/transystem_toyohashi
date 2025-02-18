@@ -1,0 +1,178 @@
+<div class="backcolor_schedule">
+  <div class="forphone">
+    <div class="header">
+      <div class="headerbox">
+        <h1>- 移動記録登録 -</h1>
+        <p>業務の詳細を入力してください</p>
+        <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">※ 必須の質問です</p>
+      </div>
+    </div>
+
+    <%= form_with model: @movement_record, local: true do |form| %>
+      <!-- スケジュールIDを隠しフィールドで送信 -->
+      <%= form.hidden_field :schedule_id, value: @movement_record.schedule_id %>
+
+      <div class="q date">
+        <b><%= form.label :move_date, "移動日" %></b><br>
+        <%= form.date_field :move_date, required: true, value: @movement_record.move_date || Date.today %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :responsible_person, "担当者" %></b><br>
+        <%= form.text_field :responsible_person, value: @movement_record.responsible_person, readonly: true %>
+      </div>
+
+      <!-- 依頼 -->
+<div class="q">
+  <b><%= form.label :request_type, "依頼" %></b><br>
+  <%= form.radio_button :request_type, "いすゞ", checked: true %> いすゞ　<br>
+  <%= form.radio_button :request_type, "UD" %> UD　<br>
+  <%= form.radio_button :request_type, "FUSO" %> FUSO<br>
+  <%= form.radio_button :request_type, "ZERO" %> ZERO
+</div>
+
+<!-- 新中古 -->
+<div class="q">
+  <b><%= form.label :vehicle_condition, "新中古" %></b><br>
+  <%= form.radio_button :vehicle_condition, "新", checked: true %> 新車　
+  <%= form.radio_button :vehicle_condition, "中" %> 中古車
+</div>
+
+      <div class="q">
+        <b><%= form.label :model, "型式" %></b><br>
+        <%= form.text_field :model, value: @movement_record.model, readonly: true %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :chassis_number, "車番" %></b><br>
+        <%= form.text_field :chassis_number, value: @movement_record.chassis_number, readonly: true %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :pickup_location, "引取先" %></b><br>
+        <%= form.text_field :pickup_location, value: @movement_record.pickup_location, readonly: true %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :waypoint, "経由地" %></b><br>
+        <%= form.text_field :waypoint %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :delivery_location, "納車先" %></b><br>
+        <%= form.text_field :delivery_location, value: @movement_record.delivery_location, readonly: true %>
+      </div>
+
+      <!-- 出発時間 -->
+      <div class="q">
+  <b><%= form.label :departure_time, "出発時間" %></b><br>
+  <%= form.select :departure_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, prompt: "時" %> :
+  <%= form.select :departure_minute, [0, 15, 30, 45].map { |m| [m.to_s.rjust(2, '0'), m] }, prompt: "分" %>
+</div>
+
+<div class="q">
+  <b><%= form.label :arrival_time, "到着時間" %></b><br>
+  <%= form.select :arrival_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, prompt: "時" %> :
+  <%= form.select :arrival_minute, [0, 15, 30, 45].map { |m| [m.to_s.rjust(2, '0'), m] }, prompt: "分" %>
+</div>
+
+
+      <div class="q">
+        <b><%= form.label :departure_distance, "出発時の距離" %></b><br>
+        <%= form.number_field :departure_distance %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :arrival_distance, "到着時の距離" %></b><br>
+        <%= form.number_field :arrival_distance %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :fuel_fee, "燃料代" %></b><br>
+        <%= form.radio_button :fuel_fee_type, "" %> 無　
+        <%= form.radio_button :fuel_fee_type, "現金" %> 現金
+        <%= form.radio_button :fuel_fee_type, "カード" %> カード<br>
+        <%= form.number_field :fuel_fee, placeholder: "金額" %>
+      </div>
+
+      <!-- 燃料 -->
+<div class="q">
+  <b><%= form.label :fuel_amount, "燃料" %></b><br>
+  <%= form.number_field :fuel_amount, placeholder: "ℓ", class: "form-control" %>
+</div>
+      <!-- 燃料代詳細 -->
+      <div class="q">
+        <b><%= form.label :fuel_fee_detail, "燃料代詳細" %></b><br>
+        <%= form.text_area :fuel_fee_detail, placeholder: "燃料代の詳細を入力" %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :toll_fee, "高速代" %></b><br>
+        <%= form.radio_button :toll_fee_type, "" %> 無　
+        <%= form.radio_button :toll_fee_type, "現金" %> 現金
+        <%= form.radio_button :toll_fee_type, "カード" %> カード<br>
+        <%= form.number_field :toll_fee, placeholder: "金額" %>
+      </div>
+
+      <!-- 高速代詳細 -->
+      <div class="q">
+        <b><%= form.label :toll_fee_detail, "高速代詳細" %></b><br>
+        <%= form.text_area :toll_fee_detail, placeholder: "高速代の詳細を入力" %>
+      </div>
+      
+
+<!-- 交通代 -->
+<div class="q">
+  <b><%= form.label :transportation_fee, "交通代" %></b><br>
+  <%= form.radio_button :transportation_fee_type, "" %> 無　
+  <%= form.radio_button :transportation_fee_type, "現金" %> 現金<br>
+  <%= form.number_field :transportation_fee, placeholder: "円", class: "form-control" %>
+</div>
+
+      <!-- 交通代詳細 -->
+      <div class="q">
+        <b><%= form.label :transportation_fee_detail, "交通代詳細" %></b><br>
+        <%= form.text_area :transportation_fee_detail, placeholder: "交通代の詳細を入力" %>
+      </div>
+
+
+<!-- 宿泊代 -->
+<div class="q">
+  <b><%= form.label :lodging_fee, "宿泊代" %></b><br>
+  <%= form.radio_button :lodging_fee_type, "" %> 無　
+  <%= form.radio_button :lodging_fee_type, "現金" %> 現金<br>
+  <%= form.number_field :lodging_fee, placeholder: "円", class: "form-control" %>
+</div>
+      <!-- 宿泊代詳細 -->
+      <div class="q">
+        <b><%= form.label :lodging_fee_detail, "宿泊代詳細" %></b><br>
+        <%= form.text_area :lodging_fee_detail, placeholder: "宿泊代の詳細を入力" %>
+      </div>
+
+      <div class="q">
+  <b><%= form.label :has_abnormality, "異常の有無" %></b><br>
+  <%= form.radio_button :has_abnormality, true, id: "has_abnormality_true" %>
+  <%= label_tag "has_abnormality_true", "有" %><br>
+  
+  <%= form.radio_button :has_abnormality, false, id: "has_abnormality_false", checked: true %>
+  <%= label_tag "has_abnormality_false", "無" %>
+</div>
+
+      <div class="q">
+        <b><%= form.label :message, "メッセージ" %></b><br>
+        <%= form.text_area :message %>
+      </div>
+
+      <% if flash[:alert].present? %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+
+      <div class="bottombtn">
+      <%= form.submit "登録", class: "submit_btn" %>
+      </div>
+    <% end %>
+  </div>
+</div>

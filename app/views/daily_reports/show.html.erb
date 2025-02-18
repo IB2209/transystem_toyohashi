@@ -1,0 +1,11 @@
+<h1>業務日報 詳細</h1>
+
+<p><strong>日付:</strong> <%= @daily_report.work_date %></p>
+<p><strong>担当者:</strong> <%= @daily_report.employee_name %></p>
+<p><strong>出勤時間:</strong> <%= @daily_report.start_time&.strftime('%H:%M') %></p>
+<p><strong>退勤時間:</strong> <%= @daily_report.end_time&.strftime('%H:%M') %></p>
+<p><strong>業務内容:</strong> <%= @daily_report.work_content_other.presence || @daily_report.work_content %></p>
+<p><strong>備考:</strong> <%= @daily_report.remarks %></p>
+
+<%= link_to "編集", edit_daily_report_path(@daily_report) %> |
+<%= link_to "一覧に戻る", daily_reports_path %>

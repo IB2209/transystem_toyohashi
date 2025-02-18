@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  delivery_location: MyString
+  schedule_date: 2025-01-27 15:04:47
+  responsible_person: MyString
+  note: MyText
+  plan: one
+
+two:
+  model: MyString
+  chassis_number: MyString
+  pickup_location: MyString
+  delivery_location: MyString
+  schedule_date: 2025-01-27 15:04:47
+  responsible_person: MyString
+  note: MyText
+  plan: two

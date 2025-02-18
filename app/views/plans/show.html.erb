@@ -1,0 +1,23 @@
+<div class="backcolor_show">
+
+<div class="show">
+
+  <h1>- 伝票詳細 -</h1>
+
+  <table class="showtable">
+    <tr><th>型式</th><td><%= @plan.model.presence || "なし" %></td></tr>
+    <tr><th>車番</th><td><%= @plan.chassis_number.presence || "なし" %></td></tr>
+    <tr><th>引取先</th><td><%= @plan.pickup_location.presence || "なし" %></td></tr>
+    <tr><th>納車先</th><td><%= @plan.delivery_location.presence || "なし" %></td></tr>
+    <tr><th>移動期日</th><td><%= @plan.move_date&.strftime("%Y年 %m月 %d日 %H:%M") || "なし" %></td></tr>
+    <tr><th>コメント</th><td><%= @plan.comment.presence || "なし" %></td></tr>
+    <tr><th>不具合内容</th><td><%= @plan.issue_detail.presence || "なし" %></td></tr>
+  </table>
+
+  <div class="bottombtn">
+    <%= link_to "戻る", plans_path, class: "back_btn" %>
+    <div class="deletecontainer"><%= button_to "削除", plan_path(@plan), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "delete_btn" %></div>
+  </div>
+
+</div>
+</div>

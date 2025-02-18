@@ -1,0 +1,7 @@
+/log
+/tmp
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/config/master.key
+/vendor/bundle
+

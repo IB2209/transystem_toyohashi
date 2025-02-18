@@ -1,0 +1,71 @@
+<div class="backcolor_schedule">
+  <div class="forphone">
+    <div class="header">
+      <div class="headerbox">
+        <h1>- 移動日登録 -</h1>
+        <p>
+          作成した伝票を元にスケジュールを登録してください。
+        </p>
+        <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">
+        ※ 必須の質問です
+        </p>
+      </div>
+    </div>
+
+    <%= form_with model: @schedule, local: true do |form| %>
+  <%= form.hidden_field :plan_id %>
+
+  <div class="q">
+    <b><%= form.label :model, "型式" %></b><br>
+    <%= form.text_field :model, value: @schedule.model, readonly: true %>
+  </div>
+
+  <div class="q">
+    <b><%= form.label :chassis_number, "車番" %></b><br>
+    <%= form.text_field :chassis_number, value: @schedule.chassis_number, readonly: true %>
+  </div>
+
+  <div class="q">
+    <b><%= form.label :pickup_location, "引取先" %></b><br>
+    <%= form.text_field :pickup_location, value: @schedule.pickup_location, readonly: true %>
+  </div>
+
+  <div class="q">
+    <b><%= form.label :delivery_location, "納車先" %></b><br>
+    <%= form.text_field :delivery_location, value: @schedule.delivery_location, readonly: true %>
+  </div>
+
+  <div class="q date">
+    <b><%= form.label :schedule_date, "移動日時" %></b><br>
+    <%= form.datetime_field :schedule_date, required: true, step: 3600, value: @schedule.schedule_date || DateTime.now.change({ hour: 9 }) %>
+  </div>
+
+  <div class="q">
+  <b><%= form.label :responsible_person, "担当者" %></b><br>
+  <% ["未定","西村", "土屋", "石川", "小笠原", "大原", "津田", "太我", "舜平", "竹本", "小野田"].each do |person| %>
+    <%= form.radio_button :responsible_person, person, id: "responsible_person_#{person}", checked: @schedule.responsible_person == person %>
+    <%= label_tag "responsible_person_#{person}", person %><br>
+  <% end %>
+  <%= form.radio_button :responsible_person, "その他", id: "responsible_person_other", checked: @schedule.responsible_person.blank? %>
+  <%= label_tag "responsible_person_other", "その他" %><br>
+  <%= form.text_field :other_responsible_person, placeholder: "その他の場合に入力", class: "optional-person" %>
+</div>
+
+
+
+      <div class="q">
+        <b><%= form.label :comment, "コメント" %></b><br>
+        <%= form.text_area :comment, placeholder: "特記事項があれば入力してください" %>
+      </div>
+     <div class="bottombtn">
+      <%= form.submit "登録", class: "submit_btn" %>
+      </div>
+    <% end %>
+    <% if flash[:alert].present? %>
+  <div class="alert alert-danger">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+  </div>
+</div>

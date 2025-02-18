@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "COXGEAR 豊橋営業所" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= yield :head %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    
+    <%= stylesheet_link_tag :application, "data-turbo-track": "reload" %>
+  </head>
+
+  <body>
+    <div class="sidebarcontainer">
+      <header>
+        <% if ["movement_records", "schedules", "plans", "entries", "in_entries", "out_entries"].include?(params[:controller]) && params[:action] == "index" %>
+        <div class="sidebar">
+    <ul class="menu">
+        <li class="menu-item" data-menu="管理画面">
+            <a href="#"><%= image_tag "icons/dashboard.png", alt: "" %>管理画面</a>
+            <ul class="dropdown">
+                <li><%= link_to "登録済伝票", plans_path %></li>
+                <li><%= link_to "業務日程", schedules_path %></li>
+                <li><%= link_to "移動記録", movement_records_path %></li>
+                <li><%= link_to "日報", daily_reports_path %></li>
+                <li><%= link_to "入出庫", entries_path %></li>
+                <li><%= link_to "入庫", in_entries_path %></li>
+                <li><%= link_to "出庫", out_entries_path %></li>
+                <li><%= link_to "未出庫", unshipped_entries_path %></li>
+            </ul>
+        </li>
+        <li class="menu-item" data-menu="登録">
+            <a href="#"><%= image_tag "icons/regi.png", alt: "" %>登録</a>
+            <ul class="dropdown">
+                <li><%= link_to "伝票", new_plan_path %></li>
+                <li><%= link_to "日報", new_daily_report_path %></li>
+                <li><%= link_to "入庫", new_in_entry_path %></li>
+                <li><%= link_to "出庫", unshipped_entries_path %></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+        <% end %>
+      </header>
+
+      <%= yield %>
+    </div>
+
+    <%= javascript_include_tag "script", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "movement_records", "data-turbo-track": "reload" %>
+  </body>
+</html>

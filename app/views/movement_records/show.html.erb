@@ -1,0 +1,40 @@
+<div class="backcolor_show">
+
+<div class="show">
+  <h1>- 移動記録詳細 -</h1>
+
+  <table class="showtable">
+    <tr><th>移動日</th><td><%= @movement_record.move_date&.strftime("%Y年 %-m月 %-d日") || "未設定" %></td></tr>
+    <tr><th>担当者</th><td><%= @movement_record.responsible_person.presence || "未設定" %></td></tr>
+    <tr><th>依頼</th><td><%= @movement_record.request_type.presence || "未設定" %></td></tr>
+    <tr><th>新中古</th><td><%= @movement_record.vehicle_condition.presence || "未設定" %></td></tr>
+    <tr><th>型式</th><td><%= @movement_record.model.presence || "未設定" %></td></tr>
+    <tr><th>車番</th><td><%= @movement_record.chassis_number.presence || "未設定" %></td></tr>
+    <tr><th>引取先</th><td><%= @movement_record.pickup_location.presence || "未設定" %></td></tr>
+    <tr><th>経由地</th><td><%= @movement_record.waypoint.presence || "なし" %></td></tr>
+    <tr><th>納車先</th><td><%= @movement_record.delivery_location.presence || "未設定" %></td></tr>
+    <tr><th>出発時間</th><td><%= @movement_record.departure_hour.to_s.rjust(2, '0') + ":" + @movement_record.departure_minute.to_s.rjust(2, '0') rescue "未設定" %></td></tr>
+    <tr><th>到着時間</th><td><%= @movement_record.arrival_hour.to_s.rjust(2, '0') + ":" + @movement_record.arrival_minute.to_s.rjust(2, '0') rescue "未設定" %></td></tr>
+    <tr><th>出発時の距離</th><td><%= @movement_record.departure_distance.presence || "未設定" %> km</td></tr>
+    <tr><th>到着時の距離</th><td><%= @movement_record.arrival_distance.presence || "未設定" %> km</td></tr>
+    <tr><th>燃料</th><td><%= @movement_record.fuel_amount.present? ? "#{@movement_record.fuel_amount} ℓ" : "未設定" %></td></tr>
+
+    <% { fuel_fee: "燃料", toll_fee: "高速", transportation_fee: "交通", lodging_fee: "宿泊" }.each do |fee, label| %>
+      <tr><th><%= label %>代</th><td>
+        <%= @movement_record.send("#{fee}_type").presence || "未設定" %> 
+        (<%= @movement_record.send(fee).presence || "未設定" %> 円)
+      </td></tr>
+      <tr><th><%= label %>代詳細</th><td><%= @movement_record.send("#{fee}_detail").presence || "なし" %></td></tr>
+    <% end %>
+
+    <tr><th>異常の有無</th><td><%= @movement_record.has_abnormality ? "有" : "無" %></td></tr>
+    <tr><th>メッセージ</th><td><%= @movement_record.message.presence || "なし" %></td></tr>
+  </table>
+
+  <div class="bottombtn">
+    <%= link_to "戻る", movement_records_path, class: "back_btn" %>
+    <div class="deletecontainer"><%= button_to "削除", movement_record_path(@movement_record), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "delete_btn" %></div>
+  </div>
+</div>
+
+</div> <!-- backcolor_show -->
