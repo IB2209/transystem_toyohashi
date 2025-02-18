@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_08_153326) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_18_070450) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "work_date"
     t.string "employee_name"
@@ -67,7 +67,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_08_153326) do
   end
 
   create_table "movement_records", force: :cascade do |t|
-    t.integer "schedule_id", null: false
+    t.bigint "schedule_id"
     t.string "responsible_person"
     t.string "model"
     t.string "chassis_number"
