@@ -22,6 +22,24 @@ production:
   host: localhost
   pool: 5
 
+queue:
+  adapter: mysql2
+  encoding: utf8
+  database: movement_records_queue
+  username: rails
+  password: "yourpassword"
+  host: localhost
+  pool: 5
+
+cache:
+  adapter: mysql2
+  encoding: utf8
+  database: movement_records_cache
+  username: rails
+  password: "yourpassword"
+  host: localhost
+  pool: 5
+
 cable:
   adapter: redis
   url: redis://localhost:6379/1
