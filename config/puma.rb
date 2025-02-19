@@ -3,7 +3,7 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 threads threads_count, threads_count
 
 # Puma をデーモン化（バックグラウンドで実行）
-daemonize true
+# daemonize true
 
 # ポート番号の指定（Nginx からのリクエストを受ける）
 bind "unix:///var/www/movement_records/tmp/sockets/puma.sock"
