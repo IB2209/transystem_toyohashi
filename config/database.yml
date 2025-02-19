@@ -35,4 +35,7 @@ production:
   cable:
     adapter: redis
     url: redis://localhost:6379/1
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8c84414ce4e8fb18bfb6f86fc53e638f67e356d5
