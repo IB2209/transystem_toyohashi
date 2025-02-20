@@ -64,3 +64,4 @@ end
 
 gem 'mysql2', '~> 0.5'
 
+gem 'sidekiq'
