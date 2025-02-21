@@ -64,7 +64,7 @@ end
 
 gem 'sidekiq'
 group :development do
-  gem "pg", ">= 2.1"
+  gem "sqlite3", ">= 2.1"
 end
 
 group :production do
