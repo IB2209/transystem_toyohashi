@@ -9,6 +9,8 @@ Rails.application.configure do
 
   # フルエラーレポートは無効にし、ユーザーにはカスタムエラーページを表示
   config.consider_all_requests_local = false
+  # 本番環境でマスターキーの必須チェックを無効化する
+  config.require_master_key = false
 
   # フラグメントキャッシュなど、キャッシングを有効化
   config.perform_caching = true
