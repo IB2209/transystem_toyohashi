@@ -72,7 +72,6 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   # 本番環境でマスターキーの必須チェックを無効化する
   config.require_master_key = false
-  config.assets.prefix = "/stylesheets"
 
-
+  config.assets.prefix = "/assets"
 end
