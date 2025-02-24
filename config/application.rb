@@ -3,8 +3,7 @@ require_relative "boot"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-require 'bundler/setup'
-Bundler.require(:default, ENV.fetch("RAILS_ENV", "development").to_sym)
+require "rails/all"
 
 module DispatchApp
   class Application < Rails::Application
