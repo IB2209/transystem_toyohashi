@@ -1,8 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
-
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
@@ -13,10 +11,10 @@ Rails.application.configure do
   config.consider_all_requests_local = false
 
   # Turn on fragment caching in view templates.
-  config.action_controller.perform_caching = true
+  config.perform_caching = true  # ✅ action_controller ではなく、config に直接設定
 
   # Cache assets for far-future expiry since they are all digest stamped.
-  config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=#{1.year.to_i}" }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -24,7 +22,7 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Assume all access to the app is happening through an SSL-terminating reverse proxy.
   config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
@@ -77,7 +75,6 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [:id]
-  config.perform_caching = true
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
