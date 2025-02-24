@@ -61,5 +61,9 @@ group :production do
   gem "pg", "~> 1.2"
 end
 
-gem 'sprockets-rails', '~> 3.5'
+# CSS をビルドするため（Tailwind CSS の例）
+gem "cssbundling-rails"
+
+# JavaScript をビルドするため（esbuild の例）
+gem "jsbundling-rails"
 

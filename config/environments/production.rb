@@ -17,6 +17,8 @@ Rails.application.configure do
   config.public_file_server.headers = {
     "Cache-Control" => "public, max-age=#{1.year.to_i}"
   }
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+
 
   # Active Storage の設定（必要なら、config/storage.yml と連携）
   # 例: 環境変数 ACTIVE_STORAGE_SERVICE に 'amazon' や 'local' などを設定
