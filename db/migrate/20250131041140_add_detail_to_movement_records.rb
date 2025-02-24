@@ -1,4 +1,4 @@
-class AddDetailToMovementRecords < ActiveRecord::Migration[8.0]
+class AddDetailToMovementRecords < ActiveRecord::Migration[7.2]
   def change
     add_column :movement_records, :fuel_fee_detail, :text
     add_column :movement_records, :toll_fee_detail, :text

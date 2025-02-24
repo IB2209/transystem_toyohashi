@@ -1,4 +1,4 @@
-class AddRadioFieldsToOutEntries < ActiveRecord::Migration[8.0]
+class AddRadioFieldsToOutEntries < ActiveRecord::Migration[7.2]
   def change
     add_column :out_entries, :radio_company_name, :string
     add_column :out_entries, :radio_model, :string

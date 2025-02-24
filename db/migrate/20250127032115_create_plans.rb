@@ -1,4 +1,4 @@
-class CreatePlans < ActiveRecord::Migration[8.0]
+class CreatePlans < ActiveRecord::Migration[7.2]
   def change
     create_table :plans do |t|
       t.string :model

@@ -1,4 +1,4 @@
-class CreateMovementRecords < ActiveRecord::Migration[8.0]
+class CreateMovementRecords < ActiveRecord::Migration[7.2]
   def change
     create_table :movement_records do |t|
       t.references :schedule, null: false, foreign_key: true

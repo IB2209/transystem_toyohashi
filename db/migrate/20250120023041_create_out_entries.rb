@@ -1,4 +1,4 @@
-class CreateOutEntries < ActiveRecord::Migration[8.0]
+class CreateOutEntries < ActiveRecord::Migration[7.2]
   def change
     create_table :out_entries do |t|
       t.string :company_name

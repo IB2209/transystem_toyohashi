@@ -1,4 +1,4 @@
-class CreateDailyReports < ActiveRecord::Migration[8.0]
+class CreateDailyReports < ActiveRecord::Migration[7.2]
   def change
     create_table :daily_reports do |t|
       t.date :work_date

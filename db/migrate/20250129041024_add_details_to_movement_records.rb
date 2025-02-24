@@ -1,4 +1,4 @@
-class AddDetailsToMovementRecords < ActiveRecord::Migration[8.0]
+class AddDetailsToMovementRecords < ActiveRecord::Migration[7.2]
   def change
     add_column :movement_records, :request_type, :string
     add_column :movement_records, :vehicle_condition, :string

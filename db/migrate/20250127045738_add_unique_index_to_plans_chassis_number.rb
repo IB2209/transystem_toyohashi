@@ -1,4 +1,4 @@
-class AddUniqueIndexToPlansChassisNumber < ActiveRecord::Migration[8.0]
+class AddUniqueIndexToPlansChassisNumber < ActiveRecord::Migration[7.2]
   def change
   end
 end
