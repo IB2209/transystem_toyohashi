@@ -61,4 +61,5 @@ group :production do
   gem "pg", "~> 1.2"
 end
 
-gem 'sprockets-rails'
+gem 'sprockets-rails', '~> 3.5'
+
