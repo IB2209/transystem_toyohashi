@@ -64,7 +64,7 @@ end
 
 gem 'sidekiq'
 group :development do
-  gem "pg", ">= 2.1"
+  gem "pg", "~> 1.2" 
 end
 
 group :production do
