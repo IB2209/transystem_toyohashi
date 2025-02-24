@@ -45,9 +45,6 @@ Rails.application.configure do
   # 非推奨（deprecation）の報告は無効化
   config.active_support.report_deprecations = false
 
-  # デフォルトのインプロセスキャッシュから、耐久性のあるキャッシュストアに変更
-  config.cache_store = :solid_cache_store
-
   # Action Mailer の設定。リンク生成用のホストは環境変数から取得
   config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "example.com") }
   # SMTP の設定は必要に応じて有効化（例: SendGrid や Mailgun の場合）
