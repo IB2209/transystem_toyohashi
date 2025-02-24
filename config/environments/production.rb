@@ -48,9 +48,6 @@ Rails.application.configure do
   # デフォルトのインプロセスキャッシュから、耐久性のあるキャッシュストアに変更
   config.cache_store = :solid_cache_store
 
-  # Active Job のバックエンドを durable なものに変更
-  config.active_job.queue_adapter = :solid_queue
-
   # Action Mailer の設定。リンク生成用のホストは環境変数から取得
   config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "example.com") }
   # SMTP の設定は必要に応じて有効化（例: SendGrid や Mailgun の場合）
