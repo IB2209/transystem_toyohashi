@@ -1,4 +1,5 @@
-class CreateInEntries < ActiveRecord::Migration[8.0]
+class CreateInEntries < ActiveRecord::Migration[7.2]
+
   def change
     create_table :in_entries do |t|
       t.string :company_name
