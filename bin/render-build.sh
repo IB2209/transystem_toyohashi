@@ -3,8 +3,7 @@
 set -o errexit
 
 bundle install
-bundle exec rails css:build
-bundle exec rails javascript:build
+
 
 
 # If you're using a Free instance type, you need to
