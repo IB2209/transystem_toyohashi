@@ -1,10 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.assets.compile = false  # デフォルトの設定（推奨）
-  config.assets.digest = true
-  config.public_file_server.enabled = true
-
+  
   # クラスキャッシュは本番環境では有効（デフォルト）
   config.cache_classes = true
 
