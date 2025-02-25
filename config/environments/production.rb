@@ -1,7 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  
   # クラスキャッシュは本番環境では有効（デフォルト）
   config.cache_classes = true
 
@@ -10,16 +9,21 @@ Rails.application.configure do
 
   # フルエラーレポートは無効にし、ユーザーにはカスタムエラーページを表示
   config.consider_all_requests_local = false
- 
+
   # フラグメントキャッシュなど、キャッシングを有効化
   config.perform_caching = true
 
-  # 静的ファイルはキャッシュヘッダーを付与して配信
+  # 静的ファイルの提供を有効化
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
   config.public_file_server.headers = {
     "Cache-Control" => "public, max-age=#{1.year.to_i}"
   }
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
+  # アセットパイプラインの設定 (Sprockets を利用する場合)
+  config.assets.enabled = true
+  config.assets.prefix = "/assets"
+  config.assets.compile = false # 本番環境ではプリコンパイルしたアセットを使用する
+  config.assets.digest = true # キャッシュバスティングのためのハッシュ付きファイル名
 
   # Active Storage の設定（必要なら、config/storage.yml と連携）
   # 例: 環境変数 ACTIVE_STORAGE_SERVICE に 'amazon' や 'local' などを設定
@@ -28,8 +32,6 @@ Rails.application.configure do
   # SSL ターミネーションを前提とした設定
   config.assume_ssl = true
   config.force_ssl = true
-  # （必要に応じて ssl_options を追加できます）
-  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # ログの設定：リクエストIDをタグに付与し、STDOUT に出力
   config.log_tags = [:request_id]
@@ -50,14 +52,6 @@ Rails.application.configure do
 
   # Action Mailer の設定。リンク生成用のホストは環境変数から取得
   config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "example.com") }
-  # SMTP の設定は必要に応じて有効化（例: SendGrid や Mailgun の場合）
-  # config.action_mailer.smtp_settings = {
-  #   user_name: Rails.application.credentials.dig(:smtp, :user_name),
-  #   password: Rails.application.credentials.dig(:smtp, :password),
-  #   address: "smtp.example.com",
-  #   port: 587,
-  #   authentication: :plain
-  # }
 
   # I18n のフォールバックを有効にし、翻訳が見つからない場合はデフォルトロケールに戻す
   config.i18n.fallbacks = true
@@ -67,10 +61,4 @@ Rails.application.configure do
 
   # 本番環境でのデバッグ情報として、Active Record の inspection は :id のみ表示
   config.active_record.attributes_for_inspect = [:id]
-
-  # DNS リバインディング攻撃対策や Host ヘッダーの制限（必要なら有効化）
-  # config.hosts = ["example.com", /.*\.example\.com/]
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-  # 本番環境でマスターキーの必須チェックを無効化する
-  config.require_master_key = false
 end

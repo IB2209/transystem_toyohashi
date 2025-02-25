@@ -67,3 +67,5 @@ gem "cssbundling-rails"
 # JavaScript をビルドするため（esbuild の例）
 gem "jsbundling-rails"
 
+
+gem "sprockets-rails", "~> 3.5"
