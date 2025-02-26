@@ -4,6 +4,8 @@ require_relative "boot"
 # you've limited to :test, :development, or :production.
 require "rails/all"
 require "sprockets/railtie" # Sprockets を明示的に読み込む
+require "importmap-rails"
+
 
 module DispatchApp
   class Application < Rails::Application
