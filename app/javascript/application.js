@@ -4,127 +4,113 @@ import "controllers"
 import "@rails/actioncable";
 import Rails from "@rails/ujs";
 Rails.start();
+import { Application } from "@hotwired/stimulus"
+import { definitionsFromContext } from "@hotwired/stimulus-loading"
 
-
-//= require rails-ujs
-
-
+const application = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+application.load(definitionsFromContext(context))
 
 document.addEventListener("DOMContentLoaded", () => {
+  initResponsiblePersonSelection();
+  initMenuState();
+  initButtonToggle();
+  initTabs();
+});
+
+// 「その他」の選択肢の処理
+function initResponsiblePersonSelection() {
   const otherRadio = document.getElementById("responsible_person_other");
   const otherInput = document.querySelector(".optional-person");
 
   if (otherRadio && otherInput) {
-    // 初期状態: その他が選択されていない場合は無効化
     otherInput.disabled = !otherRadio.checked;
-
-    // ラジオボタンの変更イベントを監視
     document.querySelectorAll("[name='schedule[responsible_person]']").forEach((radio) => {
       radio.addEventListener("change", () => {
         otherInput.disabled = !otherRadio.checked;
         if (!otherRadio.checked) {
-          otherInput.value = ""; // その他以外を選択した場合、入力をクリア
+          otherInput.value = "";
         }
       });
     });
   }
-});
+}
 
-document.addEventListener("DOMContentLoaded", function () {
+// メニューの開閉状態の処理
+function initMenuState() {
   const menuItems = document.querySelectorAll(".menu-item > a");
-
-  // ページロード時にlocalStorageから状態を復元
   restoreMenuState();
 
   menuItems.forEach(item => {
-      item.addEventListener("click", function (event) {
-          event.preventDefault(); // Railsのリンク遷移を防ぐ
-
-          let parent = this.parentElement;
-          let dropdown = parent.querySelector(".dropdown");
-
-          if (dropdown) {
-              // メニューの開閉状態をトグル
-              if (parent.classList.contains("open")) {
-                  parent.classList.remove("open");
-              } else {
-                  parent.classList.add("open");
-              }
-              saveMenuState(); // 状態を保存
-          }
-      });
+    item.addEventListener("click", function (event) {
+      event.preventDefault();
+      let parent = this.parentElement;
+      let dropdown = parent.querySelector(".dropdown");
+      if (dropdown) {
+        parent.classList.toggle("open");
+        saveMenuState();
+      }
+    });
   });
 
-  // 開いているメニューの状態をlocalStorageに保存
   function saveMenuState() {
-      const openMenus = [];
-      document.querySelectorAll(".menu-item.open").forEach(item => {
-          openMenus.push(item.dataset.menu); // 各メニューにdata-menuを付与する
-      });
-      localStorage.setItem("sidebarMenuState", JSON.stringify(openMenus));
+    const openMenus = [];
+    document.querySelectorAll(".menu-item.open").forEach(item => {
+      openMenus.push(item.dataset.menu);
+    });
+    localStorage.setItem("sidebarMenuState", JSON.stringify(openMenus));
   }
 
-  // ページリロード時にlocalStorageから開いているメニューを復元
   function restoreMenuState() {
-      const storedMenus = JSON.parse(localStorage.getItem("sidebarMenuState"));
-      if (storedMenus) {
-          storedMenus.forEach(menu => {
-              const item = document.querySelector(`[data-menu="${menu}"]`);
-              if (item) {
-                  item.classList.add("open");
-              }
-          });
-      }
+    const storedMenus = JSON.parse(localStorage.getItem("sidebarMenuState"));
+    if (storedMenus) {
+      storedMenus.forEach(menu => {
+        const item = document.querySelector(`[data-menu="${menu}"]`);
+        if (item) item.classList.add("open");
+      });
+    }
   }
-});
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".btn-toggle").forEach(button => {
-        button.addEventListener("click", (event) => {
-            event.preventDefault(); // ページ遷移を防ぐ
-            
-            const url = button.getAttribute("data-url"); // 各ボタンのURLを取得
-            
-            fetch(url, {
-                method: "PATCH",
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                // 更新するボタンを明確に識別
-                const buttonToUpdate = document.querySelector(`[data-url='${url}']`);
-                
-                if (buttonToUpdate) {
-                    // ステータスを更新
-                    buttonToUpdate.textContent = data.new_status ? "済" : "未";
-                    buttonToUpdate.classList.toggle("btn-success", data.new_status);
-                    buttonToUpdate.classList.toggle("btn-danger", !data.new_status);
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        });
+}
+
+// ボタンのトグル処理
+function initButtonToggle() {
+  document.querySelectorAll(".btn-toggle").forEach(button => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const url = button.getAttribute("data-url");
+      fetch(url, {
+        method: "PATCH",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        const buttonToUpdate = document.querySelector(`[data-url='${url}']`);
+        if (buttonToUpdate) {
+          buttonToUpdate.textContent = data.new_status ? "済" : "未";
+          buttonToUpdate.classList.toggle("btn-success", data.new_status);
+          buttonToUpdate.classList.toggle("btn-danger", !data.new_status);
+        }
+      })
+      .catch(error => console.error("Error:", error));
     });
-});
+  });
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    const tabLinks = document.querySelectorAll(".tab-link");
-    const tabPanes = document.querySelectorAll(".tab-pane");
+// タブの切り替え処理
+function initTabs() {
+  const tabLinks = document.querySelectorAll(".tab-link");
+  const tabPanes = document.querySelectorAll(".tab-pane");
 
-    tabLinks.forEach(link => {
-        link.addEventListener("click", () => {
-            // すべてのタブの "active" クラスを削除
-            tabLinks.forEach(tab => tab.classList.remove("active"));
-            tabPanes.forEach(pane => pane.classList.remove("active"));
-
-            // クリックしたタブを "active" にする
-            link.classList.add("active");
-            const targetTab = document.getElementById(link.dataset.tab);
-            if (targetTab) {
-                targetTab.classList.add("active");
-            }
-        });
+  tabLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      tabLinks.forEach(tab => tab.classList.remove("active"));
+      tabPanes.forEach(pane => pane.classList.remove("active"));
+      link.classList.add("active");
+      const targetTab = document.getElementById(link.dataset.tab);
+      if (targetTab) targetTab.classList.add("active");
     });
-});
-
+  });
+}
