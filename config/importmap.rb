@@ -14,3 +14,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 # Import additional libraries
 pin "@hotwired/turbo", to: "turbo.min.js", preload: true
 pin "@rails/actioncable", to: "actioncable.js", preload: true
+pin "@rails/ujs", to: "rails-ujs.js", preload: true
