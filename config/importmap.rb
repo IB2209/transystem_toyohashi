@@ -4,10 +4,13 @@
 pin "application"
 
 # Import Turbo and Stimulus (if using Hotwire)
-pin "@hotwired/turbo-rails", to: "turbo.min.js"
-pin "@hotwired/stimulus", to: "stimulus.min.js"
-pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
-
+pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
+pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
+pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
 
 # Import controllers from app/javascript/controllers
 pin_all_from "app/javascript/controllers", under: "controllers"
+
+# Import additional libraries
+pin "@hotwired/turbo", to: "turbo.min.js", preload: true
+pin "@rails/actioncable/src", to: "actioncable.js", preload: true
