@@ -1,9 +1,9 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 import "controllers"
-import "@rails/actioncable";
-import Rails from "@rails/ujs";
-Rails.start();
+import "@rails/actioncable"
+import Rails from "@rails/ujs"
+Rails.start()
 import { Application } from "@hotwired/stimulus"
 import { definitionsFromContext } from "@hotwired/stimulus-loading"
 
