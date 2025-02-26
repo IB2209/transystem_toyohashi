@@ -3,7 +3,7 @@ services:
     name: movement_records
     env: ruby
     plan: starter
-    buildCommand: "bundle install && bundle exec rake assets:precompile"
+    buildCommand: "./bin/render-build.sh"
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
       - key: DATABASE_URL
