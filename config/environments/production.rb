@@ -42,7 +42,7 @@ Rails.application.configure do
   end
 
   # ログレベルは環境変数で柔軟に設定（デフォルトは info）
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info").to_sym
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "debug").to_sym
 
   # ヘルスチェックのログを抑制（例: /up へのリクエスト）
   config.silence_healthcheck_path = "/up"
