@@ -10,7 +10,7 @@ pin "@hotwired/stimulus-loading", to: "vendor/javascript/stimulus-loading.js", p
 pin_all_from "app/javascript/controllers", under: "controllers"
 
 # Import additional libraries
-pin "@rails/actioncable", to: "vendor/javascript/@rails--actioncable--src.js", preload: true
+pin "@rails/actioncable", to: "@rails--actioncable--src.js", preload: true
 pin "@rails/ujs", to: "vendor/javascript/rails-ujs.js", preload: true
 
 # Import vendor JavaScript
