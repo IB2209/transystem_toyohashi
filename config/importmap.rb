@@ -1,16 +1,17 @@
-# config/importmap.rb
-
 # Import the main application JavaScript file
 pin "application"
 
 # Import Turbo and Stimulus (if using Hotwire)
-pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
-pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
-pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
+pin "@hotwired/turbo-rails", to: "vendor/javascript/@hotwired--turbo-rails.js", preload: true
+pin "@hotwired/stimulus", to: "vendor/javascript/@hotwired--stimulus.js", preload: true
+pin "@hotwired/stimulus-loading", to: "vendor/javascript/stimulus-loading.js", preload: true
 
 # Import controllers from app/javascript/controllers
 pin_all_from "app/javascript/controllers", under: "controllers"
 
 # Import additional libraries
-pin "@rails/actioncable", to: "actioncable.js", preload: true
-pin "@rails/ujs", to: "rails-ujs.js", preload: true
+pin "@rails/actioncable", to: "vendor/javascript/@rails--actioncable--src.js", preload: true
+pin "@rails/ujs", to: "vendor/javascript/rails-ujs.js", preload: true
+
+# Import vendor JavaScript
+pin_all_from "vendor/javascript", under: "vendor"
