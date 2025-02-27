@@ -11,7 +11,7 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 
 # Import additional libraries
 pin "@rails/actioncable", to: "@rails--actioncable--src.js", preload: true
-pin "@rails/ujs", to: "vendor/javascript/rails-ujs.js", preload: true
+pin "@rails/ujs", to: "rails-ujs.js", preload: true
 
 # Import vendor JavaScript
 pin_all_from "vendor/javascript", under: "vendor"
