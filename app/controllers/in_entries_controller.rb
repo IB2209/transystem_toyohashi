@@ -1,6 +1,5 @@
 class InEntriesController < ApplicationController
   def index
-    @in_entries = InEntry.all.order(entry_date: :asc)
     @in_entries = InEntry.includes(:out_entry).order(entry_date: :desc, id: :desc)
     @grouped_entries_by_month = @in_entries.group_by { |entry| entry.entry_date.beginning_of_month }.sort.reverse.to_h
     @monthly_in_count = @grouped_entries_by_month.transform_values(&:size)
