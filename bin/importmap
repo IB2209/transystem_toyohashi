@@ -1,8 +1,4 @@
 #!/usr/bin/env ruby
 
-# Load the Rails application
 require_relative "../config/application"
-
-# Load Importmap commands
 require "importmap/commands"
-
