@@ -12,4 +12,4 @@ pin "@rails/ujs", to: "@rails--ujs.js" # @7.1.3
 
 # Import vendor JavaScript
 pin_all_from "vendor/javascript", under: "vendor"
-pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.0.100
+pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @7.2.201

@@ -4,12 +4,9 @@ import "@rails/actioncable"
 import "@hotwired/turbo"
 import Rails from "@rails/ujs"
 Rails.start()
-import { Application } from "@hotwired/stimulus";
-import { definitionsFromContext } from "@hotwired/stimulus";
+import { Application } from "@hotwired/stimulus"
 
-const application = Application.start();
-const context = require.context("./controllers", true, /\.js$/);
-application.load(definitionsFromContext(context));
+const application = Application.start()
 
 document.addEventListener("DOMContentLoaded", () => {
   initResponsiblePersonSelection();
