@@ -11,7 +11,15 @@ class InEntriesController < ApplicationController
 
   def confirm
     @in_entry = InEntry.new(process_params(in_entry_params))
-    render :confirm unless @in_entry.valid?
+    respond_to do |format|
+      if @in_entry.valid?
+        format.html { render :confirm }
+        format.turbo_stream { render :confirm }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
+      end
+    end
   end
 
   def create
@@ -19,9 +27,15 @@ class InEntriesController < ApplicationController
     if params[:back]
       render :new
     elsif @in_entry.save
-      redirect_to success_in_entries_path, notice: "送信完了しました。"
+      respond_to do |format|
+        format.html { redirect_to success_in_entries_path, notice: "送信完了しました。" }
+        format.turbo_stream { redirect_to success_in_entries_path, notice: "送信完了しました。" }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -36,11 +50,17 @@ class InEntriesController < ApplicationController
   def update
     @in_entry = InEntry.find(params[:id])
     if @in_entry.update(in_entry_params)
-      redirect_to in_entries_path, notice: "入庫データを更新しました。"
-    else
-      render :edit
+    respond_to do |format|
+      format.html { redirect_to in_entries_path, notice: "入庫データを更新しました。" }
+      format.turbo_stream { redirect_to in_entries_path, notice: "入庫データを更新しました。" }
+    end
+  else
+    respond_to do |format|
+      format.html { render :edit, status: :unprocessable_entity }
+      format.turbo_stream { render :edit, status: :unprocessable_entity }
     end
   end
+end
 
   def show
     @in_entry = InEntry.find(params[:id])
