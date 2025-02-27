@@ -2,6 +2,7 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "@rails/actioncable"
+import "@hotwired/turbo"
 import Rails from "@rails/ujs"
 Rails.start()
 import { Application } from "@hotwired/stimulus"
