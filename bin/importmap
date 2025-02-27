@@ -5,3 +5,4 @@ require_relative "../config/application"
 
 # Load Importmap commands
 require "importmap/commands"
+
