@@ -2,7 +2,7 @@
 pin "application"
 
 # Import Turbo and Stimulus (if using Hotwire)
-pin "@hotwired/turbo-rails", to: "vendor/javascript/@hotwired--turbo-rails.js", preload: true
+pin "@hotwired/turbo-rails", to: "@hotwired--turbo-rails.js", preload: true
 pin "@hotwired/stimulus", to: "vendor/javascript/@hotwired--stimulus.js", preload: true
 pin "@hotwired/stimulus-loading", to: "vendor/javascript/stimulus-loading.js", preload: true
 
