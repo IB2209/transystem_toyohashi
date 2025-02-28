@@ -70,3 +70,6 @@ gem "jsbundling-rails"
 gem "sprockets-rails", "~> 3.5"
 
 gem "importmap-rails", "~> 2.1"
+
+# Use sqlite3 as the database for Active Record
+gem "sqlite3", ">= 2.1"

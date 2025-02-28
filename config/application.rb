@@ -12,9 +12,12 @@ module DispatchApp
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
     config.i18n.default_locale = :ja
+    config.time_zone = 'Tokyo'  # 日本時間（JST）を設定
+    config.active_record.default_timezone = :local  # DBのタイムゾーンもローカルに設定
 
     # `lib/` 以下の不要なフォルダをオートロードしない
     config.autoload_lib(ignore: %w[assets tasks])
+
 
     # Configuration for the application, engines, and railties goes here.
     #
