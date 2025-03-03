@@ -94,7 +94,7 @@
       <tbody>
         <% schedules.each_with_index do |schedule, index| %>
           <tr data-edit-url="<%= edit_schedule_path(schedule) %>">
-            <td class="borderleft th_no"><%= index + 1 %></td>
+            <td class="borderleft th_no" rowspan="2"><%= index + 1 %></td>
             <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
             <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %></td>
             <td class="borderbottom tantou">
@@ -112,7 +112,7 @@
           
           </tr>
           <tr>
-            <td colspan="3" class="th_underspace"></td>
+            <td colspan="2" class="th_underspace"></td>
           </tr>
         <% end %>
       </tbody>
