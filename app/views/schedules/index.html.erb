@@ -28,15 +28,15 @@
       </thead>
       <tbody>
         <% schedules.each_with_index do |schedule, index| %>
-          <tr data-edit-url="<%= edit_schedule_path(schedule) %>">
-            <td><%= index + 1 %></td>
-            <td><%= schedule.plan&.model %></td>
-            <td><%= schedule.plan&.chassis_number %></td>
-            <td><%= schedule.plan&.pickup_location %></td>
-            <td><%= schedule.plan&.delivery_location %></td>
-            <td><%= schedule.schedule_date.strftime("%-H時") %></td>
-            <td><%= schedule.responsible_person%></td>
-            <td class="th_message"><%= schedule.comment %></td>
+          <tr>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= index + 1 %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.model %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.chassis_number %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.pickup_location %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.delivery_location %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.schedule_date.strftime("%-H時") %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.responsible_person%></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_message"><%= schedule.comment %></td>
             <td class="tablespace"></td>
             <td class="regibtn" style="text-align: center;">
               <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "btn btn-primary" %>
@@ -120,9 +120,9 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("tbody tr").forEach(row => {
-      row.addEventListener("click", () => {
-        const editUrl = row.getAttribute("data-edit-url");
+    document.querySelectorAll("td[data-edit-url]").forEach(cell => {
+      cell.addEventListener("click", () => {
+        const editUrl = cell.getAttribute("data-edit-url");
         if (editUrl) {
           window.location.href = editUrl;
         }
