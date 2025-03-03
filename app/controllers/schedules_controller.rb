@@ -21,6 +21,7 @@ class SchedulesController < ApplicationController
         @schedule.chassis_number = plan.chassis_number
         @schedule.pickup_location = plan.pickup_location
         @schedule.delivery_location = plan.delivery_location
+        @schedule.comment = plan.comment
         @schedule.schedule_date = plan.move_date || DateTime.now.change({ hour: 9, min: 0 })
       rescue ActiveRecord::RecordNotFound
         redirect_to plans_path, alert: '指定された伝票が見つかりませんでした。'

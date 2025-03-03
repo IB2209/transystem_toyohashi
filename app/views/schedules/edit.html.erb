@@ -18,8 +18,16 @@
       <div class="q">
         <div class="no_edit">　型式：<%= @schedule.model.presence || "未設定" %></div>
         <div class="no_edit">　車番：</th><td><%= @schedule.chassis_number.presence || "未設定" %></div>
-        <div class="no_edit">引取先：<%= @schedule.pickup_location.presence || "未設定" %></div>
-        <div class="no_edit">納車先：<%= @schedule.delivery_location.presence || "未設定" %></div>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :pickup_location, "引取先" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :pickup_location, value: @schedule.pickup_location.presence || "未設定" %>
+      </div>
+
+      <div class="q">
+        <b><%= form.label :delivery_location, "納車先" %><sup class="require">※</sup><br></b>
+        <%= form.text_field :delivery_location, value: @schedule.delivery_location.presence || "未設定" %>
       </div>
 
       <div class="q date">
