@@ -29,7 +29,7 @@
       </thead>
       <tbody>
         <% schedules.each_with_index do |schedule, index| %>
-          <tr>
+          <tr data-edit-url="<%= edit_schedule_path(schedule) %>">
             <td><%= index + 1 %></td>
             <td><%= schedule.plan&.model %></td>
             <td><%= schedule.plan&.chassis_number %></td>
