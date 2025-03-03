@@ -250,6 +250,7 @@ header{
   border-radius: 10%;
   background-color: orange;
   padding: 0;
+  min-width: 50px;
 }
 .regibtn_in{
   border: none;

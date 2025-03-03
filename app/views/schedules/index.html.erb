@@ -39,7 +39,7 @@
             <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_message"><%= schedule.comment %></td>
             <td class="tablespace"></td>
             <td class="regibtn" style="text-align: center;">
-              <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "btn btn-primary" %>
+              <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "a" %>
             </td>
             <td class="tablespace"></td>
             <td class="th_delete"><%= link_to '削除', schedule_path(schedule), class: 'btn btn-primary' %></td>
