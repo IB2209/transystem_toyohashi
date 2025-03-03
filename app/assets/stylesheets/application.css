@@ -932,6 +932,7 @@ table.movement tbody .bottom{
   .displayphone .th_modelchassis{
     max-width: 300px;
     width: 100%;
+    text-align: left;
   }
 
   .displayphone .tantou{
