@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_18_071545) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_03_033230) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "work_date"
     t.string "employee_name"
@@ -95,7 +95,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_071545) do
     t.string "vehicle_condition"
     t.integer "lodging_fee"
     t.integer "transportation_fee"
-    t.integer "fuel_amount"
+    t.decimal "fuel_amount", precision: 10, scale: 2
     t.string "lodging_fee_type"
     t.string "transportation_fee_type"
     t.boolean "status", default: false

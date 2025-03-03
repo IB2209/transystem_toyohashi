@@ -77,9 +77,10 @@
       <%= number_with_delimiter(record.fuel_fee) %>円
     <% end %>
   <% end %>
-  <% if record.fuel_amount.present? && record.fuel_amount.to_i > 0 %>
-    (<%= record.fuel_amount.to_i %>ℓ)
-  <% end %>
+  <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
+    (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
+<% end %>
+
 </td>
       <!-- 高速代 -->
 <td>

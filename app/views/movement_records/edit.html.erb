@@ -86,10 +86,11 @@
         <%= form.number_field :arrival_distance, value: @movement_record.arrival_distance %>
       </div>
 
-      <div class="q">
+<div class="q">
   <b><%= form.label :fuel_amount, "燃料" %></b><br>
-  <%= form.number_field :fuel_amount, placeholder: "ℓ", class: "form-control", value: @movement_record.fuel_amount %>
+  <%= form.number_field :fuel_amount, placeholder: "ℓ", class: "form-control", step: "0.01", min: "0", value: @movement_record.fuel_amount.to_f %>
 </div>
+
       
       <!-- 料金関連 -->
       <% { fuel_fee: "燃料", toll_fee: "高速", transportation_fee: "交通", lodging_fee: "宿泊" }.each do |fee, label| %>
