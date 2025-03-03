@@ -199,13 +199,13 @@ header{
   width: 130px;
 }
 .tmp_home table .th_chassis{
-  width: 100px;
+  width: 90px;
 }
 .tmp_home table .th_pickup{
-  width: 120px;
+  min-width: 120px;
 }
 .tmp_home table .th_delivery{
-  width: 100px;
+  min-width: 120px;
 }
 .tmp_home table .th_limit{
   width: 35px;
@@ -678,6 +678,7 @@ td.out_new.not-registered {
   font-weight: bold;
   font-size: 15px;
 }
+
 
 /*----------------------移動記録---------------------------*/
 table.movement thead{

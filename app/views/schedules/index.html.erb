@@ -20,7 +20,6 @@
           <th class="tablespace"></th>
           <th class="th_regi">移動記録</th>
           <th class="tablespace"></th>
-          <th class="th_edit">編集</th>
           <th class="th_delete">削除</th>
         </tr>
         <tr>
@@ -43,7 +42,6 @@
               <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "btn btn-primary" %>
             </td>
             <td class="tablespace"></td>
-            <td class="th_edit"><%= link_to '編集', edit_schedule_path(schedule), class: 'btn btn-primary' %></td>
             <td class="th_delete"><%= link_to '削除', schedule_path(schedule), class: 'btn btn-primary' %></td>
           </tr>
         <% end %>
