@@ -93,7 +93,7 @@
       
       <tbody>
         <% schedules.each_with_index do |schedule, index| %>
-          <tr>
+          <tr data-edit-url="<%= edit_schedule_path(schedule) %>">
             <td class="borderleft th_no"><%= index + 1 %></td>
             <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
             <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %></td>
@@ -105,9 +105,10 @@
             <td rowspan="2" class="regibtn" style="text-align: center;"><%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "" %></td>
           </tr>
           <tr class="trbottom">
-          <td class="border borderleft th_no"><%= link_to '編集', edit_schedule_path(schedule), class: 'th_no' %></td>
-          
-          <td class="border td_left" colspan="2"><%= schedule.comment %></td>
+          <% if schedule.comment.present? %>
+              <td class="border td_left" colspan="3"><%= schedule.comment %></td>
+            <% end %>
+          </tr>
           
           </tr>
           <tr>
@@ -119,3 +120,16 @@
   <% end %>
 </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("tbody tr").forEach(row => {
+      row.addEventListener("click", () => {
+        const editUrl = row.getAttribute("data-edit-url");
+        if (editUrl) {
+          window.location.href = editUrl;
+        }
+      });
+    });
+  });
+</script>
