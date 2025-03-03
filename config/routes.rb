@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
-  root "entries#index" # トップページを入庫一覧に設定
+  # movement-records.onrender.com にアクセスした場合は Cox Gear にリダイレクト
+  constraints(lambda { |req| req.host == "movement-records.onrender.com" }) do
+    get "/", to: redirect("https://www.cox-gear.jp/")
+  end
 
+  # それ以外のドメインでは入庫一覧を表示
+  root "entries#index"
   # スマートフォン用
   get "smartphone", to: "smartphone#index"
 
