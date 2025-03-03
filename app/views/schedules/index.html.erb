@@ -35,7 +35,7 @@
             <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.pickup_location %></td>
             <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.delivery_location %></td>
             <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.schedule_date.strftime("%-H時") %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.responsible_person%></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %></td>
             <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_message"><%= schedule.comment %></td>
             <td class="tablespace"></td>
             <td class="regibtn" style="text-align: center;">
@@ -90,12 +90,12 @@
       
       <tbody>
         <% schedules.each_with_index do |schedule, index| %>
-          <tr data-edit-url="<%= edit_schedule_path(schedule) %>">
-            <td class="borderleft th_no" rowspan="2"><%= index + 1 %></td>
-            <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
+          <tr>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderleft th_no" rowspan="2"><%= index + 1 %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
             <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %></td>
-            <td class="borderbottom tantou">
-            <%= schedule.responsible_person%><br>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderbottom tantou">
+            <%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %><br>
             <%= schedule.schedule_date.strftime("%-H時") %>
             </td>
             <td rowspan="2" class="tablespace"></td>
@@ -103,7 +103,7 @@
           </tr>
           <tr class="trbottom">
           <% if schedule.comment.present? %>
-              <td class="border td_left" colspan="3"><%= schedule.comment %></td>
+              <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="border td_left" colspan="3"><%= schedule.comment %></td>
             <% end %>
           </tr>
           
