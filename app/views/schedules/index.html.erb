@@ -99,7 +99,7 @@
             <%= schedule.schedule_date.strftime("%-H時") %>
             </td>
             <td rowspan="2" class="tablespace"></td>
-            <td rowspan="2" class="regibtn" style="text-align: center;"><%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "" %></td>
+            <td rowspan="2" class="regibtn" style="text-align: center;"><%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "a" %></td>
           </tr>
           <tr class="trbottom">
           <% if schedule.comment.present? %>
