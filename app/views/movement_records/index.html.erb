@@ -205,7 +205,7 @@
         </th>
       </tr>
       <tr>
-        <th colspan="2" style="text-align: left;">コメント</th>
+        <th colspan="2" style="text-align: left;">メッセージ</th>
       </tr>
     </thead>
   </table>
@@ -231,16 +231,14 @@
                 <%= "#{record.departure_hour.to_s.rjust(2, '0')}:#{record.departure_minute.to_s.rjust(2, '0')}" %> ➡︎ 
                 <%= "#{record.arrival_hour.to_s.rjust(2, '0')}:#{record.arrival_minute.to_s.rjust(2, '0')}" %><br>
                 <%= "#{record.departure_distance.present? ? "#{record.departure_distance} km" : "未設定"} ➡︎ 
-                    #{record.arrival_distance.present? ? "#{record.arrival_distance} km" : "未設定"}" %>
+                    #{record.arrival_distance.present? ? "#{record.arrival_distance} km" : "未設定"}" %><br>
+                <% if record.message.present? %>
+                <hr style="margin:3px 0; padding:0; border:0.5px solid #ccc;">
+                  <%= record.message %>
+                <% end %>
               </td>
             </tr>
-            <% if record.message.present? %>
-              <tr class="trbottom">
-                <td data-edit-url="<%= edit_movement_record_path(record) %>" class="border td_left" colspan="2">
-                  <%= record.message %>
-                </td>
-              </tr>
-            <% end %>
+            
             <tr>
               <td colspan="2" class="th_underspace"></td>
             </tr>
