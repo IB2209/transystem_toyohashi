@@ -991,3 +991,50 @@ table.movement tbody .bottom{
   align-items: center;
   height: 100vh;
 }
+
+/* スマホ用フッター */
+.mobile-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: #333;
+  padding: 10px 0;
+  z-index: 1000;
+  height:50px;
+  border-top: 3px solid orange;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 8px 10px 5px;
+  flex-grow: 1;
+  text-align: center;
+  width:50px
+}
+
+.footer-link.active {
+  background-color: orange; /* 選択中のメニューを目立たせる */
+  color: #333;
+  font-weight: bold;
+  border-radius: -10;
+  height: 100%;
+  width:70px;
+  margin-top:-10px;
+  font-size: 16px
+}
+
+a.footer-link.active {
+  padding-top:18px
+}
+
+/* PCでは表示しない */
+@media screen and (min-width: 768px) {
+  .mobile-footer {
+    display: none;
+  }
+}
