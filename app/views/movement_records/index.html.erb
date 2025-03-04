@@ -189,3 +189,77 @@
     <% end %> <!-- `@grouped_movement_records.each` の `end` -->
   </div>
 </div>
+
+<div class="displayphone">
+  <h1>移動記録</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="th_no" rowspan="2" style="min-width: 40px">No.<br><br>担当</th>
+        <th class="th_modelchassis" style="text-align: left;">
+          型式：車番 <br>
+          引取先 ➡︎ 納車先 <br>
+          出発時間 ➡︎ 到着時間 <br>
+          出発距離 ➡︎ 到着距離
+        </th>
+      </tr>
+      <tr>
+        <th colspan="2" style="text-align: left;">コメント</th>
+      </tr>
+    </thead>
+  </table>
+  <hr>
+
+  <% @grouped_movement_records.each do |month, daily_records| %>
+    <% daily_records.each do |date, records| %>  <%# records は配列 %>
+      <h2 style="margin-top: 20px; padding: 20px 0 5px; text-align: left">
+        <%= l date, format: "%-m月%-d日(%a)" %>
+      </h2>
+
+      <table>
+        <tbody>
+          <% records.each_with_index do |record, index| %>
+            <tr>
+              <td data-edit-url="<%= edit_movement_record_path(record) %>" class="borderleft th_no" style="min-width: 40px">
+                <%= index + 1 %> <br><br>
+                <%= record.responsible_person || "" %>
+              </td>
+              <td data-edit-url="<%= edit_movement_record_path(record) %>" class="th_modelchassis td_left">
+                <%= record.model %> ： <%= record.chassis_number %><br>
+                <%= record.pickup_location %> ➡︎ <%= record.delivery_location %><br>
+                <%= "#{record.departure_hour.to_s.rjust(2, '0')}:#{record.departure_minute.to_s.rjust(2, '0')}" %> ➡︎ 
+                <%= "#{record.arrival_hour.to_s.rjust(2, '0')}:#{record.arrival_minute.to_s.rjust(2, '0')}" %><br>
+                <%= "#{record.departure_distance.present? ? "#{record.departure_distance} km" : "未設定"} ➡︎ 
+                    #{record.arrival_distance.present? ? "#{record.arrival_distance} km" : "未設定"}" %>
+              </td>
+            </tr>
+            <% if record.message.present? %>
+              <tr class="trbottom">
+                <td data-edit-url="<%= edit_movement_record_path(record) %>" class="border td_left" colspan="2">
+                  <%= record.message %>
+                </td>
+              </tr>
+            <% end %>
+            <tr>
+              <td colspan="2" class="th_underspace"></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("td[data-edit-url]").forEach(cell => {
+      cell.addEventListener("click", () => {
+        const editUrl = cell.getAttribute("data-edit-url");
+        if (editUrl) {
+          window.location.href = editUrl;
+        }
+      });
+    });
+  });
+</script>
