@@ -54,9 +54,9 @@
       </header>
 
       <%= yield %>
-    </div>
+    </div> 
     <footer class="mobile-footer">
-<%= link_to "伝票<br>登録".html_safe, new_plan_path, class: "footer-link #{current_page?(new_plan_path) ? 'active' : ''}" %>
+      <%= link_to "伝票<br>登録".html_safe, new_plan_path, class: "footer-link #{current_page?(new_plan_path) ? 'active' : ''}" %>
 <%= link_to "登録済<br>伝票".html_safe, plans_path, class: "footer-link #{current_page?(plans_path) ? 'active' : ''}" %>
 <%= link_to "業務<br>日程".html_safe, schedules_path, class: "footer-link #{current_page?(schedules_path) ? 'active' : ''}" %>
 <%= link_to "移動<br>記録".html_safe, movement_records_path, class: "footer-link #{current_page?(movement_records_path) ? 'active' : ''}" %>

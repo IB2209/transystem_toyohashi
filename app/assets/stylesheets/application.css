@@ -924,6 +924,9 @@ table.movement tbody .bottom{
 
 /* スマホ用スタイル */
 @media screen and (max-width: 480px) {
+  footer{
+    margin-top: 100px;
+  }
   .tmp_home {
     display: none;
   }
