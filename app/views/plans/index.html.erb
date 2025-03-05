@@ -122,7 +122,9 @@
                 <%= plan.comment %>
               </td>
             <% end %>
-            <% if plan.issue_detail.present? %>
+          </tr>
+          <tr class="trbottom">
+          <% if plan.issue_detail.present? %>
               <td data-edit-url="<%= edit_plan_path(plan) %>" class="border td_left" colspan="2">
                 <%= plan.issue_detail %>
               </td>
