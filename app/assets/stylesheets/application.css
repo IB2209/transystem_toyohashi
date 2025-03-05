@@ -910,7 +910,7 @@ table.movement tbody .bottom{
 
 
 /* タブレット用スタイル */
-@media screen and (max-width: 1310px) {
+@media screen and (max-width: 1370px) {
   .tmp_home {
     margin-left: 50px;
   }
