@@ -1019,19 +1019,22 @@ table.movement tbody .bottom{
   padding: 3px 10px 10px;
   flex-grow: 1;
   text-align: center;
-  width:40px
+  width: 40px;
+  transition: all 0.3s ease-in-out; /* スムーズなアニメーションを適用 */
 }
 
 .footer-link.active {
   background-color: orange; /* 選択中のメニューを目立たせる */
   color: #333;
   font-weight: bold;
-  border-radius: -10;
+  border-radius: 10px; /* 修正: border-radius は負の値を取れないので修正 */
   height: 100%;
-  width:60px;
-  margin-top:-10px;
-  font-size: 14.5px
+  width: 60px;
+  margin-top: -10px;
+  font-size: 14.5px;
+  transition: all 0.3s ease-in-out; /* スムーズなアニメーション */
 }
+
 
 a.footer-link.active {
   padding-top:10px
