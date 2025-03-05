@@ -175,7 +175,7 @@ header{
 /*----------------------forpc---------------------------*/
 .forpc{
   padding: 15px;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: auto;
   background-color: rgb(255, 255, 254);
   
@@ -909,7 +909,7 @@ table.movement tbody .bottom{
 
 
 /* タブレット用スタイル */
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 2000px) {
   .tmp_home {
     margin-left: 50px;
   }
