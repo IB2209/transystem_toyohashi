@@ -1,3 +1,5 @@
+<% content_for :hide_footer, true %>
+
 <div class="backcolor_out">
 
 <div class="forphone">
@@ -14,7 +16,7 @@
   </div>
 </div>
 
-<%= form_with model: @out_entry, local: true do |form| %>
+<%= form_with model: @out_entry, url: confirm_out_entries_path, local: true do |form| %>
   <div class="q date">
     <b><%= form.label :entry_date, "出庫日" %><sup class="require">※</sup><br></b>
     <%= form.date_field :entry_date, value: @out_entry.entry_date || Date.today %>

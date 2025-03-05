@@ -1,0 +1,39 @@
+<% content_for :hide_footer, true %>
+
+<div class="backcolor_show">
+<div class="confirm">
+
+<h1>- 出庫情報確認 -</h1>
+<p>以下の内容で送信してよろしいですか？</p>
+
+<table class="confirmtable">
+  <tr><th>出庫日</th><td><%= @out_entry.entry_date&.strftime("%-m月%-d日") %></td></tr>
+  <tr><th>型式</th><td><%= @out_entry.model %></td></tr>
+  <tr><th>車体番号</th><td><%= @out_entry.chassis_number %></td></tr>
+  <tr><th>会社名</th><td><%= @out_entry.radio_company_name.presence || @out_entry.company_name %></td></tr>
+  <tr><th>運転者名</th><td><%= @out_entry.driver_name %></td></tr>
+  <tr><th>納車先</th><td><%= @out_entry.radio_delivery_location.presence || @out_entry.delivery_location %></td></tr>
+  <tr><th>異常の有無</th><td><%= @out_entry.has_abnormality ? "有" : "無" %></td></tr>
+  <tr><th class="message">メッセージ</th><td><%= @out_entry.message %></td></tr>
+</table>
+
+<%= form_with model: @out_entry, url: out_entries_path, local: true do |form| %>
+  <%= form.hidden_field :entry_date %>
+  <%= form.hidden_field :model %>
+  <%= form.hidden_field :chassis_number %>
+  <%= form.hidden_field :radio_company_name %>
+  <%= form.hidden_field :company_name %>
+  <%= form.hidden_field :driver_name %>
+  <%= form.hidden_field :radio_delivery_location %>
+  <%= form.hidden_field :delivery_location %>
+  <%= form.hidden_field :has_abnormality %>
+  <%= form.hidden_field :message %>
+
+<div class="bottombtn">
+  <%= form.submit "戻る", name: "back", class: "back_btn" %>
+  <%= form.submit "送信", class: "submit_btn" %>
+</div>
+<% end %>
+
+</div>
+</div>

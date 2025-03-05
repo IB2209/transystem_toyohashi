@@ -24,20 +24,33 @@ class OutEntriesController < ApplicationController
   end
 end
 
-  
+def confirm
+  @out_entry = OutEntry.new(out_entry_params)  # 修正
+
+  if @out_entry.valid?
+    render :confirm
+  else
+    @in_entries = InEntry.all
+    render :new
+  end
+end
+
 
   def create
     processed_params = process_params(out_entry_params)
     @out_entry = OutEntry.new(processed_params)
   
     if @out_entry.save
-      redirect_to out_entries_path, notice: "出庫情報が登録されました。"
+      redirect_to success_out_entries_path, notice: "出庫情報が登録されました。"
     else
       Rails.logger.debug "エラー: #{@out_entry.errors.full_messages}"
       flash.now[:alert] = @out_entry.errors.full_messages.join(", ")
       @in_entries = InEntry.all # エラー時も入庫データを渡す
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def success
   end
   
 

@@ -45,7 +45,12 @@ Rails.application.routes.draw do
   end
 
   # 出庫情報
-  resources :out_entries
+  resources :out_entries do
+    collection do
+      post :confirm  # 確認画面
+      get :success   # 登録完了画面
+    end
+  end
 
   # 伝票関連
   resources :plans do
