@@ -64,3 +64,89 @@
   <% end %>
 </div>
 </div>
+
+
+<div class="displayphone">
+  <h1>登録済伝票</h1>
+  <table>
+    <thead>
+      <tr>
+        <th class="th_no" rowspan="3">No.</th>
+        <th class="th_modelchassis">
+          型式：車番 <br>
+          引取先 ➡︎ 納車先
+        </th>
+        <th class="tantou">
+          期限
+        </th>
+        <th rowspan="2" class="tablespace"></th>
+        <th class="th_movereco" rowspan="2">日程 <br> 担当</th>
+      </tr>
+      <tr>
+        <th colspan="2" style="text-align: left;">コメント</th>
+      </tr>
+      <tr>
+        <th colspan="2" style="text-align: left;">不具合</th>
+      </tr>
+    </thead>
+  </table>
+  <hr>
+
+  <% @grouped_plans_by_date.each do |date, plans| %>
+    <h2 style="margin-top: 20px; padding: 20px 0 5px; text-align: left">
+      <%= l date, format: "%-m月%-d日(%a)" %>
+    </h2>
+    
+    <table>
+      <tbody>
+        <% plans.each_with_index do |plan, index| %>
+          <tr>
+            <td data-edit-url="<%= edit_plan_path(plan) %>" class="borderleft th_no" rowspan="2">
+              <%= index + 1 %>
+            </td>
+            <td data-edit-url="<%= edit_plan_path(plan) %>" class="th_modelchassis td_left">
+              <%= plan.model %> ： <%= plan.chassis_number %><br>
+              <%= plan.pickup_location %> ➡︎ <%= plan.delivery_location %>
+            </td>
+            <td data-edit-url="<%= edit_plan_path(plan) %>" class="borderbottom tantou">
+              <%= plan.move_date.strftime("%-H時") %>
+            </td>
+            <td rowspan="2" class="tablespace"></td>
+            <td rowspan="2" class="regibtn" style="text-align: center;">
+              <%= link_to "登録", new_movement_record_path(plan_id: plan.id), class: "a" %>
+            </td>
+          </tr>
+          <tr class="trbottom">
+            <% if plan.comment.present? %>
+              <td data-edit-url="<%= edit_plan_path(plan) %>" class="border td_left" colspan="3">
+                <%= plan.comment %>
+              </td>
+            <% end %>
+            <% if plan.issue_detail.present? %>
+              <td data-edit-url="<%= edit_plan_path(plan) %>" class="border td_left" colspan="3">
+                <%= plan.issue_detail %>
+              </td>
+            <% end %>
+          </tr>
+          <tr>
+            <td colspan="2" class="th_underspace"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("td[data-edit-url]").forEach(cell => {
+      cell.addEventListener("click", () => {
+        const editUrl = cell.getAttribute("data-edit-url");
+        if (editUrl) {
+          window.location.href = editUrl;
+        }
+      });
+    });
+  });
+</script>
