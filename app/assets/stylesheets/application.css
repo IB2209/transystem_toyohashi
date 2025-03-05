@@ -65,6 +65,7 @@ header{
   top: 0;
   padding-top: 20px;
   overflow-y: auto;
+  z-index: 1000;
 }
 
 /* メニューリストのスタイル */
@@ -183,7 +184,7 @@ header{
 /*----------------------tmp_home---------------------------*/
 .tmp_home{
   width: 100%;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: auto;
   padding: 10px 15px 50px;
 }
