@@ -997,6 +997,7 @@ table.movement tbody .bottom{
   height: 100vh;
 }
 
+
 /* スマホ用フッター */
 .mobile-footer {
   position: fixed;
@@ -1028,9 +1029,8 @@ table.movement tbody .bottom{
   color: #333;
   font-weight: bold;
   border-radius: 10px; /* 修正: border-radius は負の値を取れないので修正 */
-  height: 100%;
-  width: 60px;
-  margin-top: -10px;
+  width: 50px;
+  margin-top: -20px;
   font-size: 14.5px;
   transition: all 0.3s ease-in-out; /* スムーズなアニメーション */
 }
