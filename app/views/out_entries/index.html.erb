@@ -61,7 +61,7 @@
       <td style="font-size: 14px; padding: 0 20px"><%= entry.chassis_number %></td>
       <td style="font-size: 14px;"><%= entry.delivery_location %></td>
       <td style="font-size: 14px;"><%= entry.has_abnormality ? "有" : "無" %></td>
-      <td style="font-size: 14px;"><%= entry.message %></td>
+      <td style="font-size: 14px; text-align:left"><%= entry.message %></td>
       <td class="tablespace"></td>
       <td style="font-size: 14px;"><%= link_to "編集", edit_out_entry_path(entry) %></td>
     </tr>

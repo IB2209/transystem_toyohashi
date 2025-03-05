@@ -66,10 +66,10 @@
       <td style="font-size: 15px; padding: 0 20px"><%= entry[:in_entry].chassis_number || entry[:out_entry]&.chassis_number %></td>
       <td style="font-size: 14px;"><%= entry[:in_entry].pickup_location %></td>
       <td style="font-size: 14px;"><%= entry[:out_entry]&.delivery_location %></td>
-      <td style="font-size: 14px;"><%= entry[:in_entry].company_name %></td>
-      <td style="font-size: 14px;"><%= entry[:in_entry].driver_name %></td>
-      <td style="font-size: 14px;"><%= entry[:out_entry]&.company_name %></td>
-      <td style="font-size: 14px;"><%= entry[:out_entry]&.driver_name %></td>
+      <td style="font-size: 13px font-weight: 400;"><%= entry[:in_entry].company_name %></td>
+      <td style="font-size: 13px font-weight: 400;"><%= entry[:in_entry].driver_name %></td>
+      <td style="font-size: 13px font-weight: 400;"><%= entry[:out_entry]&.company_name %></td>
+      <td style="font-size: 13px font-weight: 400;"><%= entry[:out_entry]&.driver_name %></td>
       <td style="font-size: 14px;"><%= (entry[:out_entry]&.entry_date && entry[:in_entry].entry_date) ? "#{(entry[:out_entry].entry_date - entry[:in_entry].entry_date).to_i}日" : "-" %></td>
       <td style="font-size: 14px;" class="out_new <%= entry[:out_entry].nil? ? 'not-registered' : 'registered' %>">
         <% if entry[:out_entry].nil? %>
