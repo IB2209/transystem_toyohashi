@@ -101,7 +101,7 @@
       <tbody>
         <% plans.each_with_index do |plan, index| %>
           <tr>
-            <td data-edit-url="<%= edit_plan_path(plan) %>" class="borderleft th_no" rowspan="3">
+            <td data-edit-url="<%= edit_plan_path(plan) %>" class="borderleft th_no" rowspan="2">
               <%= index + 1 %>
             </td>
             <td data-edit-url="<%= edit_plan_path(plan) %>" class="th_modelchassis td_left">
@@ -111,8 +111,8 @@
             <td data-edit-url="<%= edit_plan_path(plan) %>" class="borderbottom tantou">
               <%= plan.move_date.strftime("%-H時") %>
             </td>
-            <td rowspan="3" class="tablespace"></td>
-            <td rowspan="3" class="regibtn" style="text-align: center;">
+            <td rowspan="2" class="tablespace"></td>
+            <td rowspan="2" class="regibtn" style="text-align: center;">
               <%= link_to "振分", new_movement_record_path(plan_id: plan.id), class: "a" %>
             </td>
           </tr>
