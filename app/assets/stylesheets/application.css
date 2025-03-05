@@ -736,7 +736,7 @@ table.movement tbody .bottom{
   padding: 0 ;
 }
 .movement .th2{
-  width: 200px;
+  min-width: 200px;
 }
 .movement .th3{
   width: 90px;
@@ -761,8 +761,8 @@ table.movement tbody .bottom{
 .movement .td8{
   border-right: 5px double black;
 }
-.movement .th1{
-  
+.movement .th9 , .movement .th10{
+  width: 89px;
 }
 .movement .th1{
   
