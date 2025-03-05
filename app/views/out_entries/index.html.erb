@@ -55,8 +55,8 @@
           <%= entry.entry_hour.present? && entry.entry_minute.present? ? "#{entry.entry_hour}:#{entry.entry_minute.to_s.rjust(2, '0')}" : entry.created_at.strftime("%-H:%M") %>
         </div>
       </td>
-      <td style="font-size: 14px;"><%= entry.company_name %></td>
-      <td style="font-size: 14px;"><%= entry.driver_name %></td>
+      <td style="font-size: 13px; font-weight: 400;"><%= entry.company_name %></td>
+      <td style="font-size: 13px; font-weight: 400;"><%= entry.driver_name %></td>
       <td style="font-size: 14px; padding: 0 20px"><%= entry.model %></td>
       <td style="font-size: 14px; padding: 0 20px"><%= entry.chassis_number %></td>
       <td style="font-size: 14px;"><%= entry.delivery_location %></td>
