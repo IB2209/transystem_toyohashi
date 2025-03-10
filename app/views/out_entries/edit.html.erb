@@ -30,27 +30,31 @@
       </div>
       
       <div class="q">
-        <b><%= form.label :company_name, "会社名" %><sup class="require">※</sup><br></b>
-        <% predefined_companies = ["北峯", "スギタニ", "海老名", "グローバル", "永山運輸", "グットラック", "コックスギア"] %>
-        <% predefined_companies.each do |company| %>
-          <%= form.radio_button :company_name, company, checked: @out_entry.company_name == company %> <%= company %><br>
-        <% end %>
-        <%= form.text_field :company_name, placeholder: "その他", value: predefined_companies.include?(@out_entry.company_name) ? "" : @out_entry.company_name %>
-      </div>
+  <b><%= form.label :radio_company_name, "会社名" %><sup class="require">※</sup><br></b>
+  <% predefined_companies = ["北峯", "スギタニ", "海老名", "グローバル", "永山運輸", "グットラック", "コックスギア"] %>
+  <% predefined_companies.each do |company| %>
+    <%= form.radio_button :radio_company_name, company, checked: @out_entry.company_name == company %> <%= company %><br>
+  <% end %>
+  <%= form.text_field :company_name, placeholder: "その他", value: predefined_companies.include?(@out_entry.company_name) ? "" : @out_entry.company_name %> 
+</div>
+
+
       
       <div class="q">
         <b><%= form.label :driver_name, "運転者名" %><sup class="require">※</sup><br></b>
         <%= form.text_field :driver_name, placeholder: "苗字のみ", value: @out_entry.driver_name %>
       </div>
       
+
       <div class="q">
-        <b><%= form.label :delivery_location, "納車先" %><sup class="require">※</sup><br></b>
-        <% predefined_locations = ["東燃", "藤沢工場", "UD上野", "東海", "久松"] %>
-        <% predefined_locations.each do |location| %>
-          <%= form.radio_button :delivery_location, location, checked: @out_entry.delivery_location == location %> <%= location %><br>
-        <% end %>
-        <%= form.text_field :delivery_location, placeholder: "その他", value: predefined_locations.include?(@out_entry.delivery_location) ? "" : @out_entry.delivery_location %>
-      </div>
+  <b><%= form.label :radio_delivery_location, "納車先" %><sup class="require">※</sup><br></b>
+  <% predefined_locations = ["東燃", "藤沢工場", "UD上野", "東海", "久松"] %>
+  <% predefined_locations.each do |location| %>
+    <%= form.radio_button :radio_delivery_location, location, checked: @out_entry.delivery_location == location %> <%= location %><br>
+  <% end %>
+  <%= form.text_field :delivery_location, placeholder: "その他", value: predefined_locations.include?(@out_entry.delivery_location) ? "" : @out_entry.delivery_location %>
+</div>
+
       
       <div class="q">
       <b><%= form.label :has_abnormality, "異常の有無" %><sup class="require">※</sup><br></b>

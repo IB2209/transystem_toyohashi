@@ -61,12 +61,17 @@ end
 
   def update
     @out_entry = OutEntry.find(params[:id])
-    if @out_entry.update(out_entry_params)
+    processed_params = process_params(out_entry_params)  # process_params を適用
+  
+    if @out_entry.update(processed_params)
       redirect_to out_entries_path, notice: '出庫データを更新しました。'
     else
+      flash.now[:alert] = @out_entry.errors.full_messages.join(", ")
       render :edit
     end
   end
+  
+
 
   def destroy
     @out_entry = OutEntry.find(params[:id])
