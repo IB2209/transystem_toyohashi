@@ -70,6 +70,10 @@ end
       render :edit
     end
   end
+
+  def show
+    @in_entry = InEntry.find(params[:id])
+  end
   
 
 
