@@ -72,8 +72,13 @@ end
   end
 
   def show
-    @in_entry = InEntry.find(params[:id])
+    @in_entry = InEntry.find_by(id: params[:id])
+  
+    if @in_entry.nil?
+      redirect_to in_entries_path, alert: "該当の入庫データが見つかりませんでした。"
+    end
   end
+  
   
 
 
