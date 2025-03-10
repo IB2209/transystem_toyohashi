@@ -1,0 +1,26 @@
+<div class="backcolor_show">
+  <div class="show">
+
+    <h1>- 出庫情報詳細 -</h1>
+
+    <table class="showtable">
+      <tr><th>出庫日</th><td><%= @out_entry.entry_date&.strftime("%-m月%-d日") %></td></tr>
+      <tr><th>会社名</th><td><%= @out_entry.company_name %></td></tr>
+      <tr><th>運転者名</th><td><%= @out_entry.driver_name %></td></tr>
+      <tr><th>型式</th><td><%= @out_entry.model %></td></tr>
+      <tr><th>車体番号</th><td><%= @out_entry.chassis_number %></td></tr>
+      <tr><th>納車先</th><td><%= @out_entry.delivery_location %></td></tr>
+      <tr><th>異常の有無</th><td><%= @out_entry.has_abnormality ? "有" : "無" %></td></tr>
+      <tr><th class="message">メッセージ</th><td><%= @out_entry.message.presence || "なし" %></td></tr>
+    </table>
+
+    <div class="bottombtn">
+      <%= link_to "戻る", out_entries_path, class: "back_btn" %>
+      <%= link_to "編集", edit_out_entry_path(@out_entry), class: "edit_btn" %>
+      <div class="deletecontainer">
+        <%= button_to "削除", out_entry_path(@out_entry), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "delete_btn" %>
+      </div>
+    </div>
+
+  </div>
+</div>
