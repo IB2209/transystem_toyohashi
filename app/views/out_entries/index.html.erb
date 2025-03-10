@@ -65,7 +65,6 @@
       <td style="font-size: 12px; text-align:left"><%= entry.message %></td>
       <td class="tablespace"></td>
       <td style="font-size: 14px;"><%= link_to "編集", edit_out_entry_path(entry) %></td>
-      <td style="font-size: 14px;"><%= link_to "削除", out_entry_path(entry), method: :delete, data: { confirm: "本当に削除しますか？" } %></td>
     </tr>
     <% previous_date = entry.entry_date %> <!-- 現在の日付を保存 -->
   <% end %>
