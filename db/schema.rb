@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_03_033230) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_11_004512) do
   create_table "daily_reports", force: :cascade do |t|
-    t.date "work_date"
+    t.date "move_date"
     t.string "employee_name"
     t.datetime "start_time"
     t.datetime "end_time"
@@ -24,10 +24,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_033230) do
     t.string "pickup_location"
     t.string "delivery_location"
     t.integer "travel_distance"
-    t.integer "fuel_fee"
-    t.integer "toll_fee"
-    t.integer "transportation_fee"
-    t.integer "lodging_fee"
+    t.integer "fuel_fee", default: 0
+    t.integer "toll_fee", default: 0
+    t.integer "transportation_fee", default: 0
+    t.integer "lodging_fee", default: 0
     t.string "fuel_fee_type"
     t.string "toll_fee_type"
     t.string "transportation_fee_type"
@@ -45,6 +45,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_033230) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "responsible_person"
+    t.integer "movement_record_id", null: false
+    t.string "absence_reason"
+    t.string "absence_reason_other"
+    t.string "attendance_status"
+    t.string "request_type"
+    t.integer "total_expense"
+    t.index ["movement_record_id"], name: "index_daily_reports_on_movement_record_id"
   end
 
   create_table "in_entries", force: :cascade do |t|
@@ -164,6 +171,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_033230) do
     t.index ["plan_id"], name: "index_schedules_on_plan_id"
   end
 
+  add_foreign_key "daily_reports", "movement_records"
   add_foreign_key "movement_records", "schedules"
   add_foreign_key "schedules", "plans"
 end

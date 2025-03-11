@@ -1,44 +1,171 @@
 <div class="tmp_home">
 
-<h1>日報一覧</h1>
+<div class="daily_per">
+  <h1>日報一覧</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>担当者</th>
-      <th>型式</th>
-      <th>車体番号</th>
-      <th>引取先</th>
-      <th>納車先</th>
-      <th>移動日</th>
-      <th>依頼</th>
-      <th>車両状態</th>
-      <th>通行料金</th>
-      <th>燃料費</th>
-      <th>宿泊費</th>
-      <th>交通費</th>
-      <th>燃料量</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @daily_reports.each do |report| %>
+  <!-- タブのヘッダー -->
+    <ul class="tab-header">
+      <% @daily_reports_by_person.keys.each_with_index do |person, index| %>
+        <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= person %>">
+          <%= person %>
+        </li>
+      <% end %>
+    </ul>
+
+    <!-- タブの内容 -->
+    <div class="tab-content">
+      <% @daily_reports_by_person.each do |person, reports| %>
+        <div class="tab-pane <%= 'active' if @daily_reports_by_person.keys.first == person %>" id="tab-<%= person %>">
+          <h2><%= person %> の日報</h2>
+
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>日付（曜日）</th>
+                <th>出社 - 退社</th>
+                <th>業務内容</th>
+                <th>依頼</th>
+                <th>型式</th>
+                <th>車体番号</th>
+                <th>引取先</th>
+                <th>納車先</th>
+                <th>燃料代</th>
+                <th>高速代</th>
+                <th>交通代</th>
+                <th>宿泊代</th>
+                <th>経費合計</th>
+                <th>備考</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+  <% reports.group_by(&:move_date).each do |date, grouped_reports| %>  <!-- ✅ 日付ごとにグループ化 -->
+    <% first_report = grouped_reports.first %>  <!-- ✅ 代表データを取得 -->
+    <% movement_records = first_report.movement_records %>
+
+    <% movement_records.each_with_index do |record, record_index| %>
       <tr>
-        <td><%= report.responsible_person %></td>
-        <td><%= report.model %></td>
-        <td><%= report.chassis_number %></td>
-        <td><%= report.pickup_location %></td>
-        <td><%= report.delivery_location %></td>
-        <td><%= report.move_date %></td>
-        <td><%= report.request_type %></td>
-        <td><%= report.vehicle_condition %></td>
-        <td><%= report.toll_fee_type %>: <%= report.toll_fee %>円</td>
-        <td><%= report.fuel_fee_type %>: <%= report.fuel_fee %>円</td>
-        <td><%= report.lodging_fee %>円</td>
-        <td><%= report.transportation_fee %>円</td>
-        <td><%= report.fuel_amount %>ℓ</td>
+        <% if record_index == 0 %>  <!-- ✅ 1回目だけ表示 -->
+          <td rowspan="<%= movement_records.size %>">
+            <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "detail-link" %>
+          </td>
+          <td rowspan="<%= movement_records.size %>">
+            <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
+            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
+          </td>
+          <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
+        <% end %>
+
+        <td><%= record.request_type %></td>
+        <td><%= record.model || "-" %></td>
+        <td><%= record.chassis_number || "-" %></td>
+        <td><%= record.pickup_location || "-" %></td>
+        <td><%= record.delivery_location || "-" %></td>
+        <td>
+          <% if record.fuel_fee.to_i > 0 %>
+            <%= number_with_delimiter(record.fuel_fee) %>円
+          <% end %>
+          <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
+            (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
+          <% end %>
+        </td>
+        <td>
+          <% if record.toll_fee.to_i > 0 %>
+            <%= number_with_delimiter(record.toll_fee) %>円
+          <% end %>
+        </td>
+        <td>
+          <% if record.transportation_fee.to_i > 0 %>
+            <%= number_with_delimiter(record.transportation_fee) %>円
+          <% end %>
+        </td>
+        <td>
+          <% if record.lodging_fee.to_i > 0 %>
+            <%= number_with_delimiter(record.lodging_fee) %>円
+          <% end %>
+        </td>
+
+        <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
+
+        <td>
+          <%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "-" %>
+        </td>
+
+        <% if record_index == 0 %>  <!-- ✅ 1回目だけ表示 -->
+          <td rowspan="<%= movement_records.size %>">
+            <%= first_report.remarks.presence || "-" %>
+          </td>
+          <td rowspan="<%= movement_records.size %>">
+            <%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %> 
+          </td>
+        <% end %>
       </tr>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+</tbody>
 
+
+
+
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let tabs = document.querySelectorAll(".tab-link");
+    let tabContents = document.querySelectorAll(".tab-pane");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", function () {
+        let target = this.getAttribute("data-tab");
+
+        tabs.forEach(t => t.classList.remove("active"));
+        this.classList.add("active");
+
+        tabContents.forEach(tc => tc.classList.remove("active"));
+        document.getElementById(target).classList.add("active");
+      });
+    });
+  });
+</script>
+
+<style>
+  .tab-header {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-bottom: 2px solid #ccc;
+  }
+  .tab-header li {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    background: #f4f4f4;
+  }
+  .tab-header li.active {
+    background: #ddd;
+    font-weight: bold;
+  }
+  .tab-pane {
+    display: none;
+    padding: 10px;
+  }
+  .tab-pane.active {
+    display: block;
+  }
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .report-table th, .report-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+</style>

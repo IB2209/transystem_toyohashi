@@ -1,63 +1,182 @@
-<h1>日報作成</h1>
+<div class="backcolor_schedule">
+  <div class="forphone">
+    <div class="header">
+      <div class="headerbox">
+        <h1>- 日報登録 -</h1>
+        <p>詳細を入力してください</p>
+        <p style="margin-bottom: 0; padding-top: 20px; color: rgb(224, 0, 0); border-top: 1px solid lightgray; font-size: 15px">
+          ※ 必須の質問です
+        </p>
+      </div>
+    </div>
 
-<%= form_with(model: @daily_report, url: daily_reports_path, local: true) do |form| %>
-  <div>
-    <label>担当者選択</label>
-    <%= select_tag :responsible_person, options_for_select(@responsible_people), id: "responsible_person_select" %>
+    
+
+    <%= form_with model: @daily_report, local: true do |form| %>
+
+      <div class="q">
+        <label>氏名</label><br>
+        <%= select_tag :responsible_person, options_for_select(@responsible_people), id: "responsible_person_select" %>
+      </div>
+
+      <div class="q">
+        <label>日付</label><br>
+        <%= form.date_field :move_date, value: Date.today, id: "move_date_select" %>
+      </div>
+
+      <div class="q">
+  <label>出勤 or 欠勤</label><br>
+  <%= form.radio_button :attendance_status, "出勤", checked: true, id: "attendance_present" %> 出勤
+  <%= form.radio_button :attendance_status, "欠勤", id: "attendance_absent" %> 欠勤
+</div>
+
+<!-- 出勤時の入力項目 -->
+<div id="present_fields">
+
+      <div class="q">
+  <label>出社</label><br>
+  <%= form.time_field :start_time, value: "08:30", id: "start_time_select" %>
+</div>
+
+<div class="q">
+  <label>退社</label><br>
+  <%= form.time_field :end_time, value: "17:30", id: "end_time_select" %>
+</div>
+
+
+      <div class="q">
+        <h2>移動記録</h2>
+        <table id="movement_records_table">
+          <thead>
+            <tr>
+              <th>型式</th>
+              <th>車体番号</th>
+              <th>引取先</th>
+              <th>納車先</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- JavaScript でデータを挿入 -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="q">
+  <label>業務内容</label><br>
+  <% work_content_options = ["車両移動", "構内作業", "送迎", "その他"] %>
+  <%= form.select :work_content, options_for_select(work_content_options, @daily_report.work_content), 
+                  { prompt: "選択してください" }, 
+                  { id: "work_content_select" } %>
+
+  <%= form.text_field :work_content_other, placeholder: "その他を選んだ場合入力", 
+                      style: (@daily_report.work_content == "その他" ? "display: block;" : "display: none;"), 
+                      id: "work_content_other_input" %>
+</div>
+
+
+      <div class="q">
+  <label>備考</label><br>
+  <%= form.text_area :remarks, placeholder: "備考欄", rows: 3 %>
+</div>
+
+</div>
+
+<!-- 欠勤時の入力項目 -->
+<div id="absent_fields" style="display: none;">
+  <div class="q">
+    <label>欠勤理由</label><br>
+    <% absent_options = ["有給", "午前休", "午後休", "振休", "忌引", "公欠", "欠勤", "その他"] %>
+    <%= select_tag :absence_reason, options_for_select(absent_options), id: "absence_reason_select" %>
+    <%= form.text_field :absence_reason_other, placeholder: "その他を選んだ場合入力", style: "display: none; width: 80%;", id: "absence_reason_other_input" %>
   </div>
 
-  <h2>移動記録</h2>
-  <table id="movement_records_table">
-    <thead>
-      <tr>
-        <th>型式</th>
-        <th>車体番号</th>
-        <th>引取先</th>
-        <th>納車先</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- JavaScript でデータを挿入 -->
-    </tbody>
-  </table>
+  <div class="q">
+    <label>備考</label><br>
+    <%= form.text_area :remarks, placeholder: "備考を入力してください", rows: 3 %>
+  </div>
+</div>
 
-  <%= form.submit "送信" %>
-<% end %>
+
+      <div class="bottombtn">
+        <%= form.submit "登録", class: "submit_btn" %>
+      </div>
+    <% end %>
+
+    <!-- エラーメッセージ表示 -->
+    <% if @daily_report.errors.any? %>
+  <div class="error-messages" style="color: red; font-weight: bold;">
+    <p>入力に誤りがあります。修正してください。</p>
+    <ul>
+      <% @daily_report.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  </div>
+</div>
+
+
+
 
 <script>
-  document.getElementById("responsible_person_select").addEventListener("change", function() {
-    let selectedPerson = this.value;
-    console.log("選択された担当者:", selectedPerson);
+document.addEventListener("DOMContentLoaded", function() {
 
-    fetch(`/daily_reports/fetch_records?responsible_person=${encodeURIComponent(selectedPerson)}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("データ取得に失敗しました");
-        }
-        return response.json();
-      })
+  function fetchMovementRecords() {
+    let selectedPerson = document.getElementById("responsible_person_select").value;
+    let selectedDate = document.getElementById("move_date_select").value;
+
+    if (!selectedPerson || !selectedDate) {
+      return;
+    }
+
+    fetch(`/daily_reports/fetch_records?responsible_person=${encodeURIComponent(selectedPerson)}&move_date=${encodeURIComponent(selectedDate)}`)
+      .then(response => response.ok ? response.json() : Promise.reject("データ取得に失敗しました"))
       .then(data => {
-        console.log("取得データ:", data);
         let tableBody = document.querySelector("#movement_records_table tbody");
-        tableBody.innerHTML = "";
+        tableBody.innerHTML = data.length === 0 
+          ? "<tr><td colspan='4'>該当する移動記録がありません</td></tr>" 
+          : data.map(record => `<tr>
+              <td>${record.model}</td>
+              <td>${record.chassis_number}</td>
+              <td>${record.pickup_location}</td>
+              <td>${record.delivery_location}</td>
+            </tr>`).join("");
 
-        if (data.length === 0) {
-          tableBody.innerHTML = "<tr><td colspan='4'>該当する移動記録がありません</td></tr>";
-          return;
-        }
-
-        data.forEach(record => {
-          let row = `<tr>
-            <td>${record.model}</td>
-            <td>${record.chassis_number}</td>
-            <td>${record.pickup_location}</td>
-            <td>${record.delivery_location}</td>
-          </tr>`;
-          tableBody.innerHTML += row;
-        });
+        setDefaultWorkContent(data.length > 0);
       })
-      .catch(error => {
-        console.error("エラー:", error);
-      });
-  });
+      .catch(error => console.error("エラー:", error));
+  }
+
+  function setDefaultWorkContent(hasRecords) {
+    let workContentSelect = document.getElementById("work_content_select");
+    if (workContentSelect) {
+      workContentSelect.value = hasRecords ? "車両移動" : "構内作業";
+    }
+  }
+
+  function toggleOtherInput(selectId, otherInputId) {
+    let select = document.getElementById(selectId);
+    let otherInput = document.getElementById(otherInputId);
+
+    if (select && otherInput) {
+      otherInput.style.display = select.value === "その他" ? "block" : "none";
+      if (select.value !== "その他") otherInput.value = "";
+    }
+  }
+
+  function toggleAttendanceFields() {
+    let isPresent = document.getElementById("attendance_present").checked;
+    document.getElementById("present_fields").style.display = isPresent ? "block" : "none";
+    document.getElementById("absent_fields").style.display = isPresent ? "none" : "block";
+  }
+
+  // イベントリスナーの適用
+  document.getElementById("responsible_person_select")?.addEventListener("change", fetchMovementRecords);
+  document.getElementById("move_date_select")?.addEventListener("change", fetchMovementRecords);
+  document.getElementById("work_content_select")?.addEventListener("change", () => toggleOtherInput("work_content_select", "work_content_other_input"));
+  document.getElementById("absence_reason_select")?.addEventListener("change", () => toggleOtherInput("absence_reason_select", "absence_reason_other_input"));
+  document.getElementById("attendance_present")?.addEventListener("change", toggleAttendanceFields);
+  document.getElementById("attendance_absent")?.addEventListener("change", toggleAttendanceFields);
+});
 </script>

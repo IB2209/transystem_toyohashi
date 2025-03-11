@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "smartphone", to: "smartphone#index"
 
   # 日報関連
-  resources :daily_reports, only: [:index, :new, :create] do
+  resources :daily_reports do
     collection do
       get :fetch_records # ✅ 追加
     end

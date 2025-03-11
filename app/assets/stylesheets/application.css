@@ -269,7 +269,7 @@ header{
   display: flex;
   border-bottom: 2px solid #ccc;
   margin-bottom: 20px;
-  max-width: 1000px;
+  max-width: 1500px;
   margin: auto;
 }
 
@@ -614,9 +614,21 @@ td.out_new.not-registered {
 .show .deletecontainer{
   width: 40%;
 } 
-
+.width {
+  width: 80%;
+}
 .show .message {
   vertical-align: top;
+}
+
+.dailyshow .backcontainer{
+  display: block;
+  width: 80%;
+  
+}
+.dailyshow .backcontainer{
+  width: 80%;
+  display: block;
 }
 
 /*----------------------出庫フォーム---------------------------*/
@@ -912,7 +924,7 @@ table.movement tbody .bottom{
 /* タブレット用スタイル */
 @media screen and (max-width: 1370px) {
   .tmp_home {
-    margin-left: 50px;
+    
   }
 }
 
@@ -1051,4 +1063,40 @@ a.footer-link.active {
   .mobile-footer {
     display: none;
   }
+}
+
+
+
+/*----------------------TMP管理表---------------------------*/
+
+
+.daily_per .tab-header {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.daily_per .tab-link {
+  padding: 10px 15px;
+  cursor: pointer;
+  background: #eee;
+  border-radius: 5px;
+}
+
+.daily_per .tab-link.active {
+  background: #007bff;
+  color: white;
+}
+
+.daily_per .tab-content {
+  margin-top: 10px;
+}
+
+.daily_per .tab-pane {
+  display: none;
+}
+
+.daily_per .tab-pane.active {
+  display: block;
 }

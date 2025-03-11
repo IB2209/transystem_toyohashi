@@ -23,7 +23,7 @@
   <body>
     <div class="sidebarcontainer">
       <header>
-        <% if ["movement_records", "schedules", "plans", "entries", "in_entries", "out_entries"].include?(params[:controller]) && params[:action] == "index" %>
+        <% if ["movement_records", "schedules", "plans", "entries", "in_entries", "out_entries", "daily_reports"].include?(params[:controller]) && params[:action] == "index" %>
         <div class="sidebar">
     <ul class="menu">
         <li class="menu-item" data-menu="管理画面">

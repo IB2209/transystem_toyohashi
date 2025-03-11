@@ -1,11 +1,30 @@
-<h1>業務日報 詳細</h1>
+<div class="backcolor_show">
+  <div class="show dailyshow">
+    <h1>- 日報詳細 -</h1>
 
-<p><strong>日付:</strong> <%= @daily_report.work_date %></p>
-<p><strong>担当者:</strong> <%= @daily_report.employee_name %></p>
-<p><strong>出勤時間:</strong> <%= @daily_report.start_time&.strftime('%H:%M') %></p>
-<p><strong>退勤時間:</strong> <%= @daily_report.end_time&.strftime('%H:%M') %></p>
-<p><strong>業務内容:</strong> <%= @daily_report.work_content_other.presence || @daily_report.work_content %></p>
-<p><strong>備考:</strong> <%= @daily_report.remarks %></p>
+    <table class="showtable">
+      <tr><th>日付</th><td><%= l @daily_report.move_date, format: "%-m月%-d日" %></td></tr>
+      <tr><th>担当者</th><td><%= @daily_report.responsible_person %></td></tr>
+      <tr><th>出社 - 退社</th>
+        <td>
+          <%= @daily_report.start_time.strftime("%-H:%M") if @daily_report.start_time.present? %> -
+          <%= @daily_report.end_time.strftime("%-H:%M") if @daily_report.end_time.present? %>
+        </td>
+      </tr>
+      <tr><th>業務内容</th><td><%= @daily_report.work_content %></td></tr>
+      <tr><th>備考</th><td><%= @daily_report.remarks.presence || "なし" %></td></tr>
+    </table>
 
-<%= link_to "編集", edit_daily_report_path(@daily_report) %> |
-<%= link_to "一覧に戻る", daily_reports_path %>
+    <div class="bottombtn">
+      <div class="backcontainer">
+        <%= link_to "戻る", daily_reports_path, class: "back_btn" %>
+      </div>
+      <div class="editcontainer">
+        <%= link_to "編集", edit_daily_report_path(@daily_report), class: "edit_btn" %>
+      </div>
+      <div class="deletecontainer">
+        <%= button_to "削除", daily_report_path(@daily_report), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "delete_btn" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -37,5 +37,11 @@ ja:
               blank: "引取先を入力してください"
             message:
               blank: "メッセージを入力してください"
+        daily_report:
+          attributes:
+            responsible_person:
+              blank: "担当者を入力してください"
+            work_content:
+              blank: "業務内容を入力してください"
       messages:
         record_invalid: "レコードの保存に失敗しました: %{errors}"
