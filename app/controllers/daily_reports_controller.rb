@@ -4,9 +4,14 @@ class DailyReportsController < ApplicationController
   def index
     @daily_reports = DailyReport.includes(:movement_records).order(move_date: :desc)
   
-    # `group_by` で **担当者ごとに整理**
-    @daily_reports_by_person = @daily_reports.group_by(&:responsible_person)
+   # 月ごとにデータをグループ化
+  @daily_reports_by_month = @daily_reports.group_by { |report| report.move_date.beginning_of_month }
+
+  # 担当者ごとにグループ化
+  @daily_reports_by_month.each do |month, reports|
+    @daily_reports_by_month[month] = reports.group_by(&:responsible_person)
   end
+end
   
   
 

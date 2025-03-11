@@ -1,132 +1,141 @@
 <div class="tmp_home">
+  <div class="daily_per">
+    <h2>2025年</h2>
+    <h1>COXGEAR豊橋営業所</h1>
+    
 
-<div class="daily_per">
-  <h1>日報一覧</h1>
-
-  <!-- タブのヘッダー -->
-    <ul class="tab-header">
-      <% @daily_reports_by_person.keys.each_with_index do |person, index| %>
-        <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= person %>">
-          <%= person %>
+    <!-- 月ごとのタブ -->
+    <ul class="month-tab-header">
+      <% @daily_reports_by_month.keys.each_with_index do |month, index| %>
+        <li class="month-tab-link <%= 'active' if index.zero? %>" data-month="month-<%= month.strftime('%Y-%m') %>">
+          <%= month.strftime('%-m月') %>
         </li>
       <% end %>
     </ul>
 
-    <!-- タブの内容 -->
-    <div class="tab-content">
-      <% @daily_reports_by_person.each do |person, reports| %>
-        <div class="tab-pane <%= 'active' if @daily_reports_by_person.keys.first == person %>" id="tab-<%= person %>">
-          <h2><%= person %> の日報</h2>
-
-          <table class="report-table">
-            <thead>
-              <tr>
-                <th>日付（曜日）</th>
-                <th>出社 - 退社</th>
-                <th>業務内容</th>
-                <th>依頼</th>
-                <th>型式</th>
-                <th>車体番号</th>
-                <th>引取先</th>
-                <th>納車先</th>
-                <th>燃料代</th>
-                <th>高速代</th>
-                <th>交通代</th>
-                <th>宿泊代</th>
-                <th>経費合計</th>
-                <th>備考</th>
-                <th>詳細</th>
-              </tr>
-            </thead>
-            <tbody>
-  <% reports.group_by(&:move_date).each do |date, grouped_reports| %>  <!-- ✅ 日付ごとにグループ化 -->
-    <% first_report = grouped_reports.first %>  <!-- ✅ 代表データを取得 -->
-    <% movement_records = first_report.movement_records %>
-
-    <% movement_records.each_with_index do |record, record_index| %>
-      <tr>
-        <% if record_index == 0 %>  <!-- ✅ 1回目だけ表示 -->
-          <td rowspan="<%= movement_records.size %>">
-            <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "detail-link" %>
-          </td>
-          <td rowspan="<%= movement_records.size %>">
-            <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
-            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
-          </td>
-          <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
-        <% end %>
-
-        <td><%= record.request_type %></td>
-        <td><%= record.model || "-" %></td>
-        <td><%= record.chassis_number || "-" %></td>
-        <td><%= record.pickup_location || "-" %></td>
-        <td><%= record.delivery_location || "-" %></td>
-        <td>
-          <% if record.fuel_fee.to_i > 0 %>
-            <%= number_with_delimiter(record.fuel_fee) %>円
+    <% @daily_reports_by_month.each do |month, reports_by_person| %>
+      <div class="month-tab-pane <%= 'active' if @daily_reports_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+        
+        <!-- タブのヘッダー（担当者ごと） -->
+        <ul class="tab-header">
+          <% reports_by_person.keys.each_with_index do |person, index| %>
+            <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= month.strftime('%Y-%m') %>-<%= person %>">
+              <%= person %>
+            </li>
           <% end %>
-          <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
-            (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
+        </ul>
+
+        <!-- タブの内容 -->
+        <div class="tab-content">
+          <% reports_by_person.each do |person, reports| %>
+            <div class="tab-pane <%= 'active' if reports_by_person.keys.first == person %>" id="tab-<%= month.strftime('%Y-%m') %>-<%= person %>">
+              <h2><%= person %> の日報</h2>
+
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>日付（曜日）</th>
+                    <th>出社 - 退社</th>
+                    <th>業務内容</th>
+                    <th>依頼</th>
+                    <th>型式</th>
+                    <th>車体番号</th>
+                    <th>引取先</th>
+                    <th>納車先</th>
+                    <th>燃料代</th>
+                    <th>高速代</th>
+                    <th>交通代</th>
+                    <th>宿泊代</th>
+                    <th>経費合計</th>
+                    <th>備考</th>
+                    <th>詳細</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% reports.group_by(&:move_date).each do |date, grouped_reports| %>
+                    <% first_report = grouped_reports.first %>
+                    <% movement_records = first_report.movement_records %>
+
+                    <% movement_records.each_with_index do |record, record_index| %>
+                      <tr>
+                        <% if record_index == 0 %>
+                          <td rowspan="<%= movement_records.size %>">
+                            <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %>
+                          </td>
+                          <td rowspan="<%= movement_records.size %>">
+                            <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
+                            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
+                          </td>
+                          <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
+                        <% end %>
+
+                        <td><%= record.request_type %></td>
+                        <td><%= record.model || "" %></td>
+                        <td><%= record.chassis_number || "" %></td>
+                        <td><%= record.pickup_location || "" %></td>
+                        <td><%= record.delivery_location || "" %></td>
+                        <td>
+                          <% if record.fuel_fee.to_i > 0 %>
+                            <%= number_with_delimiter(record.fuel_fee) %>円
+                          <% end %>
+                          <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
+                            (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
+                          <% end %>
+                        </td>
+                        <td><%= record.toll_fee.to_i > 0 ? "#{number_with_delimiter(record.toll_fee)}円" : "" %></td>
+                        <td><%= record.transportation_fee.to_i > 0 ? "#{number_with_delimiter(record.transportation_fee)}円" : "" %></td>
+                        <td><%= record.lodging_fee.to_i > 0 ? "#{number_with_delimiter(record.lodging_fee)}円" : "" %></td>
+
+                        <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
+                        <td><%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "" %></td>
+
+                        <% if record_index == 0 %>
+                          <td rowspan="<%= movement_records.size %>"><%= first_report.remarks.presence || "" %></td>
+                          <td rowspan="<%= movement_records.size %>">
+                            <%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %> 
+                          </td>
+                        <% end %>
+                      </tr>
+                    <% end %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
           <% end %>
-        </td>
-        <td>
-          <% if record.toll_fee.to_i > 0 %>
-            <%= number_with_delimiter(record.toll_fee) %>円
-          <% end %>
-        </td>
-        <td>
-          <% if record.transportation_fee.to_i > 0 %>
-            <%= number_with_delimiter(record.transportation_fee) %>円
-          <% end %>
-        </td>
-        <td>
-          <% if record.lodging_fee.to_i > 0 %>
-            <%= number_with_delimiter(record.lodging_fee) %>円
-          <% end %>
-        </td>
-
-        <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
-
-        <td>
-          <%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "-" %>
-        </td>
-
-        <% if record_index == 0 %>  <!-- ✅ 1回目だけ表示 -->
-          <td rowspan="<%= movement_records.size %>">
-            <%= first_report.remarks.presence || "-" %>
-          </td>
-          <td rowspan="<%= movement_records.size %>">
-            <%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %> 
-          </td>
-        <% end %>
-      </tr>
-    <% end %>
-  <% end %>
-</tbody>
-
-
-
-
-          </table>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    let tabs = document.querySelectorAll(".tab-link");
-    let tabContents = document.querySelectorAll(".tab-pane");
+    let monthTabs = document.querySelectorAll(".month-tab-link");
+    let monthContents = document.querySelectorAll(".month-tab-pane");
 
-    tabs.forEach(tab => {
+    let personTabs = document.querySelectorAll(".tab-link");
+    let personContents = document.querySelectorAll(".tab-pane");
+
+    monthTabs.forEach(tab => {
+      tab.addEventListener("click", function () {
+        let target = this.getAttribute("data-month");
+
+        monthTabs.forEach(t => t.classList.remove("active"));
+        this.classList.add("active");
+
+        monthContents.forEach(tc => tc.classList.remove("active"));
+        document.getElementById(target).classList.add("active");
+      });
+    });
+
+    personTabs.forEach(tab => {
       tab.addEventListener("click", function () {
         let target = this.getAttribute("data-tab");
 
-        tabs.forEach(t => t.classList.remove("active"));
+        personTabs.forEach(t => t.classList.remove("active"));
         this.classList.add("active");
 
-        tabContents.forEach(tc => tc.classList.remove("active"));
+        personContents.forEach(tc => tc.classList.remove("active"));
         document.getElementById(target).classList.add("active");
       });
     });
@@ -134,38 +143,131 @@
 </script>
 
 <style>
-  .tab-header {
+  .month-tab-header {
     display: flex;
     list-style: none;
     padding: 0;
     border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
   }
-  .tab-header li {
+  .month-tab-header li {
     padding: 10px 15px;
     cursor: pointer;
     border: 1px solid #ccc;
     margin-right: 5px;
     background: #f4f4f4;
   }
-  .tab-header li.active {
+  .month-tab-header li.active {
     background: #ddd;
     font-weight: bold;
   }
-  .tab-pane {
-    display: none;
-    padding: 10px;
-  }
-  .tab-pane.active {
-    display: block;
-  }
-  .report-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  .report-table th, .report-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-  }
+  /* 📌 月ごとのタブ */
+.month-tab-header {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.month-tab-header li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  margin: 0 5px;
+  background: #f8f8f8;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.month-tab-header li.active {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  border-color: #007bff;
+}
+
+/* 📌 月のタブ内容（初期は非表示） */
+.month-tab-pane {
+  display: none;
+  padding: 10px;
+}
+
+.month-tab-pane.active {
+  display: block;
+}
+
+/* 📌 担当者ごとのタブ */
+.tab-header {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  border-bottom: 2px solid #ccc;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.tab-header li {
+  padding: 8px 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  margin-right: 5px;
+  background: #f4f4f4;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.tab-header li.active {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+  border-color: #28a745;
+}
+
+/* 📌 担当者タブの内容（初期は非表示） */
+.tab-pane {
+  display: none;
+  padding: 10px;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* 📌 日報テーブルのスタイル */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.report-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+/* 📌 詳細リンクボタン */
+.detail-link,
+.edit-link {
+  display: inline-block;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: white;
+  background: #17a2b8;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.detail-link:hover,
+.edit-link:hover {
+  background: #138496;
+}
+
 </style>
