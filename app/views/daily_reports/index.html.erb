@@ -6,16 +6,16 @@
 
     <!-- 月ごとのタブ -->
     <ul class="month-tab-header">
-      <% @daily_reports_by_month.keys.each_with_index do |month, index| %>
-        <li class="month-tab-link <%= 'active' if index.zero? %>" data-month="month-<%= month.strftime('%Y-%-m') %>">
-          <%= month.strftime('%-m月') %>
-        </li>
-      <% end %>
-    </ul>
-    
+  <% @daily_reports_by_month.keys.each_with_index do |month, index| %>
+    <li class="month-tab-link <%= 'active' if index.zero? %>" data-month="month-<%= month.strftime('%Y-%m') %>">
+      <%= month.strftime('%-m月') %>
+    </li>
+  <% end %>
+</ul>
 
-    <% @daily_reports_by_month.each do |month, reports_by_person| %>
+<% @daily_reports_by_month.each do |month, reports_by_person| %>
   <div class="month-tab-pane <%= 'active' if @daily_reports_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+
 
     <!-- 📌 全担当者の合計を表示するテーブル -->
     <h2><%= month.strftime("%-m月") %> 集計（豊橋営業所）</h2>
@@ -193,7 +193,7 @@
 
 </table>
 
-<hr style="margin: 50px auto; border-color: lightgray;">
+<hr style="margin: 50px auto; border-color: white;">
 
 
         
