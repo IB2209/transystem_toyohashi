@@ -9,6 +9,8 @@ class DailyReportsController < ApplicationController
 
     # 担当者ごとにグループ化
     @daily_reports_by_month.transform_values! { |reports| reports.group_by(&:responsible_person) }
+
+    
   end
 
   def new

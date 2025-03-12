@@ -1,5 +1,6 @@
 class Schedule < ApplicationRecord
   belongs_to :plan
+  has_many :movement_records
   validates :responsible_person, presence: true
   validates :schedule_date, presence: true
   validates :plan_id, presence: true

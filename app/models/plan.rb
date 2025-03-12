@@ -1,4 +1,6 @@
 class Plan < ApplicationRecord
+  has_many :schedules
+  has_many :movement_records, through: :schedules
   validates :chassis_number, presence: true
   validate :chassis_number_and_location_rules
 

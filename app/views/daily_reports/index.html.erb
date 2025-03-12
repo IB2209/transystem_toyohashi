@@ -7,17 +7,100 @@
     <!-- 月ごとのタブ -->
     <ul class="month-tab-header">
       <% @daily_reports_by_month.keys.each_with_index do |month, index| %>
-        <li class="month-tab-link <%= 'active' if index.zero? %>" data-month="month-<%= month.strftime('%Y-%m') %>">
+        <li class="month-tab-link <%= 'active' if index.zero? %>" data-month="month-<%= month.strftime('%Y-%-m') %>">
           <%= month.strftime('%-m月') %>
         </li>
       <% end %>
     </ul>
+    
 
     <% @daily_reports_by_month.each do |month, reports_by_person| %>
-      <div class="month-tab-pane <%= 'active' if @daily_reports_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+  <div class="month-tab-pane <%= 'active' if @daily_reports_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+
+    <!-- 📌 全担当者の合計を表示するテーブル -->
+    <h2><%= month.strftime("%-m月") %> 集計（豊橋営業所）</h2>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>経費合計</th>
+          <th>燃料代（ℓ）</th>
+          <th>高速代</th>
+          <th>交通代</th>
+          <th>宿泊代</th>
+          <th>自走台数</th>
+          <th>自走距離</th>
+          <th>いすゞ</th>
+          <th>UD</th>
+          <th>FUSO</th>
+          <th>ZERO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>豊橋営業所</th>
+          <td>
+            <% total_expense_all = reports_by_person.values.flatten.sum { |r| 
+              r.movement_records.sum(:fuel_fee).to_i +
+              r.movement_records.sum(:toll_fee).to_i +
+              r.movement_records.sum(:transportation_fee).to_i +
+              r.movement_records.sum(:lodging_fee).to_i
+            } %>
+            <%= number_with_delimiter(total_expense_all) + "円" if total_expense_all > 0 %>
+          </td>
+
+          <td>
+            <% fuel_fee_all = reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:fuel_fee).to_i } %>
+            <% fuel_amount_all = reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:fuel_amount).to_i } %>
+            <%= number_with_delimiter(fuel_fee_all) + "円" if fuel_fee_all > 0 %>
+            <% if fuel_amount_all > 0 %>
+              (<%= number_with_delimiter(fuel_amount_all) %>ℓ)
+            <% end %>
+          </td>
+
+          <td><%= number_with_delimiter(reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:toll_fee).to_i }) + "円" if reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:toll_fee).to_i } > 0 %></td>
+          <td><%= number_with_delimiter(reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:transportation_fee).to_i }) + "円" if reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:transportation_fee).to_i } > 0 %></td>
+          <td><%= number_with_delimiter(reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:lodging_fee).to_i }) + "円" if reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:lodging_fee).to_i } > 0 %></td>
+
+          <td>
+            <% movement_count_all = reports_by_person.values.flatten.sum { |r| r.movement_records.count } %>
+            <%= number_with_delimiter(movement_count_all) if movement_count_all > 0 %>
+          </td>
+
+          <td>
+            <% total_travel_distance_all = reports_by_person.values.flatten.sum { |r| r.movement_records.sum(:travel_distance).to_i } %>
+            <%= number_with_delimiter(total_travel_distance_all) + "km" if total_travel_distance_all > 0 %>
+          </td>
+
+          <td>
+            <% isuzu_count_all = reports_by_person.values.flatten.sum { |r| r.movement_records.where(request_type: 'いすゞ').count } %>
+            <%= number_with_delimiter(isuzu_count_all) if isuzu_count_all > 0 %>
+          </td>
+
+          <td>
+            <% ud_count_all = reports_by_person.values.flatten.sum { |r| r.movement_records.where(request_type: 'UD').count } %>
+            <%= number_with_delimiter(ud_count_all) if ud_count_all > 0 %>
+          </td>
+
+          <td>
+            <% fuso_count_all = reports_by_person.values.flatten.sum { |r| r.movement_records.where(request_type: 'FUSO').count } %>
+            <%= number_with_delimiter(fuso_count_all) if fuso_count_all > 0 %>
+          </td>
+
+          <td>
+            <% zero_count_all = reports_by_person.values.flatten.sum { |r| r.movement_records.where(request_type: 'ZERO').count } %>
+            <%= number_with_delimiter(zero_count_all) if zero_count_all > 0 %>
+          </td>
+          
+        </tr>
+        
+      </tbody>
+    </table>
+
+
 
         <!-- 📌 月間集計テーブル -->
-        <h2><%= month.strftime("%Y年 %m月") %> の集計</h2>
+        <h2 style="margin-top:50px;"><%= month.strftime("%-m月") %> 集計（各担当）</h2>
         <table class="summary-table">
   <thead>
     <tr>
@@ -116,12 +199,14 @@
         
         <!-- タブのヘッダー（担当者ごと） -->
         <ul class="tab-header">
-          <% reports_by_person.keys.each_with_index do |person, index| %>
-            <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= month.strftime('%Y-%m') %>-<%= person %>">
-              <%= person %>
-            </li>
-          <% end %>
-        </ul>
+  <% fixed_order = ["西村", "土屋", "石川", "小笠原", "大原", "津田", "太我", "舜平", "竹本", "小野田", "藤田"] %>
+  <% reports_by_person.keys.sort_by { |person| fixed_order.index(person) || fixed_order.size }.each_with_index do |person, index| %>
+    <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= month.strftime('%Y-%m') %>-<%= person %>">
+      <%= person %>
+    </li>
+  <% end %>
+</ul>
+
 
         <!-- タブの内容 -->
         <div class="tab-content">
