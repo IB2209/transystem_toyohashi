@@ -221,7 +221,7 @@
 
 
         <!-- タブの内容 -->
-        <div class="tab-content">
+        <div class="tab-content new_per">
           <% reports_by_person.each do |person, reports| %>
             <div class="tab-pane <%= 'active' if reports_by_person.keys.first == person %>" id="tab-<%= month.strftime('%Y-%m') %>-<%= person %>">
               <h2><%= person %> の日報</h2>
@@ -576,4 +576,7 @@
   display: block;
 }
 
+.new_per, .new_per th, .new_per td, .new_per tr, .new_per tbody, .new_per thead {
+  font-size: 12px;
+}
 </style>
