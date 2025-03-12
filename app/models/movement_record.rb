@@ -2,6 +2,9 @@ class MovementRecord < ApplicationRecord
   belongs_to :schedule
   has_one :out_entry, dependent: :destroy
   has_one :in_entry, dependent: :destroy
+  has_many :daily_reports, foreign_key: :movement_record_id
+
+  before_save :calculate_travel_distance
 
   # **時間のバリデーション**
   validates :departure_hour, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 24 }
@@ -16,6 +19,14 @@ class MovementRecord < ApplicationRecord
   validate :validate_movement_conditions, on: :create # 新規登録時のみ実行
 
   private
+
+  # 出発地点と到着地点の距離の差を travel_distance に保存
+  def calculate_travel_distance
+    return if departure_distance.nil? || arrival_distance.nil?
+
+    self.travel_distance = (arrival_distance - departure_distance).abs
+  end
+
 
   # 🚀 **移動記録のバリデーション（新規登録時のみ）**
   def validate_movement_conditions

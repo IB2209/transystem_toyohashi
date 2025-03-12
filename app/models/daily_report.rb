@@ -1,15 +1,16 @@
 class DailyReport < ApplicationRecord
   has_many :movement_records, foreign_key: :responsible_person, primary_key: :responsible_person
-  
+  before_save :set_travel_distance
+
   def movement_records
     MovementRecord.where(responsible_person: responsible_person, move_date: move_date)
   end
 
   # **担当者の選択肢**
-  RESPONSIBLE_PEOPLE = ["西村", "土屋", "石川", "小笠原", "大原", "津田", "太我", "舜平", "竹本", "小野田"].freeze
+  RESPONSIBLE_PEOPLE = ["西村", "土屋", "石川", "小笠原", "大原", "津田", "太我", "舜平", "竹本", "小野田", "藤田"].freeze
 
   # **業務内容の選択肢**
-  WORK_CONTENT_OPTIONS = ["車両移動", "構内作業", "事務作業", "横乗り", "送迎", "大阪", "その他"].freeze
+  WORK_CONTENT_OPTIONS = ["自走", "構内作業", "事務作業", "横乗り", "送迎", "大阪", "その他"].freeze
 
   # **欠勤理由の選択肢**
   ABSENCE_REASON_OPTIONS = ["有給", "午前休", "午後休", "振休", "忌引", "公欠", "欠勤", "その他"].freeze
@@ -32,13 +33,22 @@ class DailyReport < ApplicationRecord
 
   private
 
+  # **移動距離 (`travel_distance`) を計算**
+  def set_travel_distance
+    if movement_records.present?
+      self.travel_distance = movement_records.sum { |record| (record.arrival_distance.to_i - record.departure_distance.to_i).abs }
+    else
+      self.travel_distance = 0  # ✅ `movement_records` がない場合は 0 にする
+    end
+  end  
+  
+
   # **"その他" が選択されたときに `work_content_other` を必須にする**
   def validate_work_content_other
     if work_content == "その他" && work_content_other.blank?
       errors.add(:work_content_other, "を入力してください")
     end
   end
-  
 
   # **"その他" が選択されたときに `absence_reason_other` を必須にする**
   def validate_absence_reason_other

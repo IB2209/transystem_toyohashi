@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_11_004512) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_12_024024) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "move_date"
     t.string "employee_name"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_11_004512) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "responsible_person"
-    t.integer "movement_record_id", null: false
+    t.integer "movement_record_id"
     t.string "absence_reason"
     t.string "absence_reason_other"
     t.string "attendance_status"
@@ -112,6 +112,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_11_004512) do
     t.text "toll_fee_detail"
     t.text "transportation_fee_detail"
     t.text "lodging_fee_detail"
+    t.integer "travel_distance"
     t.index ["schedule_id"], name: "index_movement_records_on_schedule_id"
   end
 

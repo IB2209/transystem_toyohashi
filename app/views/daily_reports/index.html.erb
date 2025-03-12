@@ -1,8 +1,8 @@
 <div class="tmp_home">
   <div class="daily_per">
     <h2>2025年</h2>
-    <h1>COXGEAR豊橋営業所</h1>
-    
+    <h1 style="margin-bottom: 70px;">COXGEAR豊橋営業所</h1>
+
 
     <!-- 月ごとのタブ -->
     <ul class="month-tab-header">
@@ -15,6 +15,51 @@
 
     <% @daily_reports_by_month.each do |month, reports_by_person| %>
       <div class="month-tab-pane <%= 'active' if @daily_reports_by_month.keys.first == month %>" id="month-<%= month.strftime('%Y-%m') %>">
+
+        <!-- 📌 月間集計テーブル -->
+        <h2><%= month.strftime("%Y年 %m月") %> の集計</h2>
+        <table class="summary-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>出勤日数</th>
+      <th>経費累計</th>
+      <th>燃料代（ℓ）累計</th>
+      <th>高速代累計</th>
+      <th>交通代累計</th>
+      <th>宿泊代累計</th>
+      <th>自走台数</th>
+      <th>自走距離</th>
+      <th>いすゞ台数</th>
+      <th>UD台数</th>
+      <th>FUSO台数</th>
+      <th>ZERO台数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% DailyReport::RESPONSIBLE_PEOPLE.each do |person| %>
+      <tr>
+        <th><%= person %></th>
+        <td><%= reports_by_person[person]&.count.to_i %></td>
+        <td><%= reports_by_person[person]&.sum { |r| r.total_expense.to_i } || 0 %>円</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:fuel_amount).to_i } || 0 %>ℓ</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:toll_fee).to_i } || 0 %>円</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:transportation_fee).to_i } || 0 %>円</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:lodging_fee).to_i } || 0 %>円</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: '自走').count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:travel_distance).to_i } || 0 %>km</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "いすゞ%").count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "UD%").count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "FUSO%").count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "ZERO%").count } || 0 %>台</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr style="margin: 50px auto; border-color: lightgray;">
+
+
         
         <!-- タブのヘッダー（担当者ごと） -->
         <ul class="tab-header">
@@ -268,6 +313,66 @@
 .detail-link:hover,
 .edit-link:hover {
   background: #138496;
+}
+/* 📌 月間集計テーブルのスタイル */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.summary-table th {
+  background: #343a40;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.summary-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+/* 📌 月ごとのタブ */
+.month-tab-header {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.month-tab-header li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  margin: 0 5px;
+  background: #f8f8f8;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.month-tab-header li.active {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  border-color: #007bff;
+}
+
+/* 📌 月のタブ内容（初期は非表示） */
+.month-tab-pane {
+  display: none;
+  padding: 10px;
+}
+
+.month-tab-pane.active {
+  display: block;
 }
 
 </style>
