@@ -180,6 +180,9 @@ header{
   background-color: rgb(255, 255, 254);
   
 }
+.tmp_home table{
+  min-width: 1100px;
+}
 
 /*----------------------tmp_home---------------------------*/
 .tmp_home{
