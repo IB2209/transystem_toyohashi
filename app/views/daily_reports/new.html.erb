@@ -45,7 +45,7 @@
 
 
       <div class="q">
-        <h2>移動記録</h2>
+        <h3>自走記録</h3>
         <table id="movement_records_table">
           <thead>
             <tr>
@@ -63,7 +63,7 @@
 
       <div class="q">
   <label>業務内容</label><br>
-  <% work_content_options = ["車両移動", "構内作業", "送迎", "その他"] %>
+  <% work_content_options = ["自走", "構内作業", "事務作業", "横乗り", "送迎", "大阪", "その他"] %>
   <%= form.select :work_content, options_for_select(work_content_options, @daily_report.work_content), 
                   { prompt: "選択してください" }, 
                   { id: "work_content_select" } %>
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function setDefaultWorkContent(hasRecords) {
     let workContentSelect = document.getElementById("work_content_select");
     if (workContentSelect) {
-      workContentSelect.value = hasRecords ? "車両移動" : "構内作業";
+      workContentSelect.value = hasRecords ? "自走" : "事務作業";
     }
   }
 
@@ -180,3 +180,20 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("attendance_absent")?.addEventListener("change", toggleAttendanceFields);
 });
 </script>
+
+<style>
+table {
+
+}
+
+tbody, thead{
+  font-size: 14px;
+  
+}
+tr, th, td {
+  border:none;
+  background-color: white;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+</style>
