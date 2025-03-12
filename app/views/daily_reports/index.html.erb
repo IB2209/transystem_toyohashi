@@ -206,12 +206,11 @@
         </tr>
       <% end %>
     <% else %>
-      <!-- ✅ 移動記録がない場合でも日報を表示 -->
+      <!-- ✅ 欠勤データも表示 -->
       <tr>
         <td><%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %></td>
-        <td><%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
-            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %></td>
-        <td><%= first_report.work_content %></td>
+        <td><%= first_report.attendance_status == "出勤" ? "#{first_report.start_time.strftime("%-H:%M") if first_report.start_time.present?} - #{first_report.end_time.strftime("%-H:%M") if first_report.end_time.present?}" : "" %></td>
+        <td><%= first_report.attendance_status == "出勤" ? first_report.work_content : "" %></td>
         <td colspan="5"></td>
         <td></td> <!-- 総距離 -->
         <td></td> <!-- 燃料代 -->
@@ -219,12 +218,13 @@
         <td></td> <!-- 交通代 -->
         <td></td> <!-- 宿泊代 -->
         <td></td> <!-- 経費合計 -->
-        <td><%= first_report.remarks.presence || "" %></td>
+        <td><%= first_report.attendance_status == "欠勤" ? "欠勤理由: #{first_report.absence_reason}" : first_report.remarks.presence || "" %></td>
         <td><%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %></td>
       </tr>
     <% end %>
   <% end %>
 </tbody>
+
 
               </table>
             </div>
