@@ -42,7 +42,8 @@ class DailyReportsController < ApplicationController
   
     if movement_records.exists?
       params[:daily_report][:movement_record_id] = movement_records.first.id  # ✅ 最初のレコードをセット
-      params[:daily_report][:travel_distance] = movement_records.sum { |record| (record.arrival_distance.to_i - record.departure_distance.to_i).abs }
+      params[:daily_report][:travel_distance] = movement_records.sum(:travel_distance).to_i  # ✅ movement_records の travel_distance を直接使用
+
     else
       # ✅ **移動記録がない場合は、最低限の情報で保存（出勤扱い）**
       params[:daily_report][:movement_record_id] = nil  # `nil` 許可済み
@@ -76,8 +77,9 @@ class DailyReportsController < ApplicationController
     movement_record = MovementRecord.find_by(id: params[:daily_report][:movement_record_id])
 
     if movement_record
-      params[:daily_report][:travel_distance] = (movement_record.arrival_distance.to_i - movement_record.departure_distance.to_i).abs
+      params[:daily_report][:travel_distance] = movement_record.travel_distance.to_i  # ✅ 直接 `travel_distance` を使用
     end
+    
 
     if @daily_report.update(daily_report_params)
       redirect_to daily_report_path(@daily_report), notice: "日報が更新されました。"

@@ -36,11 +36,12 @@ class DailyReport < ApplicationRecord
   # **移動距離 (`travel_distance`) を計算**
   def set_travel_distance
     if movement_records.present?
-      self.travel_distance = movement_records.sum { |record| (record.arrival_distance.to_i - record.departure_distance.to_i).abs }
+      self.travel_distance = movement_records.sum(:travel_distance).to_i  # ✅ movement_records の travel_distance を合計
     else
-      self.travel_distance = 0  # ✅ `movement_records` がない場合は 0 にする
+      self.travel_distance = 0
     end
-  end  
+  end
+  
   
 
   # **"その他" が選択されたときに `work_content_other` を必須にする**

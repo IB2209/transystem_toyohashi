@@ -23,35 +23,50 @@
     <tr>
       <th></th>
       <th>出勤日数</th>
-      <th>経費累計</th>
-      <th>燃料代（ℓ）累計</th>
-      <th>高速代累計</th>
-      <th>交通代累計</th>
-      <th>宿泊代累計</th>
+      <th>経費合計</th>
+      <th>燃料代（ℓ）</th>
+      <th>高速代</th>
+      <th>交通代</th>
+      <th>宿泊代</th>
       <th>自走台数</th>
       <th>自走距離</th>
-      <th>いすゞ台数</th>
-      <th>UD台数</th>
-      <th>FUSO台数</th>
-      <th>ZERO台数</th>
+      <th>いすゞ</th>
+      <th>UD</th>
+      <th>FUSO</th>
+      <th>ZERO</th>
     </tr>
   </thead>
   <tbody>
     <% DailyReport::RESPONSIBLE_PEOPLE.each do |person| %>
       <tr>
         <th><%= person %></th>
-        <td><%= reports_by_person[person]&.count.to_i %></td>
-        <td><%= reports_by_person[person]&.sum { |r| r.total_expense.to_i } || 0 %>円</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:fuel_amount).to_i } || 0 %>ℓ</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:toll_fee).to_i } || 0 %>円</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:transportation_fee).to_i } || 0 %>円</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:lodging_fee).to_i } || 0 %>円</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: '自走').count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.count.to_i %>日</td>
+        <td>
+  <%= number_with_delimiter(reports_by_person[person]&.sum { |r| 
+    r.movement_records.sum(:fuel_fee).to_i +
+    r.movement_records.sum(:toll_fee).to_i +
+    r.movement_records.sum(:transportation_fee).to_i +
+    r.movement_records.sum(:lodging_fee).to_i 
+  } || 0) %>円
+</td>
+        <td>
+  <%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.sum(:fuel_fee).to_i } || 0) %>円
+  (<%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.sum(:fuel_amount).to_i } || 0) %>ℓ)
+</td>
+<td><%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.sum(:toll_fee).to_i } || 0) %>円</td>
+<td><%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.sum(:transportation_fee).to_i } || 0) %>円</td>
+<td><%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.sum(:lodging_fee).to_i } || 0) %>円</td>
+
+        <td>
+  <%= number_with_delimiter(reports_by_person[person]&.sum { |r| r.movement_records.count } || 0) %>
+</td>
+
+      </td>
         <td><%= reports_by_person[person]&.sum { |r| r.movement_records.sum(:travel_distance).to_i } || 0 %>km</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "いすゞ%").count } || 0 %>台</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "UD%").count } || 0 %>台</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "FUSO%").count } || 0 %>台</td>
-        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where("model LIKE ?", "ZERO%").count } || 0 %>台</td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: 'いすゞ').count } || 0 %></td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: 'UD').count } || 0 %></td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: 'FUSO').count } || 0 %></td>
+        <td><%= reports_by_person[person]&.sum { |r| r.movement_records.where(request_type: 'ZERO').count } || 0 %></td>
       </tr>
     <% end %>
   </tbody>
@@ -87,6 +102,7 @@
                     <th>車体番号</th>
                     <th>引取先</th>
                     <th>納車先</th>
+                    <th>総距離</th>
                     <th>燃料代</th>
                     <th>高速代</th>
                     <th>交通代</th>
@@ -97,53 +113,81 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% reports.group_by(&:move_date).each do |date, grouped_reports| %>
-                    <% first_report = grouped_reports.first %>
-                    <% movement_records = first_report.movement_records %>
+  <% reports.group_by(&:move_date).each do |date, grouped_reports| %>
+    <% first_report = grouped_reports.first %>
+    <% movement_records = first_report.movement_records %>
 
-                    <% movement_records.each_with_index do |record, record_index| %>
-                      <tr>
-                        <% if record_index == 0 %>
-                          <td rowspan="<%= movement_records.size %>">
-                            <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %>
-                          </td>
-                          <td rowspan="<%= movement_records.size %>">
-                            <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
-                            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
-                          </td>
-                          <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
-                        <% end %>
+    <% if movement_records.present? %>
+      <% movement_records.each_with_index do |record, record_index| %>
+        <tr>
+          <% if record_index == 0 %>
+            <td rowspan="<%= movement_records.size %>">
+              <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %>
+            </td>
+            <td rowspan="<%= movement_records.size %>">
+              <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
+              <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
+            </td>
+            <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
+          <% end %>
 
-                        <td><%= record.request_type %></td>
-                        <td><%= record.model || "" %></td>
-                        <td><%= record.chassis_number || "" %></td>
-                        <td><%= record.pickup_location || "" %></td>
-                        <td><%= record.delivery_location || "" %></td>
-                        <td>
-                          <% if record.fuel_fee.to_i > 0 %>
-                            <%= number_with_delimiter(record.fuel_fee) %>円
-                          <% end %>
-                          <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
-                            (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
-                          <% end %>
-                        </td>
-                        <td><%= record.toll_fee.to_i > 0 ? "#{number_with_delimiter(record.toll_fee)}円" : "" %></td>
-                        <td><%= record.transportation_fee.to_i > 0 ? "#{number_with_delimiter(record.transportation_fee)}円" : "" %></td>
-                        <td><%= record.lodging_fee.to_i > 0 ? "#{number_with_delimiter(record.lodging_fee)}円" : "" %></td>
+          <td><%= record.request_type %></td>
+          <td><%= record.model || "" %></td>
+          <td><%= record.chassis_number || "" %></td>
+          <td><%= record.pickup_location || "" %></td>
+          <td><%= record.delivery_location || "" %></td>
+          <td>
+            <%= if record.departure_distance.present? && record.arrival_distance.present?
+                  "#{number_with_delimiter(record.arrival_distance - record.departure_distance)} km"
+                else
+                  "未設定"
+                end
+            %>
+          </td>
+          <td>
+            <% if record.fuel_fee.to_i > 0 %>
+              <%= number_with_delimiter(record.fuel_fee) %>円
+            <% end %>
+            <% if record.fuel_amount.present? && record.fuel_amount > 0 %>
+              (<%= record.fuel_amount.to_s.sub(/\.0+$/, '') %>ℓ)
+            <% end %>
+          </td>
+          <td><%= record.toll_fee.to_i > 0 ? "#{number_with_delimiter(record.toll_fee)}円" : "" %></td>
+          <td><%= record.transportation_fee.to_i > 0 ? "#{number_with_delimiter(record.transportation_fee)}円" : "" %></td>
+          <td><%= record.lodging_fee.to_i > 0 ? "#{number_with_delimiter(record.lodging_fee)}円" : "" %></td>
 
-                        <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
-                        <td><%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "" %></td>
+          <% total_fee = record.toll_fee.to_i + record.fuel_fee.to_i + record.transportation_fee.to_i + record.lodging_fee.to_i %>
+          <td><%= total_fee > 0 ? "#{number_with_delimiter(total_fee)}円" : "" %></td>
 
-                        <% if record_index == 0 %>
-                          <td rowspan="<%= movement_records.size %>"><%= first_report.remarks.presence || "" %></td>
-                          <td rowspan="<%= movement_records.size %>">
-                            <%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %> 
-                          </td>
-                        <% end %>
-                      </tr>
-                    <% end %>
-                  <% end %>
-                </tbody>
+          <% if record_index == 0 %>
+            <td rowspan="<%= movement_records.size %>"><%= first_report.remarks.presence || "" %></td>
+            <td rowspan="<%= movement_records.size %>">
+              <%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %> 
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% else %>
+      <!-- ✅ 移動記録がない場合でも日報を表示 -->
+      <tr>
+        <td><%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %></td>
+        <td><%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
+            <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %></td>
+        <td><%= first_report.work_content %></td>
+        <td colspan="5"></td>
+        <td></td> <!-- 総距離 -->
+        <td></td> <!-- 燃料代 -->
+        <td></td> <!-- 高速代 -->
+        <td></td> <!-- 交通代 -->
+        <td></td> <!-- 宿泊代 -->
+        <td></td> <!-- 経費合計 -->
+        <td><%= first_report.remarks.presence || "" %></td>
+        <td><%= link_to "詳細", daily_report_path(first_report), class: "edit-link" %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</tbody>
+
               </table>
             </div>
           <% end %>
