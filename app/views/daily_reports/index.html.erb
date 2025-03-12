@@ -105,7 +105,7 @@
   <thead>
     <tr>
       <th></th>
-      <th>出勤日数</th>
+      <th>出勤日数<br>(残業時間)</th>
       <th>経費合計</th>
       <th>燃料代（ℓ）</th>
       <th>高速代</th>
@@ -122,11 +122,23 @@
   <tbody>
   <% DailyReport::RESPONSIBLE_PEOPLE.each do |person| %>
     <% reports = reports_by_person[person] || [] %>
+
+    <% total_overtime_minutes = reports.sum do |r| 
+      next 0 unless r.start_time.present? && r.end_time.present?
+      work_duration = ((r.end_time - r.start_time) / 60).to_i # 勤務時間（分単位）
+      overtime_minutes = [work_duration - 540, 0].max # 9時間(540分)超えた分をカウント
+      overtime_minutes
+    end %>
+
     <tr>
       <th><%= person %></th>
 
-      <!-- ✅ 出勤日数（移動記録がなくてもカウント） -->
-      <td><%= reports.count %>日</td>
+      <td>
+        <%= reports.count %>日
+        <% if total_overtime_minutes > 0 %>
+          (<%= total_overtime_minutes / 60 %>h)
+        <% end %>
+      </td>
 
       <!-- ✅ 経費合計（0の場合は空白） -->
       <td>
@@ -217,8 +229,8 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th>日付（曜日）</th>
-                    <th>出社 - 退社</th>
+                    <th>日付</th>
+                    <th>出社 - 退社(残業)</th>
                     <th>業務内容</th>
                     <th>依頼</th>
                     <th>型式</th>
@@ -235,7 +247,7 @@
                     <th>詳細</th>
                   </tr>
                 </thead>
-                <tbody>
+                  <tbody>
   <% reports.group_by(&:move_date).each do |date, grouped_reports| %>
     <% first_report = grouped_reports.first %>
     <% movement_records = first_report.movement_records %>
@@ -247,9 +259,19 @@
             <td rowspan="<%= movement_records.size %>">
               <%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %>
             </td>
+
+            <!-- ✅ 出社 - 退社（残業時間） -->
             <td rowspan="<%= movement_records.size %>">
               <%= first_report.start_time.strftime("%-H:%M") if first_report.start_time.present? %> -
               <%= first_report.end_time.strftime("%-H:%M") if first_report.end_time.present? %>
+
+              <% if first_report.start_time.present? && first_report.end_time.present? %>
+                <% work_duration = ((first_report.end_time - first_report.start_time) / 60).to_i %>
+                <% overtime_minutes = [work_duration - 540, 0].max %>
+                <% if overtime_minutes > 0 %>
+                  (<%= overtime_minutes / 60 %>:<%= overtime_minutes % 60 %>)
+                <% end %>
+              <% end %>
             </td>
             <td rowspan="<%= movement_records.size %>"><%= first_report.work_content %></td>
           <% end %>
@@ -292,9 +314,21 @@
       <% end %>
     <% else %>
       <!-- ✅ 欠勤データも表示 -->
-      <tr>
-        <td><%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %></td>
-        <td><%= first_report.attendance_status == "出勤" ? "#{first_report.start_time.strftime("%-H:%M") if first_report.start_time.present?} - #{first_report.end_time.strftime("%-H:%M") if first_report.end_time.present?}" : "" %></td>
+<tr>
+  <td><%= link_to l(date, format: "%-d日(%a)"), daily_report_path(first_report), class: "" %></td>
+
+  <!-- ✅ 出社 - 退社（残業時間） -->
+  <td>
+    <% if first_report.attendance_status == "出勤" && first_report.start_time.present? && first_report.end_time.present? %>
+      <%= first_report.start_time.strftime("%-H:%M") %> - <%= first_report.end_time.strftime("%-H:%M") %>
+
+      <% work_duration = ((first_report.end_time - first_report.start_time) / 60).to_i %>
+      <% overtime_minutes = [work_duration - 540, 0].max %>
+      <% if overtime_minutes > 0 %>
+        (<%= overtime_minutes / 60 %>h)
+      <% end %>
+    <% end %>
+  </td>
         <td><%= first_report.attendance_status == "出勤" ? first_report.work_content : "" %></td>
         <td colspan="5"></td>
         <td></td> <!-- 総距離 -->
