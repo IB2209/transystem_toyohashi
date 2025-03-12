@@ -928,6 +928,12 @@ table.movement tbody .bottom{
   }
 }
 
+@media screen and (min-width: 1050px) and (max-width: 1110px) {
+  .tmp_home{
+    margin-left: 20px;
+  }
+}
+
 
 /* 480px以上のスタイル */
 @media screen and (min-width: 768px) {
