@@ -922,9 +922,9 @@ table.movement tbody .bottom{
 
 
 /* タブレット用スタイル */
-@media screen and (max-width: 14000px) {
-  .tmp_home {
-    
+@media screen and (max-width: 12000px) {
+  header , .sidebar{
+    width: 170px;
   }
 }
 
