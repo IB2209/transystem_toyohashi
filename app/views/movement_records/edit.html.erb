@@ -64,28 +64,30 @@
       </div>
 
       <!-- 出発時間 -->
-      <div class="q">
-        <b><%= form.label :departure_time, "出発時間" %></b><br>
-        <%= form.select :departure_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, selected: @movement_record.departure_hour, prompt: "時" %> :
-        <%= form.select :departure_minute, [0, 15, 30, 45].map { |m| [m.to_s.rjust(2, '0'), m] }, selected: @movement_record.departure_minute, prompt: "分" %>
-      </div>
+<div class="q">
+  <b><%= form.label :departure_time, "出発時間" %></b><br>
+  <%= form.select :departure_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, selected: @movement_record.departure_hour, prompt: "時" %> :
+  <%= form.select :departure_minute, (0..59).map { |m| [m.to_s.rjust(2, '0'), m] }, selected: @movement_record.departure_minute, prompt: "分" %>
+</div>
 
-      <div class="q">
-        <b><%= form.label :arrival_time, "到着時間" %></b><br>
-        <%= form.select :arrival_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, selected: @movement_record.arrival_hour, prompt: "時" %> :
-        <%= form.select :arrival_minute, [0, 15, 30, 45].map { |m| [m.to_s.rjust(2, '0'), m] }, selected: @movement_record.arrival_minute, prompt: "分" %>
-      </div>
+<!-- 到着時間 -->
+<div class="q">
+  <b><%= form.label :arrival_time, "到着時間" %></b><br>
+  <%= form.select :arrival_hour, (0..23).map { |h| [h.to_s.rjust(2, '0'), h] }, selected: @movement_record.arrival_hour, prompt: "時" %> :
+  <%= form.select :arrival_minute, (0..59).map { |m| [m.to_s.rjust(2, '0'), m] }, selected: @movement_record.arrival_minute, prompt: "分" %>
+</div>
+
+
 
       <div class="q">
         <b><%= form.label :departure_distance, "出発時の距離" %></b><br>
-        <%= form.number_field :departure_distance, value: @movement_record.departure_distance %>
+        <%= form.number_field :departure_distance %>
       </div>
 
       <div class="q">
         <b><%= form.label :arrival_distance, "到着時の距離" %></b><br>
-        <%= form.number_field :arrival_distance, value: @movement_record.arrival_distance %>
+        <%= form.number_field :arrival_distance %>
       </div>
-
 <div class="q">
   <b><%= form.label :fuel_amount, "燃料" %></b><br>
   <%= form.number_field :fuel_amount, placeholder: "ℓ", class: "form-control", step: "0.01", min: "0", value: @movement_record.fuel_amount.to_f %>

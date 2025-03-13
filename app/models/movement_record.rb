@@ -14,6 +14,8 @@ class MovementRecord < ApplicationRecord
 
   # **異常のデフォルト値を false に設定**
   attribute :has_abnormality, :boolean, default: false
+  attribute :request_type, :string, default: "いすゞ"   # ✅ 依頼のデフォルト
+  attribute :vehicle_condition, :string, default: "新" # ✅ 新中古のデフォルト
 
   # **未出庫一覧のバリデーション**
   validate :validate_movement_conditions, on: :create # 新規登録時のみ実行

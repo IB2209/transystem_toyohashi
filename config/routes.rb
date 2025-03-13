@@ -24,8 +24,14 @@ Rails.application.routes.draw do
   end
 
   # スケジュール関連
-  resources :schedules
+  resources :schedules do
+    member do
+      patch :depart
+      patch :arrive
+    end
+  end
 
+  
   # 移動記録関連
   resources :movement_records do
     member do

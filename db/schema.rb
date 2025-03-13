@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_12_041500) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_13_031328) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "move_date"
     t.string "employee_name"
@@ -148,8 +148,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_12_041500) do
     t.text "issue_detail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_scheduled", default: false, null: false
-    t.boolean "scheduled"
+    t.boolean "scheduled", default: false, null: false
     t.string "model_other"
     t.string "pickup_other"
     t.string "delivery_other"
@@ -168,7 +167,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_12_041500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "comment"
-    t.boolean "is_completed"
+    t.boolean "is_completed", default: false
+    t.integer "departure_distance"
+    t.integer "arrival_distance"
+    t.datetime "departure_time"
+    t.datetime "arrival_time"
     t.index ["plan_id"], name: "index_schedules_on_plan_id"
   end
 

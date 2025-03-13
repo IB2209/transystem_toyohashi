@@ -10,15 +10,12 @@
       <thead>
         <tr>
           <th class="th_no">No.</th>
-          <th class="th_model">型式</th>
-          <th class="th_chassis">車番</th>
-          <th class="th_pickup">引取先</th>
-          <th class="th_delivery">納車先</th>
-          <th class="th_limit">開始</th>
+          <th class="th_model">型式<br>車番</th>
+          <th class="th_pickup">引取先<br>納車先</th>
+          <th>出発</th>
+          <th>到着</th>
           <th class="th_responsible_person">担当</th>
           <th class="th_comment">コメント</th>
-          <th class="tablespace"></th>
-          <th class="th_regi">移動記録</th>
           <th class="tablespace"></th>
           <th class="th_delete">削除</th>
         </tr>
@@ -30,30 +27,49 @@
         <% schedules.each_with_index do |schedule, index| %>
           <tr>
             <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= index + 1 %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.model %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.chassis_number %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.pickup_location %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.delivery_location %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.schedule_date.strftime("%-H時") %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.model %><br><%= schedule.plan&.chassis_number %></td>
+            <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.plan&.pickup_location %><br><%= schedule.plan&.delivery_location %></td>
+          <td class="<%= schedule.departure_distance.nil? ? 'departure-pending' : (schedule.arrival_distance.nil? ? 'departure-registered' : '') %>">
+  <%= schedule.departure_time.present? ? schedule.departure_time.strftime('%H:%M') : "距離を入力後出発" %> <br>
+  <% if schedule.departure_distance.nil? %>
+    <%= form_with url: depart_schedule_path(schedule), method: :patch, local: true do |form| %>
+      <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input" %>
+      <%= form.submit "出発", class: "btn btn-primary" %>
+    <% end %>
+  <% else %>
+    <strong><%= schedule.departure_distance %> km</strong>
+  <% end %>
+</td>
+
+<!-- 到着時間 -->
+<td class="<%= schedule.departure_distance.present? && schedule.arrival_distance.nil? ? 'arrival-pending' : '' %>">
+  <%= schedule.arrival_time.present? ? schedule.arrival_time.strftime('%H:%M') : "距離を入力後到着" %> <br>
+  <% if schedule.departure_distance.present? && schedule.arrival_distance.nil? %>
+    <%= form_with url: arrive_schedule_path(schedule), method: :patch, local: true do |form| %>
+      <%= form.number_field :arrival_distance, min: schedule.departure_distance, required: true, class: "distance-input" %>
+      <%= form.submit "到着", class: "btn btn-success" %>
+    <% end %>
+  <% elsif schedule.arrival_distance.present? %>
+    <strong><%= schedule.arrival_distance %> km</strong>
+  <% end %>
+</td>
+
+
             <td data-edit-url="<%= edit_schedule_path(schedule) %>"><%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %></td>
             <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_message"><%= schedule.comment %></td>
-            <td class="tablespace"></td>
-            <td class="regibtn" style="text-align: center;">
-              <%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "a" %>
-            </td>
+            
             <td class="tablespace"></td>
             <td class="th_delete"><%= link_to '削除', schedule_path(schedule), class: 'btn btn-primary' %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
+    
+
+
   <% end %>
 </div>
 </div>
-
-
-
-
 
 
 <div class="displayphone">
@@ -61,7 +77,7 @@
 <table>
   <thead>
         <tr>
-          <th class="th_no" rowspan="2">No.</th>
+          <th class="th_no">No.</th>
           <th class="th_modelchassis">
             型式：車番 <br>
             引取先 ➡︎ 納車先
@@ -71,10 +87,10 @@
           出発
           </th>
           <th rowspan="2" class="tablespace"></th>
-          <th class="th_movereco" rowspan="2">移動 <br> 記録</th>
+          <th class="th_movereco" rowspan="2">編集</th>
         </tr>
         <tr>
-          <th colspan="2" style="text-align: left;">コメント</th>
+          <th colspan="3" style="text-align: left;">コメント</th>
         </tr>
       </thead>
   </table>
@@ -84,35 +100,64 @@
     <h2 style="margin-top: 20px; padding: 20px 0 5px; text-align: left">
     <%= l date, format: "%-m月%-d日(%a)" %>
     </h2>
-    
-      
     <table>
       
       <tbody>
-        <% schedules.each_with_index do |schedule, index| %>
-          <tr>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderleft th_no" rowspan="2"><%= index + 1 %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
-            <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %></td>
-            <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderbottom tantou">
-            <%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %><br>
-            <%= schedule.schedule_date.strftime("%-H時") %>
-            </td>
-            <td rowspan="2" class="tablespace"></td>
-            <td rowspan="2" class="regibtn" style="text-align: center;"><%= link_to "登録", new_movement_record_path(schedule_id: schedule.id), class: "a" %></td>
-          </tr>
-          <tr class="trbottom">
-          <% if schedule.comment.present? %>
-              <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="border td_left" colspan="3"><%= schedule.comment %></td>
+  <% schedules.each_with_index do |schedule, index| %>
+    <tr class="schedule-row" data-toggle-id="form-schedule-<%= schedule.id %>">
+      <td class="borderleft th_no"><%= index + 1 %></td>
+      <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
+        <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %>
+      </td>
+      <td class="borderbottom tantou">
+        <%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %><br>
+      </td>
+    </tr>
+
+    <!-- 出発・到着登録フォーム -->
+    <tr id="form-schedule-<%= schedule.id %>" class="hidden">
+      <td colspan="3" style="padding-top: 10px;">
+        <!-- 出発フォーム -->
+        <div style="padding: 10px;" class="<%= schedule.departure_distance.nil? ? 'departure-pending' : (schedule.arrival_distance.nil? ? 'departure-registered' : '') %>">
+          <%= schedule.departure_time.present? ? schedule.departure_time.strftime('%H:%M') : "距離を入力後出発" %> 　/　
+          <% if schedule.departure_distance.nil? %>
+            <%= form_with url: depart_schedule_path(schedule), method: :patch, local: true do |form| %>
+              <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input" %>
+              <%= form.submit "出発", class: "btn btn-primary" %>
             <% end %>
-          </tr>
-          
-          </tr>
-          <tr>
-            <td colspan="2" class="th_underspace"></td>
-          </tr>
+          <% else %>
+            <strong><%= schedule.departure_distance %> km</strong>
+          <% end %>
+        </div>
+
+        <!-- 到着フォーム（出発未登録なら非表示） -->
+        <% if schedule.departure_distance.present? %>
+          <div class="arrival-pending" style="padding: 10px;">
+            <%= schedule.arrival_time.present? ? schedule.arrival_time.strftime('%H:%M') : "距離を入力後到着" %> <br>
+            <% if schedule.arrival_distance.nil? %>
+              <%= form_with url: arrive_schedule_path(schedule), method: :patch, local: true do |form| %>
+                <%= form.number_field :arrival_distance, min: schedule.departure_distance, required: true, class: "distance-input" %>
+                <%= form.submit "到着", class: "btn btn-success btn btn-primary" %>
+              <% end %>
+            <% else %>
+              <strong><%= schedule.arrival_distance %> km</strong>
+            <% end %>
+          </div>
         <% end %>
-      </tbody>
+
+      </td>
+    </tr>
+    <tr>
+      <td colspan="5" class="th_underspace" style="border-right: 1px solid white"></td>
+    </tr>
+    
+
+    <tr>
+      <td colspan="5" class="th_underspace" style="border-right: 1px solid white"></td>
+    </tr>
+  <% end %>
+</tbody>
+
     </table>
   <% end %>
 </div>
@@ -129,4 +174,61 @@
       });
     });
   });
+
+  document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".schedule-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const toggleId = row.getAttribute("data-toggle-id");
+      const formRow = document.getElementById(toggleId);
+
+      if (formRow) {
+        formRow.classList.toggle("hidden");
+      }
+    });
+  });
+});
+
+
 </script>
+
+<style>
+.hidden {
+  display: none;
+}
+
+/* 出発未登録（赤色: 注意喚起） */
+.departure-pending {
+  background-color: lightcoral;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 出発済み & 到着未登録（青色: 進行中） */
+.departure-registered {
+  background-color: lightblue;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 到着済み（緑色） */
+.arrival-pending {
+  background-color: lightgreen;
+  text-align: center;
+  font-weight: bold;
+}
+
+.displayphone .distance-input {
+  padding-top: 15px;
+  width: 120px;
+  height: 50px; /* 高さを30pxに設定 */
+  text-align: center;
+  font-size: 18px;
+}
+
+.displayphone .btn-primary {
+  height: 50px; /* ボタンの高さを30pxに設定 */
+  padding: 15px 20px; /* 余白調整 */
+  font-size: 16px; /* 文字サイズ調整 */
+}
+
+</style>

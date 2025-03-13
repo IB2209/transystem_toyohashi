@@ -139,7 +139,7 @@
       <td rowspan="2" class="money_name detail"><%= record.toll_fee_detail.presence || "" %></td>
       <td rowspan="2" class="money_name detail"><%= record.transportation_fee_detail.presence || "" %></td>
       <td rowspan="2" class="money_name detail"><%= record.lodging_fee_detail.presence || "" %></td>
-      <td class="td8" rowspan="3" colspan="2"><%= record.message || "なし" %></td>
+      <td class="td8" rowspan="3" colspan="2"><%= record.message || "" %></td>
       <td class="border_none" rowspan="3">ロケ管理<br>
   <%= button_to record.status_1 ? "済" : "未",
     toggle_status_1_movement_record_path(record),

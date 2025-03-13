@@ -59,6 +59,8 @@ end
       @movement_record.chassis_number = @schedule.chassis_number
       @movement_record.pickup_location = @schedule.pickup_location
       @movement_record.delivery_location = @schedule.delivery_location
+      
+      
     end
 
     now = Time.current
@@ -66,10 +68,6 @@ end
 
   @movement_record = MovementRecord.new(
     has_abnormality: false,               # 異常なしをデフォルト
-    arrival_hour: now.hour,                # 現在の時間
-    arrival_minute: rounded_minute,        # 15分単位の丸め値
-    departure_hour: (now - 1.hour).hour,   # 出発時間は1時間前
-    departure_minute: rounded_minute,       # 15分単位の丸め値
     request_type: "いすゞ",                # 依頼のデフォルト
     vehicle_condition: "新車"              # 新中古のデフォルト
   )
@@ -81,6 +79,8 @@ end
     @movement_record.chassis_number = @schedule.chassis_number
     @movement_record.pickup_location = @schedule.pickup_location
     @movement_record.delivery_location = @schedule.delivery_location
+    @movement_record.arrival_time = @schedule.arrival_time
+    @movement_record.departure_time = @schedule.departure_time
   end
   end
 
@@ -91,7 +91,7 @@ end
     if @movement_record.save
       handle_in_out_entry(@movement_record)
       @movement_record.schedule.update(is_completed: true) if @movement_record.schedule.present?
-      redirect_to movement_records_path, notice: '移動記録が登録されました。'
+      redirect_to movement_records_path, notice: '自走記録が登録されました。'
     else
       flash.now[:alert] = @movement_record.errors.full_messages.join(', ')
       render :new, status: :unprocessable_entity
@@ -100,7 +100,16 @@ end
 
   # 編集フォーム
   def edit
+    @movement_record.departure_hour = @movement_record.departure_time&.hour if @movement_record.departure_hour.nil?
+    @movement_record.departure_minute = @movement_record.departure_time&.min if @movement_record.departure_minute.nil?
+    @movement_record.arrival_hour = @movement_record.arrival_time&.hour if @movement_record.arrival_hour.nil?
+    @movement_record.arrival_minute = @movement_record.arrival_time&.min if @movement_record.arrival_minute.nil?
+    @movement_record.request_type ||= "いすゞ"
+    @movement_record.vehicle_condition ||= "新"
   end
+  
+  
+  
 
   # 更新処理
   def update
@@ -201,6 +210,8 @@ end
       :fuel_fee_detail, :toll_fee_detail, :transportation_fee_detail, :lodging_fee_detail
     )
   end
+  
+  
   
   
   
