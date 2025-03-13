@@ -105,11 +105,11 @@
       <tbody>
   <% schedules.each_with_index do |schedule, index| %>
     <tr class="schedule-row" data-toggle-id="form-schedule-<%= schedule.id %>">
-      <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderleft th_no"><%= index + 1 %></td>
+      <td class="borderleft th_no"><%= index + 1 %></td>
       <td class="th_modelchassis td_left"><%= schedule.plan&.model %> ： <%= schedule.plan&.chassis_number %><br>
         <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %>
       </td>
-      <td class="borderbottom tantou">
+      <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderbottom tantou">
         <%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %><br>
       </td>
     </tr>
