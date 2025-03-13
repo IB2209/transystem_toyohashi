@@ -110,7 +110,7 @@
         <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %>
       </td>
       <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderbottom tantou">
-        <%= schedule.responsible_person == "未定" ? "" : schedule.responsible_person %><br>
+        <%= schedule.responsible_person == "未定" ? "出発前に<br>名前選択".html_safe : schedule.responsible_person %><br>
       </td>
     </tr>
 
