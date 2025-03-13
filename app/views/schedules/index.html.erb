@@ -137,7 +137,7 @@
             <% if schedule.arrival_distance.nil? %>
               <%= form_with url: arrive_schedule_path(schedule), method: :patch, local: true do |form| %>
                 <%= form.number_field :arrival_distance, min: schedule.departure_distance, required: true, class: "distance-input" %>
-                <%= form.submit "到着", class: "btn btn-success btn btn-primary" %>
+                <%= form.submit "到着", class: "btn btn-primary" %>
               <% end %>
             <% else %>
               <strong><%= schedule.arrival_distance %> km</strong>
@@ -201,28 +201,32 @@
   background-color: lightcoral;
   text-align: center;
   font-weight: bold;
+  font-size: 16px;
 }
 
 /* 出発済み & 到着未登録（青色: 進行中） */
 .departure-registered {
-  background-color: lightblue;
+  background-color: lightgreen;
   text-align: center;
   font-weight: bold;
+  font-size: 16px;
 }
 
 /* 到着済み（緑色） */
 .arrival-pending {
-  background-color: lightgreen;
+  background-color: lightblue;
   text-align: center;
   font-weight: bold;
+  font-size: 16px;
 }
 
 .displayphone .distance-input {
-  padding-top: 15px;
+  margin-top: 20px;
   width: 120px;
   height: 50px; /* 高さを30pxに設定 */
   text-align: center;
-  font-size: 18px;
+  font-size: 22px;
+  margin-right: 30px;
 }
 
 .displayphone .btn-primary {
