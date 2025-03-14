@@ -122,7 +122,7 @@
           <%= schedule.departure_time.present? ? schedule.departure_time.strftime('%H:%M') : "距離を入力後出発" %> 　/　
           <% if schedule.departure_distance.nil? %>
             <%= form_with url: depart_schedule_path(schedule), method: :patch, local: true do |form| %>
-              <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input", placeholder: "出発前に担当を選択" %>
+              <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input" %>
               <%= form.submit "出発", class: "btn btn-primary" %>
             <% end %>
           <% else %>
