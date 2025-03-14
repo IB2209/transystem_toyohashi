@@ -110,7 +110,7 @@
         <%= schedule.plan&.pickup_location %> ➡︎ <%= schedule.plan&.delivery_location %>
       </td>
       <td data-edit-url="<%= edit_schedule_path(schedule) %>" class="borderbottom tantou" style="width: 80px;">
-        <%= schedule.responsible_person == "未定" ? "出発前に<br>名前選択".html_safe : schedule.responsible_person %><br>
+        <%= schedule.responsible_person == "未定" ? "名前<br>選択".html_safe : schedule.responsible_person %><br>
       </td>
     </tr>
 
@@ -122,7 +122,7 @@
           <%= schedule.departure_time.present? ? schedule.departure_time.strftime('%H:%M') : "距離を入力後出発" %> 　/　
           <% if schedule.departure_distance.nil? %>
             <%= form_with url: depart_schedule_path(schedule), method: :patch, local: true do |form| %>
-              <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input" %>
+              <%= form.number_field :departure_distance, min: 0, required: true, class: "distance-input", placeholder: "出発前に担当を選択" %>
               <%= form.submit "出発", class: "btn btn-primary" %>
             <% end %>
           <% else %>
