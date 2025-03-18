@@ -1,7 +1,7 @@
 {
   "name": "CTS",
   "short_name": "CST",
-  "start_url": "/schedules",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
