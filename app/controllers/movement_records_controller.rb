@@ -219,23 +219,13 @@ end
   # 入出庫表の連携処理
   def handle_in_out_entry(movement_record)
     if movement_record.delivery_location == "豊橋プール"
-      create_or_update_in_entry(movement_record)
+      update_in_entry(movement_record)
     end
 
     if movement_record.pickup_location == "豊橋プール"
-      create_or_update_out_entry(movement_record)
+      update_out_entry(movement_record)
     end
   end
-  def handle_in_out_entry
-    if delivery_location == "豊橋プール"
-      create_or_update_in_entry
-    end
-  
-    if pickup_location == "豊橋プール"
-      create_or_update_out_entry
-    end
-  end
-  
 
   # 入庫表の更新または作成
   def update_in_entry(movement_record)
@@ -277,37 +267,6 @@ end
       raise
     end
   end
-
-  def create_or_update_in_entry
-    in_entry = InEntry.find_or_initialize_by(movement_record_id: id)
-    in_entry.assign_attributes(
-      entry_date: move_date || Date.today,
-      driver_name: responsible_person,
-      model: model,
-      chassis_number: chassis_number,
-      pickup_location: pickup_location,
-      has_abnormality: has_abnormality,
-      message: message,
-      company_name: "コックス豊橋"
-    )
-    in_entry.save!
-  end
-  
-  def create_or_update_out_entry
-    out_entry = OutEntry.find_or_initialize_by(movement_record_id: id)
-    out_entry.assign_attributes(
-      entry_date: move_date,
-      driver_name: responsible_person,
-      model: model,
-      chassis_number: chassis_number,
-      pickup_location: pickup_location,
-      delivery_location: delivery_location,
-      company_name: "コックス豊橋",
-      message: message
-    )
-    out_entry.save!
-  end
-  
   
 
 end
