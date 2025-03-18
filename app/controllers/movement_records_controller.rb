@@ -218,14 +218,18 @@ end
 
   # 入出庫表の連携処理
   def handle_in_out_entry(movement_record)
+    # 🚀 すでに出庫データがある場合、新しい `OutEntry` を作らない
+    return if OutEntry.exists?(chassis_number: movement_record.chassis_number)
+  
     if movement_record.delivery_location == "豊橋プール"
       update_in_entry(movement_record)
     end
-
+  
     if movement_record.pickup_location == "豊橋プール"
       update_out_entry(movement_record)
     end
   end
+  
 
   # 入庫表の更新または作成
   def update_in_entry(movement_record)
@@ -247,6 +251,9 @@ end
   end
 
   def update_out_entry(movement_record)
+    # 🚀 すでに `OutEntry` がある場合、新しい出庫データを作らない
+    return if OutEntry.exists?(chassis_number: movement_record.chassis_number)
+  
     out_entry = OutEntry.find_or_initialize_by(movement_record_id: movement_record.id)
   
     begin
@@ -267,6 +274,7 @@ end
       raise
     end
   end
+  
   
 
 end
