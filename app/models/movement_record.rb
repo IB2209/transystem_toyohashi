@@ -1,7 +1,8 @@
 class MovementRecord < ApplicationRecord
   belongs_to :schedule
-  has_one :out_entry, dependent: :destroy
-  has_one :in_entry, dependent: :destroy
+  has_one :in_entry, foreign_key: :movement_record_id, primary_key: :id, dependent: :destroy
+has_one :out_entry, foreign_key: :movement_record_id, primary_key: :id, dependent: :destroy
+
   has_many :daily_reports, foreign_key: :movement_record_id
 
   before_save :calculate_travel_distance
@@ -68,9 +69,9 @@ class MovementRecord < ApplicationRecord
   # ✅ **未出庫の車両判定**
   def exists_in_unshipped_list?
     # `InEntry` に存在し、かつ `OutEntry` には存在しない `chassis_number` を「未出庫」と判定
-    unshipped = InEntry.where(chassis_number: chassis_number)
-                       .where.not(chassis_number: OutEntry.select(:chassis_number)) # 出庫済みのものを除外
-                       .exists?
+    unshipped = InEntry.where(movement_record_id: id)
+                     .where.not(movement_record_id: OutEntry.select(:movement_record_id)) # 出庫済みのものを除外
+                     .exists?
 
     Rails.logger.info "🔍 未出庫リストチェック: 車番=#{chassis_number} | 結果=#{unshipped ? '未出庫' : '出庫済み'}"
     unshipped
