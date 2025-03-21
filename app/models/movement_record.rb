@@ -54,13 +54,13 @@ class MovementRecord < ApplicationRecord
     return if MovementRecord.where(chassis_number: chassis_number, pickup_location: delivery_location, delivery_location: pickup_location).exists?
 
     # ✅ **完全一致（pickup_location & delivery_location が同じ）の場合は登録NG（編集時は除外）**
-    if MovementRecord.where(chassis_number: chassis_number, pickup_location: pickup_location, delivery_location: delivery_location)
-                     .where.not(id: id) # 編集時は自分自身を除外
-                     .exists?
-      Rails.logger.warn "❌ #{chassis_number} は完全一致のデータが存在するためNG"
-      errors.add(:chassis_number, "この車番の引取先・納車先の組み合わせは既に登録されています")
-      return
-    end
+    #if MovementRecord.where(chassis_number: chassis_number, pickup_location: pickup_location, delivery_location: delivery_location)
+    #                .where.not(id: id) # 編集時は自分自身を除外
+    #               .exists?
+    #  Rails.logger.warn "❌ #{chassis_number} は完全一致のデータが存在するためNG"
+    #  errors.add(:chassis_number, "この車番の引取先・納車先の組み合わせは既に登録されています")
+    #  return
+    
 
     Rails.logger.info "✅ バリデーション成功: MovementRecord ##{id} | 車番: #{chassis_number}"
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_13_031328) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_18_235101) do
   create_table "daily_reports", force: :cascade do |t|
     t.date "move_date"
     t.string "employee_name"
@@ -135,6 +135,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_031328) do
     t.string "pickup_location"
     t.integer "entry_hour"
     t.integer "entry_minute"
+    t.integer "in_entry_id"
+    t.index ["in_entry_id"], name: "index_out_entries_on_in_entry_id"
     t.index ["movement_record_id"], name: "index_out_entries_on_movement_record_id"
   end
 

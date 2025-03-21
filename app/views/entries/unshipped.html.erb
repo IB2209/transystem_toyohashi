@@ -25,7 +25,12 @@
           <td class="unshipped_no"><%= index + 1 %></td>
           <td class="unshipped_chassis_number"><%= entry.chassis_number %></td>
           <td class="unshipped_new_left"></td>
-          <td class="unshipped_new"><%= link_to "選択", new_out_entry_path(chassis_number: entry.chassis_number) %></td>
+          <% if OutEntry.exists?(in_entry_id: entry.id) %>
+  <td class="unshipped_new registered">済</td>
+<% else %>
+  <td class="unshipped_new not-registered"><%= link_to "選択", new_out_entry_path(chassis_number: entry.chassis_number) %></td>
+<% end %>
+
         </tr>
       <% end %>
     </tbody>

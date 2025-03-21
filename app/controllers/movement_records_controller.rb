@@ -133,10 +133,23 @@ end
   end
 
   # 削除処理
-  def destroy
-    @movement_record.destroy
-    redirect_to movement_records_path, notice: '移動記録が削除されました。'
+def destroy
+  ActiveRecord::Base.transaction do
+    # 🚀 先に `in_entries` / `out_entries` を削除
+    InEntry.where(movement_record_id: @movement_record.id).destroy_all
+    OutEntry.where(movement_record_id: @movement_record.id).destroy_all
+
+    # 🚀 `movement_record` を削除
+    @movement_record.destroy!
   end
+
+  redirect_to movement_records_path, notice: '移動記録が削除されました。'
+rescue StandardError => e
+  Rails.logger.error "移動記録削除エラー: #{e.message}"
+  flash[:alert] = "移動記録の削除に失敗しました。"
+  redirect_to movement_records_path
+end
+
 
 # ステータス1のトグル
 def toggle_status_1
@@ -214,67 +227,46 @@ end
   
   
   
-  
-
   # 入出庫表の連携処理
   def handle_in_out_entry(movement_record)
-    # 🚀 すでに出庫データがある場合、新しい `OutEntry` を作らない
-    return if OutEntry.exists?(chassis_number: movement_record.chassis_number)
-  
     if movement_record.delivery_location == "豊橋プール"
-      update_in_entry(movement_record)
+      create_new_in_entry(movement_record)
     end
   
     if movement_record.pickup_location == "豊橋プール"
-      update_out_entry(movement_record)
+      create_new_out_entry(movement_record)
     end
   end
   
-
-  # 入庫表の更新または作成
-  def update_in_entry(movement_record)
-    in_entry = InEntry.find_or_initialize_by(movement_record_id: movement_record.id)
-    begin
-      in_entry.update!(
-        entry_date: movement_record.move_date || Date.today,
-        driver_name: movement_record.responsible_person,
-        model: movement_record.model,
-        chassis_number: movement_record.chassis_number,
-        pickup_location: movement_record.pickup_location,
-        has_abnormality: movement_record.has_abnormality,
-        message: movement_record.message,
-        company_name: "コックス豊橋"
-      )
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "InEntry更新エラー: #{e.record.errors.full_messages.join(', ')} - 移動記録ID: #{movement_record.id}"
-    end
+  def create_new_in_entry(movement_record)
+    in_entry = InEntry.create!(
+      entry_date: movement_record.move_date || Date.today,
+      driver_name: movement_record.responsible_person,
+      model: movement_record.model,
+      chassis_number: movement_record.chassis_number,
+      pickup_location: movement_record.pickup_location,
+      has_abnormality: movement_record.has_abnormality,
+      message: movement_record.message,
+      company_name: "コックス豊橋",
+      movement_record_id: movement_record.id
+    )
+  
+    Rails.logger.info "✅ InEntry 作成: #{in_entry.inspect}"
   end
 
-  def update_out_entry(movement_record)
-    # 🚀 すでに `OutEntry` がある場合、新しい出庫データを作らない
-    return if OutEntry.exists?(chassis_number: movement_record.chassis_number)
-  
-    out_entry = OutEntry.find_or_initialize_by(movement_record_id: movement_record.id)
-  
-    begin
-      out_entry.update!(
-        entry_date: movement_record.move_date,           # 🚀 移動記録の `move_date` をそのまま反映
-        entry_hour: movement_record.departure_hour,     # 🚀 出発時間を反映
-        entry_minute: movement_record.departure_minute, # 🚀 出発分を反映
-        driver_name: movement_record.responsible_person,
-        model: movement_record.model,
-        chassis_number: movement_record.chassis_number,
-        pickup_location: movement_record.pickup_location,
-        delivery_location: movement_record.delivery_location,
-        company_name: "コックス豊橋", # 会社名を固定
-        message: movement_record.message
-      )
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error "OutEntry更新エラー: #{e.record.errors.full_messages.join(', ')} - 移動記録ID: #{movement_record.id}"
-      raise
-    end
-  end
-  
-  
 
+  def create_new_out_entry(movement_record)
+    # すでに関連する `OutEntry` がある場合、新しい `InEntry` に紐付けない
+    existing_out_entry = OutEntry.find_by(chassis_number: movement_record.chassis_number, movement_record_id: movement_record.id)
+    return if existing_out_entry.present? # すでに出庫データがあるなら何もしない
+  
+    # 🚀 `entry_date` を考慮して、正しく `InEntry` を紐づける
+    in_entry = InEntry.where(chassis_number: movement_record.chassis_number)
+                      .where("entry_date <= ?", movement_record.move_date) # **出庫日より前の入庫データのみ取得**
+                      .where.not(id: OutEntry.select(:in_entry_id)) # **すでに出庫データがある `InEntry` は除外**
+                      .order(entry_date: :desc, id: :desc)
+                      .first
+  
+    return if in_entry.nil? # **該当する入庫データがない場合はスキップ**
+end  
 end

@@ -60,13 +60,14 @@
                   <td style="font-size: 14px;"><%= entry.has_abnormality ? "有" : "無" %></td>
                   <td style="font-size: 12px; text-align:left"><%= entry.message %></td>
                   <td class="tablespace"></td>
-                  <td style="font-size: 14px;" class="out_new <%= entry.out_entry.nil? ? 'not-registered' : 'registered' %>">
-                    <% if entry.out_entry.nil? %>
-                      <%= link_to "登録", new_out_entry_path(chassis_number: entry.chassis_number) %>
-                    <% else %>
-                      <div class="sumi">済</div>
-                    <% end %>
-                  </td>
+                  <td style="font-size: 14px;" class="out_new <%= entry.out_entries.present? ? 'registered' : 'not-registered' %>">
+  <% if entry.out_entries.present? %>
+    <div class="sumi">済</div>
+  <% else %>
+    <%= link_to "登録", new_out_entry_path(chassis_number: entry.chassis_number) %>
+  <% end %>
+</td>
+
                   <td class="tablespace"></td>
                   <td style="font-size: 14px;"><%= link_to "編集", edit_in_entry_path(entry) %></td>
                   <td style="font-size: 14px;"><%= link_to "削除", in_entry_path(entry), method: :delete, data: { confirm: "削除してよろしいですか？" } %>

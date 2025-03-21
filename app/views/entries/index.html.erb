@@ -57,19 +57,26 @@
       </tr>
     <% end %>
 
+    <% latest_out_entry = OutEntry.find_by(in_entry_id: entry[:in_entry].id) %> <!-- 最新の出庫情報を取得 -->
     <tr>
+    
       <!-- No.を降順に表示 -->
       <td style="font-size: 14px; background-color: #f9f9f9;"><%= total_entries - index %></td>
       <td style="font-size: 14px;"><%= entry[:in_entry].entry_date&.strftime("%-m/%-d") %></td>
-      <td style="font-size: 14px;"><%= entry[:out_entry]&.entry_date&.strftime("%-m/%-d") || "" %></td>
+      <td style="font-size: 14px;"><%= latest_out_entry&.entry_date&.strftime("%-m/%-d") || "" %></td>
       <td style="font-size: 15px; padding: 0 20px"><%= entry[:in_entry].model || entry[:out_entry]&.model %></td>
       <td style="font-size: 15px; padding: 0 20px"><%= entry[:in_entry].chassis_number || entry[:out_entry]&.chassis_number %></td>
       <td style="font-size: 14px;"><%= entry[:in_entry].pickup_location %></td>
-      <td style="font-size: 14px;"><%= entry[:out_entry]&.delivery_location %></td>
+      <td style="font-size: 14px;"><%= latest_out_entry&.delivery_location %></td>
+      
+
+
+
+
       <td style="font-size: 13px; font-weight: 400;"><%= entry[:in_entry].company_name %></td>
       <td style="font-size: 13px; font-weight: 400;"><%= entry[:in_entry].driver_name %></td>
-      <td style="font-size: 13px; font-weight: 400;"><%= entry[:out_entry]&.company_name %></td>
-      <td style="font-size: 13px; font-weight: 400;"><%= entry[:out_entry]&.driver_name %></td>
+      <td style="font-size: 13px; font-weight: 400;"><%= latest_out_entry&.company_name %></td>
+      <td style="font-size: 13px; font-weight: 400;"><%= latest_out_entry&.driver_name %></td>
       <td style="font-size: 14px;"><%= (entry[:out_entry]&.entry_date && entry[:in_entry].entry_date) ? "#{(entry[:out_entry].entry_date - entry[:in_entry].entry_date).to_i}日" : "-" %></td>
       <td style="font-size: 14px;" class="out_new <%= entry[:out_entry].nil? ? 'not-registered' : 'registered' %>">
         <% if entry[:out_entry].nil? %>

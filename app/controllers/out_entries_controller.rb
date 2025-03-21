@@ -37,18 +37,28 @@ end
 
 
   def create
-    processed_params = process_params(out_entry_params)
-    @out_entry = OutEntry.new(processed_params)
-  
-    if @out_entry.save
-      redirect_to success_out_entries_path, notice: "出庫情報が登録されました。"
-    else
-      Rails.logger.debug "エラー: #{@out_entry.errors.full_messages}"
-      flash.now[:alert] = @out_entry.errors.full_messages.join(", ")
-      @in_entries = InEntry.all # エラー時も入庫データを渡す
-      render :new, status: :unprocessable_entity
-    end
+  processed_params = process_params(out_entry_params)
+  @out_entry = OutEntry.new(processed_params)
+
+  # **🚀 `entry_date` を考慮して、該当する `InEntry` を取得**
+  matched_in_entry = InEntry.where(chassis_number: @out_entry.chassis_number)
+                            .where("entry_date <= ?", @out_entry.entry_date) # **出庫日より前の入庫データのみ取得**
+                            .order(entry_date: :desc, id: :desc)
+                            .first
+
+  # **🚀 `in_entry_id` を設定（見つからない場合は nil）**
+  @out_entry.in_entry_id = matched_in_entry&.id
+
+  if @out_entry.save
+    redirect_to success_out_entries_path, notice: "出庫情報が登録されました。"
+  else
+    Rails.logger.debug "エラー: #{@out_entry.errors.full_messages}"
+    flash.now[:alert] = @out_entry.errors.full_messages.join(", ")
+    @in_entries = InEntry.all
+    render :new, status: :unprocessable_entity
   end
+end
+
 
   def success
   end
@@ -97,7 +107,7 @@ end
   private
 
   def out_entry_params
-    params.require(:out_entry).permit(:company_name, :radio_company_name, :driver_name, :model, :radio_model, :chassis_number, :pickup_location, :radio_pickup_location, :delivery_location, :radio_delivery_location, :has_abnormality, :message, :entry_date)
+    params.require(:out_entry).permit(:company_name, :radio_company_name, :driver_name, :model, :radio_model, :chassis_number, :pickup_location, :radio_pickup_location, :delivery_location, :radio_delivery_location, :has_abnormality, :message, :entry_date, :in_entry_id)
   end
   
 

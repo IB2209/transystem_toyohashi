@@ -1,6 +1,6 @@
 class InEntriesController < ApplicationController
   def index
-    @in_entries = InEntry.includes(:out_entry).order(entry_date: :desc, id: :desc)
+    @in_entries = InEntry.includes(:out_entries).order(entry_date: :desc, id: :desc)
     @grouped_entries_by_month = @in_entries.group_by { |entry| entry.entry_date.beginning_of_month }.sort.reverse.to_h
     @monthly_in_count = @grouped_entries_by_month.transform_values(&:size)
   end
@@ -16,14 +16,19 @@ class InEntriesController < ApplicationController
 
   def create
     @in_entry = InEntry.new(in_entry_params)
+  
     if params[:back]
       render :new
     elsif @in_entry.save
+      Rails.logger.info "✅ InEntry が保存されました: #{@in_entry.inspect}"
       redirect_to success_in_entries_path, notice: "送信完了しました。"
     else
+      Rails.logger.error "❌ InEntry の保存に失敗: #{@in_entry.errors.full_messages.join(', ')}"
+      flash.now[:alert] = @in_entry.errors.full_messages.join(", ")
       render :new
     end
   end
+  
 
   # 送信完了ページ
   def success

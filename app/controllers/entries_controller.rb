@@ -1,16 +1,23 @@
 class EntriesController < ApplicationController
   def index
-    # 入庫データと関連する出庫データを一括取得し、入庫データを最新順（降順）にソート
-    @in_entries = InEntry.includes(:out_entry).order(entry_date: :desc, id: :desc)
+    # **🔥 `includes(:out_entry)` を利用してクエリの最適化**
+    @in_entries = InEntry.includes(:out_entries).order(entry_date: :desc, id: :desc)
 
-    # 入庫データと対応する出庫データを結合し、車泊数を計算
+    # **🔥 `in_entry_id` を使って、正しい出庫データを取得**
+   # 🚀 `entry_date` に基づいて対応する `OutEntry` を取得
     @entries = @in_entries.map do |in_entry|
+      out_entry = in_entry.out_entries.where("entry_date >= ?", in_entry.entry_date).order(entry_date: :asc).first
+
       {
         in_entry: in_entry,
-        out_entry: in_entry.out_entry,
-        stay_days: in_entry.out_entry ? (in_entry.out_entry.entry_date - in_entry.entry_date).to_i : nil
+        out_entry: out_entry,
+        stay_days: out_entry ? (out_entry.entry_date - in_entry.entry_date).to_i : nil
       }
     end
+    
+    
+    
+    
 
     # 月ごとの入庫台数と出庫台数を計算
     @grouped_entries_by_month = @entries.group_by { |entry| entry[:in_entry].entry_date.beginning_of_month }
@@ -23,11 +30,13 @@ class EntriesController < ApplicationController
   end
 
   def unshipped
-    # 未出庫の入庫データを取得し、型式でグループ化
-    @in_entries = InEntry.includes(:out_entry).where(out_entries: { id: nil }).order(:model, :chassis_number)
-  
+    # 🔥 `in_entry_id: nil` を使用して未出庫の入庫データを取得
+    @in_entries = InEntry.left_joins(:out_entries)
+                     .where(out_entries: { id: nil })
+                     .order(:model, :chassis_number)
+
+
     # @in_entries が空でも @grouped_entries は空のハッシュとして扱えるようにする
     @grouped_entries = @in_entries.group_by(&:model) || {}
   end
-  
 end
