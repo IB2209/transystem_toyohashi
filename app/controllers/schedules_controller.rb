@@ -74,31 +74,50 @@ class SchedulesController < ApplicationController
     # 出発時刻を取得
     departure_time = @schedule.departure_time || Time.current
     
-      # 到着後に MovementRecord を作成
-      movement_record = MovementRecord.create!(
-        schedule_id: @schedule.id,
-        responsible_person: @schedule.responsible_person,
-        model: @schedule.model,
-        chassis_number: @schedule.chassis_number,
-        pickup_location: @schedule.pickup_location,
-        delivery_location: @schedule.delivery_location,
-        departure_distance: @schedule.departure_distance,
-        arrival_distance: @schedule.arrival_distance,
-        move_date: @schedule.schedule_date,
-        departure_hour: @schedule.departure_time&.hour,
-        departure_minute: @schedule.departure_time&.min,
-        arrival_hour: @schedule.arrival_time&.hour,
-        arrival_minute: @schedule.arrival_time&.min
-      )
+    movement_record = MovementRecord.create!(
+      schedule_id: @schedule.id,                          # 紐付くスケジュールID
+      responsible_person: @schedule.responsible_person,  # 担当者名
+      model: @schedule.model,                            # 型式
+      chassis_number: @schedule.chassis_number,          # 車体番号
+      pickup_location: @schedule.pickup_location,        # 引取先
+      delivery_location: @schedule.delivery_location,    # 納車先
+      departure_distance: @schedule.departure_distance,  # 出発時走行距離
+      arrival_distance: @schedule.arrival_distance,      # 到着時走行距離
+      move_date: @schedule.schedule_date,                # 移動日（スケジュール日）
+      departure_hour: @schedule.departure_time&.hour,    # 出発時刻（時）
+      departure_minute: @schedule.departure_time&.min,   # 出発時刻（分）
+      arrival_hour: @schedule.arrival_time&.hour,        # 到着時刻（時）
+      arrival_minute: @schedule.arrival_time&.min        # 到着時刻（分）
+    )
 
-      # スケジュールを完了扱いにする（一覧から消える）
-      @schedule.update(is_completed: true)
-
-      redirect_to movement_records_path, notice: "到着が記録され、移動記録に移動しました。"
-    else
-      redirect_to schedules_path, alert: "到着距離の保存に失敗しました。"
+    # 🚗 納車先が「豊橋プール」の場合は、自動的に入庫データ（InEntry）を作成
+    if movement_record.delivery_location == "豊橋プール"
+      # 同じ車体番号と移動日で既に入庫データが存在しない場合のみ作成
+      unless InEntry.exists?(chassis_number: movement_record.chassis_number, entry_date: movement_record.move_date)
+        InEntry.create!(
+          entry_date: movement_record.move_date,              # 入庫日 = 移動日
+          company_name: "コックス豊橋",                                   # 空欄（必要に応じて後で入力）
+          driver_name: movement_record.responsible_person,                                    # 空欄
+          model: movement_record.model,                       # 型式
+          chassis_number: movement_record.chassis_number,     # 車体番号
+          pickup_location: movement_record.pickup_location,   # 引取先
+          has_abnormality: movement_record.has_abnormality,                             # 異常なし（仮）
+          message: movement_record.message,                                        # メッセージ空欄
+          movement_record_id: movement_record.id              # MovementRecord と関連付け
+        )
+      end
     end
+
+    # スケジュールを完了済みにする（スケジュール一覧から除外される）
+    @schedule.update(is_completed: true)
+
+    # 移動記録ページへリダイレクト
+    redirect_to movement_records_path, notice: "到着が記録され、移動記録に移動しました。"
+  else
+    # 失敗時の処理
+    redirect_to schedules_path, alert: "到着距離の保存に失敗しました。"
   end
+end
 
   def edit
   end
