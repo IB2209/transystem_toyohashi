@@ -35,9 +35,7 @@ end
     end
 
     # 入庫表・出庫表への自動連携
-    @movement_records.each do |record|
-      handle_in_out_entry(record)
-    end
+    
 
     # 代金系の合計額を計算
     @total_toll_fee = @movement_records.sum { |record| record.toll_fee.to_i }
@@ -239,6 +237,8 @@ end
   end
   
   def create_new_in_entry(movement_record)
+    
+
     in_entry = InEntry.create!(
       entry_date: movement_record.move_date || Date.today,
       driver_name: movement_record.responsible_person,
