@@ -67,7 +67,6 @@
     <%= link_to "登録", new_out_entry_path(chassis_number: entry.chassis_number) %>
   <% end %>
 </td>
-
                   <td class="tablespace"></td>
                   <td style="font-size: 14px;"><%= link_to "編集", edit_in_entry_path(entry) %></td>
                   <td style="font-size: 14px;"><%= link_to "削除", in_entry_path(entry), method: :delete, data: { confirm: "削除してよろしいですか？" } %>
