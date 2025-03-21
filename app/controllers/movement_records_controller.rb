@@ -237,7 +237,7 @@ end
   end
   
   def create_new_in_entry(movement_record)
-    
+    return if InEntry.exists?(chassis_number: movement_record.chassis_number, entry_date: movement_record.move_date)
 
     in_entry = InEntry.create!(
       entry_date: movement_record.move_date || Date.today,
