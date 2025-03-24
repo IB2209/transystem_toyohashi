@@ -134,7 +134,7 @@
       <th><%= person %></th>
 
       <td>
-        <%= reports.count %>日
+        <%= reports.map(&:move_date).uniq.count %>日
         <% if total_overtime_minutes > 0 %>
           (<%= total_overtime_minutes / 60 %>h)
         <% end %>
