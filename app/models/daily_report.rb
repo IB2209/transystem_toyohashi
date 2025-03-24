@@ -29,6 +29,8 @@ class DailyReport < ApplicationRecord
   validate :validate_absence_reason_other
   validate :end_time_after_start_time
 
+  validates :move_date, uniqueness: { scope: :responsible_person, message: "はこの担当者の日報がすでに登録されています" }
+
   before_save :calculate_total_expense
 
   private
