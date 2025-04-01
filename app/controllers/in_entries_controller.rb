@@ -15,7 +15,7 @@ class InEntriesController < ApplicationController
   end
 
   def create
-    @in_entry = InEntry.new(in_entry_params)
+    @in_entry = InEntry.new(process_params(in_entry_params))
   
     if params[:back]
       render :new
@@ -40,12 +40,15 @@ class InEntriesController < ApplicationController
 
   def update
     @in_entry = InEntry.find(params[:id])
-    if @in_entry.update(in_entry_params)
+    processed_params = process_params(in_entry_params)
+  
+    if @in_entry.update(processed_params)
       redirect_to in_entries_path, notice: "入庫データを更新しました。"
     else
       render :edit
     end
   end
+  
 
   def show
     @in_entry = InEntry.find(params[:id])
