@@ -109,21 +109,29 @@ class SchedulesController < ApplicationController
     end
 
     if movement_record.pickup_location == "豊橋プール"
-      # 同じ車体番号と移動日で既に入庫データが存在しない場合のみ作成
-      unless OutEntry.exists?(chassis_number: movement_record.chassis_number, entry_date: movement_record.move_date)
-        OutEntry.create!(
-          entry_date: movement_record.move_date,              # 入庫日 = 移動日
-          company_name: "コックス豊橋",                         # 空欄（必要に応じて後で入力）
-          driver_name: movement_record.responsible_person,    # 空欄
-          model: movement_record.model,                       # 型式
-          chassis_number: movement_record.chassis_number,     # 車体番号
-          delivery_location: movement_record.delivery_location,# 納車先
-          has_abnormality: movement_record.has_abnormality,   # 異常なし（仮）
-          message: movement_record.message,                   # メッセージ空欄
-          movement_record_id: movement_record.id              # MovementRecord と関連付け
-        )
-      end
-    end
+  unless OutEntry.exists?(chassis_number: movement_record.chassis_number, entry_date: movement_record.move_date)
+
+    # ✅ 出庫日に対応する InEntry を取得して in_entry_id を紐付け
+    matched_in_entry = InEntry.where(chassis_number: movement_record.chassis_number)
+                              .where("entry_date <= ?", movement_record.move_date)
+                              .order(entry_date: :desc, id: :desc)
+                              .first
+
+    OutEntry.create!(
+      entry_date: movement_record.move_date,
+      company_name: "コックス豊橋",
+      driver_name: movement_record.responsible_person,
+      model: movement_record.model,
+      chassis_number: movement_record.chassis_number,
+      delivery_location: movement_record.delivery_location,
+      has_abnormality: movement_record.has_abnormality,
+      message: movement_record.message,
+      movement_record_id: movement_record.id,
+      in_entry_id: matched_in_entry&.id # ← ここで紐付ける
+    )
+  end
+end
+
 
     # スケジュールを完了済みにする（スケジュール一覧から除外される）
     @schedule.update(is_completed: true)
