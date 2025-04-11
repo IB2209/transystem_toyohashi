@@ -1,22 +1,14 @@
 #!/usr/bin/env bash
+# exit on error
 set -o errexit
 
-echo "📦 Installing wkhtmltopdf..."
-
-curl -L -A "Mozilla/5.0" -o wkhtmltopdf.deb \
-  https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6/wkhtmltox_0.12.6-1.bionic_amd64.deb
-
-# デバッグ出力
-ls -lh wkhtmltopdf.deb
-
-# dpkg 展開
-mkdir -p .apt
-dpkg -x wkhtmltopdf.deb .apt
-rm wkhtmltopdf.deb
-
-export PATH="$PWD/.apt/usr/local/bin:$PATH"
-
-echo "📦 Installing Ruby dependencies..."
 bundle install
 bundle exec rails assets:precompile
 bundle exec rails assets:clean
+
+
+# If you're using a Free instance type, you need to
+# perform database migrations in the build command.
+# Uncomment the following line:
+
+# bundle exec rails db:migrate
