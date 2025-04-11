@@ -7,6 +7,7 @@ ja:
     formats:
       default: "%Y年%-m月%-d日"
       short: "%-m/%-d"
+      short2: "%-m月%-d日"
       long: "%Y年%-m月%-d日 (%a)"
       month_and_year: "%Y年%-m月" # 年月を表示するフォーマット
       weekday: "%A" # 曜日のみを表示するフォーマット

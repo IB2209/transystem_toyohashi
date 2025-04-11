@@ -1,0 +1,15 @@
+<h1><%= l @week_start, format: :default %>〜の週 自走記録</h1>
+
+<% @records.each do |record| %>
+  <div class="record">
+    <strong><%= l record.move_date, format: :long %></strong><br>
+    <%= record.model %>（<%= record.chassis_number %>）<br>
+    <%= record.pickup_location %> → <%= record.delivery_location %><br>
+    担当：<%= record.responsible_person %><br>
+    距離：<%= record.departure_distance || 0 %>km → <%= record.arrival_distance || 0 %>km
+    （<%= record.travel_distance || (record.arrival_distance.to_i - record.departure_distance.to_i) %>km）<br>
+    <% if record.message.present? %>
+      備考：<%= record.message %>
+    <% end %>
+  </div>
+<% end %>

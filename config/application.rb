@@ -7,6 +7,7 @@ require "sprockets/railtie" # Sprockets を明示的に読み込む
 require "importmap-rails"
 
 
+
 module DispatchApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

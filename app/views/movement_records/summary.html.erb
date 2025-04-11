@@ -1,0 +1,226 @@
+<div class="tmp_home" style="padding-left: 30px;">
+<h1>自走記録サマリー</h1>
+
+<!-- 月ごとのタブ -->
+<ul class="tab-header">
+  <% @grouped_by_month_and_day.keys.sort.reverse.each_with_index do |month, index| %>
+    <li class="tab-link <%= 'active' if index.zero? %>" data-tab="tab-<%= month.strftime('%Y-%m') %>">
+      <%= month.strftime("%-m月") %>
+    </li>
+  <% end %>
+</ul>
+
+<!-- 各月のタブ内容 -->
+<div class="tab-content">
+  <% @grouped_by_month_and_day.keys.sort.reverse.each_with_index do |month, index| %>
+    <div class="tab-pane <%= 'active' if index.zero? %>" id="tab-<%= month.strftime('%Y-%m') %>">
+      <% days = @grouped_by_month_and_day[month].sort.reverse.to_h %>
+      <% current_week = nil %>
+
+      <% days.each do |date, records| %>
+        <% week_start = date.beginning_of_week(:monday) %>
+
+        <% if current_week != week_start %>
+          <% current_week = week_start %>
+          <% week_total = @weekly_summary_by_month[month][week_start].to_i rescue 0 %>
+          <div class="week-total-banner">
+            <strong><%= l week_start, format: :default %>〜の週</strong>（<%= week_total %> 台）
+            <%= link_to "週表示", movement_records_weekly_summary_path(week_start: week_start.to_s, month: month.strftime("%Y-%m")), class: "pdf-button" %>
+          </div>
+        <% end %>
+
+        <div class="date-block">
+          <h3><%= l date, format: :short2 %> / <%= records.count %> 台</h3>
+
+          <% records.each do |record| %>
+            <div class="record-card">
+              <h4><%= record.model %>（<%= record.chassis_number %>）/ <%= record.pickup_location %> → <%= record.delivery_location %></h4>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- タブ末尾にも週間サマリー -->
+      <div class="weekly-summary">
+        <h4>週間サマリー</h4>
+        <ul>
+          <% (@weekly_summary_by_month[month] || {}).sort.reverse.each do |week_start, count| %>
+            <li><%= week_start.strftime("%Y年%-m月%-d日") %>〜　<%= count %> 台</li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>
+</div>
+
+<!-- ✅ タブ切り替え用JS -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabLinks = document.querySelectorAll(".tab-link");
+    const tabPanes = document.querySelectorAll(".tab-pane");
+
+    tabLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        tabLinks.forEach(l => l.classList.remove("active"));
+        tabPanes.forEach(p => p.classList.remove("active"));
+
+        link.classList.add("active");
+        const targetId = link.dataset.tab;
+        document.getElementById(targetId).classList.add("active");
+      });
+    });
+  });
+</script>
+
+<style>
+body {
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  padding: 20px;
+  background-color: #fdfdfd;
+  color: #333;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  border-left: 5px solid #3498db;
+  padding-left: 10px;
+}
+
+h2 {
+  margin-top: 40px;
+  font-size: 20px;
+  color: #2c3e50;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+h3 {
+  margin-top: 25px;
+  font-size: 16px;
+  color: #34495e;
+}
+
+h4 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.tab-header {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #3498db;
+}
+
+.tab-header li {
+  padding: 10px 20px;
+  margin-right: 5px;
+  background: #ecf0f1;
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.tab-header li.active {
+  background: #3498db;
+  color: white;
+  font-weight: bold;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.date-block {
+  display: block;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.record-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.record-card .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.record-card .row div {
+  width: 50%;
+  font-size: 14px;
+  padding: 3px 0;
+}
+
+@media screen and (max-width: 768px) {
+  .record-card .row div {
+    width: 100%;
+  }
+
+  h1, h2, h3, h4 {
+    font-size: 90%;
+  }
+}
+
+.weekly-summary {
+  margin-top: 30px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-left: 5px solid #2ecc71;
+}
+
+.weekly-summary h4 {
+  margin-bottom: 10px;
+  color: #27ae60;
+}
+
+.weekly-summary ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.weekly-summary li {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.pdf-button {
+  float: right;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-button:hover {
+  background-color: #c0392b;
+}
+
+@media print {
+  .pdf-button,
+  .tab-header,
+  .tab-link,
+  .weekly-summary {
+    display: none !important;
+  }
+}
+</style>

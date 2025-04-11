@@ -15,6 +15,12 @@ Rails.application.routes.draw do
   
   # スマートフォン用
   get "smartphone", to: "smartphone#index"
+  # config/routes.rb
+  get 'movement_records/weekly_summary', to: 'movement_records#weekly_summary'
+  get 'movement_records/weekly_pdf', to: 'movement_records#weekly_pdf', defaults: { format: :pdf }
+
+
+
 
   # 日報関連
   resources :daily_reports do
@@ -40,6 +46,10 @@ Rails.application.routes.draw do
       get :report  # 個別の日報表示ページ
       post :print  # 印刷処理
     end
+    collection do
+      get :summary
+    end
+  
   end
 
   # 入庫情報
@@ -71,5 +81,9 @@ Rails.application.routes.draw do
       get :unshipped # 未出庫データ用のルート
     end
   end
+
+  
+
   
 end
+

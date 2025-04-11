@@ -47,6 +47,57 @@ end
     @total_cost = @total_toll_fee + @total_fuel_fee + @total_transportation_fee + @total_lodging_fee
   end
 
+
+  def summary
+    # 全データを日付順で取得（move_date 降順）
+    records = MovementRecord.order(move_date: :desc)
+  
+    # 月 → 日でグループ化
+    @grouped_by_month_and_day = records.group_by { |r| r.move_date.beginning_of_month }
+                                       .transform_values { |recs| recs.group_by(&:move_date) }
+  
+    # 月ごとの週単位サマリー
+    @weekly_summary_by_month = {}
+  
+    @grouped_by_month_and_day.each do |month, days|
+      weekly_summary = Hash.new(0)
+      days.each do |date, recs|
+        week_start = date.beginning_of_week(:monday)
+        weekly_summary[week_start] += recs.size
+      end
+      @weekly_summary_by_month[month] = weekly_summary
+    end
+  end
+
+
+def weekly_summary
+  @month = Date.parse(params[:month] + "-01")
+  @week_start = Date.parse(params[:week_start])
+  @records = MovementRecord.where(move_date: @week_start..(@week_start + 6.days))
+                           .order(move_date: :asc)
+
+  @grouped_by_date = @records.group_by(&:move_date)
+end
+
+# app/controllers/movement_records_controller.rb
+
+def weekly_pdf
+  @week_start = Date.parse(params[:week_start])
+  @records = MovementRecord.where(move_date: @week_start..(@week_start + 6.days)).order(:move_date)
+  @grouped_by_date = @records.group_by(&:move_date)
+
+  respond_to do |format|
+    format.pdf do
+      render pdf: "週別自走記録_#{@week_start.strftime('%Y%m%d')}",
+             template: "movement_records/weekly_summary", # ← weekly_summary.html.erb をPDF化！
+             layout: "pdf" # ← layouts/pdf.html.erb を使う
+    end
+  end
+end
+
+
+
+
   # 新規作成フォーム
   def new
     @movement_record = MovementRecord.new(has_abnormality: false)
