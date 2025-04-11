@@ -2,7 +2,7 @@
 <h1><%= l @week_start, format: :long %> の週<br>
   自走記録（<%= @records.size %> 台）</h1><div style="text-align: right; margin-bottom: 20px;">
   <div style="text-align: right; margin-bottom: 20px;">
-  <%= link_to "この週をPDFで出力", movement_records_weekly_pdf_path(week_start: @week_start.to_s), class: "pdf-button", target: "_blank" %>
+  <button onclick="window.print()" class="pdf-button">この週を印刷 / PDF保存</button>
 </div>
 
 </div>
