@@ -35,7 +35,7 @@
   <!-- 引取先 -->
   <div class="q">
     <b><%= form.label :pickup_location, "引取先" %><sup class="require">※</sup><br></b>
-    <% ["豊橋プール", "トレクス", "いすゞ豊橋", "いすゞ浜松", "いすゞ萩原", "あさひ物流", "極東小牧", "フジトラDH", "フジトラ第1P", "フジトラ第2P", "UD豊橋", "UD小牧", "UD京都", "UD八尾", "阪九F", "泉大津"].each do |location| %>
+    <% ["豊橋プール", "トレクス", "いすゞ豊橋", "いすゞ浜松", "いすゞ萩原", "あさひ物流", "極東小牧", "フジトラDH", "フジトラ第1P", "フジトラ第2P", "フジトラ第3P", "UD豊橋", "UD小牧", "UD京都", "UD八尾", "阪九F", "泉大津"].each do |location| %>
       <%= form.radio_button :pickup_location, location, id: "pickup_#{location}" %>
       <%= label_tag "pickup_#{location}", location %><br>
     <% end %>
@@ -47,7 +47,7 @@
   <!-- 納車先 -->
   <div class="q">
     <b><%= form.label :delivery_location, "納車先" %><sup class="require">※</sup><br></b>
-    <% ["豊橋プール", "トレクス", "いすゞ豊橋", "いすゞ浜松", "いすゞ萩原", "あさひ物流", "極東小牧", "フジトラDH", "フジトラ第1P", "フジトラ第2P", "UD小牧", "UD八尾", "阪九F", "泉大津"].each do |location| %>
+    <% ["豊橋プール", "トレクス", "いすゞ豊橋", "いすゞ浜松", "いすゞ萩原", "あさひ物流", "極東小牧", "フジトラDH", "フジトラ第1P", "フジトラ第2P", "フジトラ第3P", "UD小牧", "UD八尾", "阪九F", "泉大津"].each do |location| %>
       <%= form.radio_button :delivery_location, location, id: "delivery_#{location}" %>
       <%= label_tag "delivery_#{location}", location %><br>
     <% end %>
