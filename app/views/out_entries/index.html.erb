@@ -56,7 +56,7 @@
         </div>
       </td>
       <td style="font-size: 13px; font-weight: 400;"><%= entry.company_name %></td>
-      <td style="font-size: 13px; font-weight: 400;"><%= entry.driver_name %></td>
+      <td style="font-size: 13px; font-weight: 400;"><%= entry.movement_record&.responsible_person.presence || entry.driver_name %></td>
       <td style="font-size: 14px; padding: 0 20px"><%= entry.model %></td>
       <td style="font-size: 14px; padding: 0 20px"><%= entry.chassis_number %></td>
       <td style="font-size: 14px;"><%= entry.delivery_location %></td>

@@ -1,7 +1,7 @@
 class OutEntriesController < ApplicationController
   
   def index
-    @out_entries = OutEntry.includes(:in_entry).order(entry_date: :desc, id: :desc)
+    @out_entries = OutEntry.includes(:in_entry, :movement_record).order(entry_date: :desc, id: :desc)
     @grouped_entries_by_month = @out_entries.group_by { |entry| entry.entry_date.beginning_of_month }.sort.reverse.to_h
     @monthly_out_count = @grouped_entries_by_month.transform_values(&:size)
   end
