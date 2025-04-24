@@ -53,7 +53,9 @@
                   <td style="font-size: 14px; background-color: #f9f9f9;"><%= entries.size - index %></td>
                   <td style="font-size: 14px;"><%= entry.entry_date&.strftime("%-d日") %> <div style="font-size: 12px; display: inline;"><%= entry.created_at&.strftime("%H:%M") %></div></td>
                   <td style="font-size: 13px; font-weight: 400;"><%= entry.company_name %></td>
-                  <td style="font-size: 13px; font-weight: 400;"><%= entry.driver_name %></td>
+                  <td style="font-size: 13px; font-weight: 400;">
+                    <%= entry.movement_records&.last&.driver_name || entry.driver_name.presence %>
+                  </td>   
                   <td style="font-size: 14px; padding: 0 20px"><%= entry.model %></td>
                   <td style="font-size: 14px; padding: 0 20px"><%= entry.chassis_number %></td>
                   <td style="font-size: 14px;"><%= entry.pickup_location %></td>
