@@ -1,7 +1,9 @@
 class EntriesController < ApplicationController
   def index
     # **🔥 `includes(:out_entry)` を利用してクエリの最適化**
-    @in_entries = InEntry.includes(:out_entries).order(entry_date: :desc, id: :desc)
+    @in_entries = InEntry.includes(:movement_record, out_entries: :movement_record)
+                     .order(entry_date: :desc, id: :desc)
+
 
     # **🔥 `in_entry_id` を使って、正しい出庫データを取得**
    # 🚀 `entry_date` に基づいて対応する `OutEntry` を取得
