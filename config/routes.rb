@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   # 指定のドメインでアクセスされた場合、リダイレクト
-  constraints(lambda { |req| req.host == "movement-records.onrender.com" }) do
-    get "/", to: redirect("https://www.cox-gear.jp/")
+  #constraints(lambda { |req| req.host == "movement-records.onrender.com" }) do
+    #get "/", to: redirect("https://www.cox-gear.jp/")
     #get "/in_entries", to: redirect("https://www.cox-gear.jp/")
     #get "/entries", to: redirect("https://www.cox-gear.jp/")
     #get "/out_entries", to: redirect("https://www.cox-gear.jp/")
-  end
+  #end
 
   # 通常のルート設定
   root "entries#index"
