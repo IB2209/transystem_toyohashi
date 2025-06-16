@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     #get "/out_entries", to: redirect("https://www.cox-gear.jp/")
   #end
 
+  scope Rails.application.config.relative_url_root || "/" do
+
   # 通常のルート設定
   root "entries#index"
   #get "/in_entries", to: "in_entries#index"
@@ -82,7 +84,7 @@ Rails.application.routes.draw do
     end
   end
 
-  
+  end
 
   
 end

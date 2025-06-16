@@ -1,64 +1,65 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  # クラスキャッシュは本番環境では有効（デフォルト）
-  config.cache_classes = true
+  config.relative_url_root = "/coxgear/transystem/toyohashi"
+  config.action_controller.relative_url_root = "/coxgear/transystem/toyohashi"
+  config.assets.prefix = "/coxgear/transystem/toyohashi/assets"
+  
 
-  # ブート時にコードを eager load してパフォーマンス向上（Rake タスク以外）
+  # 本番ではコードはリロードしない（高速化）
+  config.enable_reloading = false
+
+  # 起動時に全コードを読み込む（本番ではtrueが必須）
   config.eager_load = true
 
-  # フルエラーレポートは無効にし、ユーザーにはカスタムエラーページを表示
+  # エラー画面はユーザーに見せない（開発時は true、本番では false）
   config.consider_all_requests_local = false
 
-  # フラグメントキャッシュなど、キャッシングを有効化
-  config.perform_caching = true
+  # コントローラキャッシュを有効にする（高速化）
+  config.action_controller.perform_caching = true
 
-  # 静的ファイルの提供を有効化
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  # 静的ファイルにキャッシュ制御ヘッダーを追加
   config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.year.to_i}"
+    "cache-control" => "public, max-age=#{1.year.to_i}"
   }
 
-  # アセットパイプラインの設定 (Sprockets を利用する場合)
-  config.assets.enabled = true
-  config.assets.prefix = "/assets"
-  config.assets.compile = false # 本番環境ではプリコンパイルしたアセットを使用する
-  config.assets.digest = true # キャッシュバスティングのためのハッシュ付きファイル名
+  # ActiveStorageはローカルに保存（Amazon S3 等を使わない場合）
+  config.active_storage.service = :local
 
-  # Active Storage の設定（必要なら、config/storage.yml と連携）
-  # 例: 環境変数 ACTIVE_STORAGE_SERVICE に 'amazon' や 'local' などを設定
-  # config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
+  # Nginx が HTTPS 終端している想定
+  config.assume_ssl = true    # ← Nginx で SSL 終端される場合に true に
+  config.force_ssl = true     # ← アプリ全体を https に強制リダイレクト
 
-  # SSL ターミネーションを前提とした設定
-  config.assume_ssl = true
-  config.force_ssl = true
+  # ログに request_id を追加（デバッグしやすくする）
+  config.log_tags = [ :request_id ]
 
-  # ログの設定：リクエストIDをタグに付与し、STDOUT に出力
-  config.log_tags = [:request_id]
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
+  # ログ出力先（stdout）を使ってログを tagged にする
+  config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # ログレベルは環境変数で柔軟に設定（デフォルトは info）
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "debug").to_sym
-
-  # ヘルスチェックのログを抑制（例: /up へのリクエスト）
+  # Rails 7 のヘルスチェックAPI (`/up`) をログに出さない
   config.silence_healthcheck_path = "/up"
 
-  # 非推奨（deprecation）の報告は無効化
+  # 非推奨機能の警告は非表示に
   config.active_support.report_deprecations = false
 
-  # Action Mailer の設定。リンク生成用のホストは環境変数から取得
-  config.action_mailer.default_url_options = { host: ENV.fetch("DOMAIN", "example.com") }
+  # メモリキャッシュ（基本的なキャッシュ方式）
+  config.cache_store = :memory_store
 
-  # I18n のフォールバックを有効にし、翻訳が見つからない場合はデフォルトロケールに戻す
+  # ActiveJob（非同期ジョブ）のキューアダプタ
+  config.active_job.queue_adapter = :async
+
+  # DeviseやURL生成で使うホスト名（重要）
+  config.action_mailer.default_url_options = { host: "ibwww.com", protocol: "https" }
+
+  # I18nのフォールバック（翻訳がなければ他言語を使う）
   config.i18n.fallbacks = true
 
-  # マイグレーション後にスキーマダンプを行わない（パフォーマンス向上）
+  # マイグレーション後の schema.rb を出力しない
   config.active_record.dump_schema_after_migration = false
 
-  # 本番環境でのデバッグ情報として、Active Record の inspection は :id のみ表示
-  config.active_record.attributes_for_inspect = [:id]
+  # ホスト認証。Nginx経由や curl のテストなどのために明示的に許可
+  config.hosts << "localhost"
+  config.hosts << "ibwww.com"
+  
 end
