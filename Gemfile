@@ -77,3 +77,5 @@ gem "faker", "~> 3.5"
 
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary' # macOS/Linux でも動くやつ
+
+gem 'dotenv-rails', groups: [:development, :test, :production]
